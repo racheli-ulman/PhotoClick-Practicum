@@ -1,0 +1,33 @@
+<header class="header">
+    <nav class="nav">
+        <button mat-raised-button class="btn black" [routerLink]="['/home/show-users']" routerLinkActive="buttonactive">
+            <mat-icon>people</mat-icon>
+            <span>משתמשים</span>
+        </button>
+
+        <button mat-raised-button class="btn black" [routerLink]="['/home/add-user']" routerLinkActive="buttonactive">
+            <mat-icon>person_add</mat-icon>
+            <span>הוספת משתמש</span>
+        </button>
+
+        <button mat-raised-button class="btn black" [routerLink]="['/home/statistics']" routerLinkActive="buttonactive">
+            <mat-icon>bar_chart</mat-icon>
+            <span>סטטיסטיקת רישום חודשית של משתמשים</span>
+        </button>
+
+        <button mat-raised-button class="btn black" [routerLink]="['/home/count-of-albums']"
+            routerLinkActive="buttonactive">
+            <mat-icon>photo_library</mat-icon>
+            <span>כל האלבומים</span>
+        </button>
+
+        <button mat-raised-button class="btn black" [routerLink]="['/home/count-of-photos']"
+            routerLinkActive="buttonactive">
+            <mat-icon>insert_photo</mat-icon>
+            <span>סטטיסטיקת תמונות</span>
+        </button>
+    </nav>
+</header>
+<div class="content-container">
+    <router-outlet></router-outlet>
+</div>

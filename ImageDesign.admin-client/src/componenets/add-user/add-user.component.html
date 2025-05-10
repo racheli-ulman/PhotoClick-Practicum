@@ -1,0 +1,84 @@
+<div class="form-container rtl-form">
+    <h2 class="form-title">הוספת משתמש חדש</h2>
+    
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="firstName" class="form-label">שם פרטי:</label>
+        <input 
+          id="firstName" 
+          type="text" 
+          formControlName="firstName" 
+          class="form-control" 
+          [ngClass]="{'invalid': registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched}" 
+        />
+        <span class="validation-error" *ngIf="registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched">
+          שם פרטי הוא שדה חובה
+        </span>
+      </div>
+  
+      <div class="form-group">
+        <label for="lastName" class="form-label">שם משפחה:</label>
+        <input 
+          id="lastName" 
+          type="text" 
+          formControlName="lastName" 
+          class="form-control" 
+          [ngClass]="{'invalid': registerForm.get('lastName')?.invalid && registerForm.get('lastName')?.touched}" 
+        />
+        <span class="validation-error" *ngIf="registerForm.get('lastName')?.invalid && registerForm.get('lastName')?.touched">
+          שם משפחה הוא שדה חובה
+        </span>
+      </div>
+  
+      <div class="form-group">
+        <label for="email" class="form-label">כתובת אימייל:</label>
+        <input 
+          id="email" 
+          type="email" 
+          formControlName="email" 
+          class="form-control" 
+          [ngClass]="{'invalid': registerForm.get('email')?.invalid && registerForm.get('email')?.touched}" 
+        />
+        <span class="validation-error" *ngIf="registerForm.get('email')?.hasError('required') && registerForm.get('email')?.touched">
+          כתובת אימייל היא שדה חובה
+        </span>
+        <span class="validation-error" *ngIf="registerForm.get('email')?.hasError('email') && registerForm.get('email')?.touched">
+          יש להזין כתובת אימייל תקינה
+        </span>
+      </div>
+  
+      <div class="form-group">
+        <label for="password" class="form-label">סיסמה:</label>
+        <div class="password-field">
+          <input 
+            id="password" 
+            [type]="showPassword ? 'text' : 'password'" 
+            formControlName="password" 
+            class="form-control" 
+            [ngClass]="{'invalid': registerForm.get('password')?.invalid && registerForm.get('password')?.touched}" 
+          />
+          <button 
+            type="button" 
+            class="password-toggle" 
+            (click)="togglePasswordVisibility()" 
+            tabindex="-1">
+            {{ showPassword ? 'הסתר' : 'הצג' }}
+          </button>
+        </div>
+        <span class="validation-error" *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
+          סיסמה היא שדה חובה
+        </span>
+      </div>
+  
+      <div *ngIf="error" class="error-message">
+        {{ error }}
+      </div>
+  
+      <button 
+        type="submit" 
+        class="submit-button" 
+        [disabled]="!registerForm.valid">
+        יצירת חשבון
+      </button>
+    </form>
+  </div>

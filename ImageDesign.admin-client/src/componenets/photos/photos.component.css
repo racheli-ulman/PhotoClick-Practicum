@@ -1,0 +1,93 @@
+/* body {
+    background-color: black; הגדרת הרקע לשחור
+    color: white; הגדרת צבע הטקסט ללבן כדי שיהיה קריא על הרקע השחור
+} */
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    max-width: 1000px;
+    margin: 0 auto;
+    direction: rtl;
+}
+
+.chart-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.error-message {
+    background-color: #ffecec;
+    color: #f44336;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    width: 100%;
+    text-align: center;
+}
+
+.chart-card {
+    width: 100%;
+    margin-bottom: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.chart-container {
+    height: 400px;
+    width: 100%;
+}
+
+.info-boxes {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.info-box {
+    text-align: center;
+    border-radius: 8px;
+    transition: transform 0.3s ease;
+}
+
+.info-box:hover {
+    transform: translateY(-5px);
+}
+
+.active-box {
+    border-top: 4px solid #FFFFFF;
+    background-color: #f8f8f8;
+}
+
+.deleted-box {
+    border-top: 4px solid #000000;
+    background-color: #f8f8f8;
+}
+
+.difference-box {
+    border-top: 4px solid #FF0000;
+    background-color: #f8f8f8;
+}
+
+.box-value {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.box-label {
+    font-size: 14px;
+    color: #666;
+}
+
+@media (max-width: 768px) {
+    .info-boxes {
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,0 +1,45 @@
+רשימת משתמשים משופרת
+<div class="user-list-container">
+    <div class="user-list-header">
+        <h2>רשימת משתמשים</h2>
+    </div>
+
+    <table class="user-table">
+        <thead>
+            <tr>
+                <th>מספר מזהה</th>
+                <th>שם פרטי</th>
+                <th>שם משפחה</th>
+                <th>אימייל</th>
+                <th>סיסמה</th>
+                <th>פעולות</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let user of users">
+                <td>{{ user.id }}</td>
+                <td>{{ user.firstName }}</td>
+                <td>{{ user.lastName }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.password }}</td>
+                <td class="action-buttons">
+                    <button class="delete-btn" (click)="delete(user.id)">מחק</button>
+                    <button class="edit-btn" *ngIf="canEditUsers" (click)="editUser(user.id)">ערוך</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div *ngIf="errorMessage" class="error-message">
+        {{ errorMessage }}
+    </div>
+
+    <!-- אופציונלי: אלמנט עימוד (pagination) -->
+    <div class="pagination" *ngIf="pages && pages.length > 1">
+        <button [ngClass]="{'active': currentPage === 1}" (click)="changePage(1)">1</button>
+        <button *ngFor="let page of pages | slice:1" [ngClass]="{'active': currentPage === page}"
+            (click)="changePage(page)">
+            {{ page }}
+        </button>
+    </div>
+</div>

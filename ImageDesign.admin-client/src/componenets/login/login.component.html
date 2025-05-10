@@ -1,0 +1,48 @@
+<div class="login-container">
+    <mat-card class="login-card">
+      <div class="login-header">
+       📷 התחברות למערכת פוטו קליק 
+      </div>
+      
+      <div class="login-content">
+        <form [formGroup]="addUserForm" (ngSubmit)="onSubmit()">
+          
+          <!-- Error message display -->
+          <div class="error-message" *ngIf="showError">
+            {{ errormessage }}
+          </div>
+          
+          <!-- Email field -->
+          <mat-form-field appearance="fill" class="form-field">
+            <mat-label>אימייל</mat-label>
+            <input matInput formControlName="email" type="email" required>
+            <mat-icon matPrefix>email</mat-icon>
+            <mat-error *ngIf="addUserForm.get('email')?.hasError('required')">
+              אימייל נדרש
+            </mat-error>
+            <mat-error *ngIf="addUserForm.get('email')?.hasError('email')">
+              נא להזין מייל תקין
+            </mat-error>
+          </mat-form-field>
+          
+          <!-- Password field -->
+          <mat-form-field appearance="fill" class="form-field">
+            <mat-label>סיסמה</mat-label>
+            <input matInput formControlName="password" [type]="hide ? 'password' : 'text'" required>
+            <mat-icon matPrefix>lock</mat-icon>
+            <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide" type="button" class="password-visibility">
+              <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+            <mat-error *ngIf="addUserForm.get('password')?.hasError('required')">
+              סיסמה נדרשת
+            </mat-error>
+          </mat-form-field>
+          
+          <!-- Login button -->
+          <button mat-raised-button color="primary" type="submit" class="login-button">
+            התחברות
+          </button>
+        </form>
+      </div>
+    </mat-card>
+  </div>

@@ -1,0 +1,141 @@
+/* עיצוב לרשימת משתמשים */
+.user-list-container {
+    font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    direction: rtl;
+    max-width: 1000px;
+    margin: 20px auto;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+}
+
+.user-list-header {
+    background-color: #1a1a1a;
+    color: #ffffff;
+    padding: 20px;
+    text-align: center;
+    border-bottom: 4px solid #d10000;
+}
+
+.user-list-header h2 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.user-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 0;
+}
+
+.user-table th {
+    background-color: #f5f5f5;
+    color: #1a1a1a;
+    padding: 15px;
+    text-align: right;
+    font-weight: 600;
+    position: sticky;
+    top: 0;
+    border-bottom: 2px solid #d10000;
+}
+
+.user-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.user-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.user-table tr:hover {
+    background-color: #fff0f0;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-start;
+}
+
+.delete-btn {
+    background-color: #d10000;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.3s;
+}
+
+.delete-btn:hover {
+    background-color: #b30000;
+}
+
+.edit-btn {
+    background-color: #1a1a1a;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.3s;
+}
+
+.edit-btn:hover {
+    background-color: #333333;
+}
+
+.error-message {
+    background-color: #ffecec;
+    color: #d10000;
+    padding: 12px;
+    border-radius: 4px;
+    margin: 15px;
+    border-right: 4px solid #d10000;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    padding: 15px;
+    background-color: #f5f5f5;
+    border-top: 1px solid #e0e0e0;
+}
+
+.pagination button {
+    background-color: #ffffff;
+    border: 1px solid #d10000;
+    color: #d10000;
+    padding: 8px 15px;
+    margin: 0 5px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.pagination button:hover {
+    background-color: #d10000;
+    color: #ffffff;
+}
+
+.pagination .active {
+    background-color: #d10000;
+    color: #ffffff;
+}
+
+/* רספונסיביות */
+@media screen and (max-width: 768px) {
+    .user-table {
+        display: block;
+        overflow-x: auto;
+    }
+
+    .user-list-header h2 {
+        font-size: 20px;
+    }
+}

@@ -1,0 +1,51 @@
+<!-- הוספת גרף העוגה -->
+<!-- <div style="display: block;">
+     <canvas baseChart
+             [data]="pieChartData"
+             [options]="{ responsive: true }"
+             chartType="pie">
+     </canvas>
+ </div> -->
+
+<div class="container">
+    <h2 class="chart-title">נתוני תמונות במערכת</h2>
+
+    <!-- הודעת שגיאה אם יש בעיה בטעינת הנתונים -->
+    <!-- <div *ngIf="errorMessage" class="error-message">
+        {{ errorMessage }}
+    </div> -->
+
+    <!-- קופסת גרף העוגה -->
+    <mat-card class="chart-card">
+        <mat-card-content>
+            <div class="chart-container">
+                <canvas baseChart [data]="pieChartData" [options]="pieChartOptions" [type]="'pie'">
+                </canvas>
+            </div>
+        </mat-card-content>
+    </mat-card>
+
+    <!-- קופסאות מידע עם מספרים מדויקים -->
+    <div class="info-boxes">
+        <mat-card class="info-box active-box">
+            <mat-card-content>
+                <div class="box-value">{{ photos.length }}</div>
+                <div class="box-label">סה"כ תמונות</div>
+            </mat-card-content>
+        </mat-card>
+
+        <mat-card class="info-box deleted-box">
+            <mat-card-content>
+                <div class="box-value">{{ deletedPhotos.length }}</div>
+                <div class="box-label">תמונות מחוקות</div>
+            </mat-card-content>
+        </mat-card>
+
+        <mat-card class="info-box difference-box">
+            <mat-card-content>
+                <div class="box-value">{{ getAbsoluteDifference() }}</div>
+                <div class="box-label">תמונות פעילות</div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

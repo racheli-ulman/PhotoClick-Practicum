@@ -1,0 +1,49 @@
+/* עיצוב כללי למיכל האלבומים */
+/* עיצוב כללי למיכל האלבומים */
+.albums-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #000; /* רקע שחור */
+    min-height: 100vh; /* גובה מלא למסך */
+    margin: 0; /* ביטול מרווחים חיצוניים */
+    padding: 0; /* ביטול מרווחים פנימיים */
+    box-sizing: border-box; /* חישוב גבולות נכון */
+    overflow: hidden; /* מניעת גלילה */
+    height: 100vh; /* הגבלת גובה */
+}
+
+/* עיצוב הכרטיס */
+.album-card {
+    max-width: 400px;
+    width: 100%;
+    background-color: #fff; /* רקע לבן */
+    color: #000; /* טקסט שחור */
+    border: 1px solid #f44336; /* מסגרת אדומה */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* הצללה לכרטיס */
+    border-radius: 8px; /* עיגול פינות */
+    overflow: hidden;
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+}
+
+  
+  /* עיצוב הכותרת */
+  .album-header {
+    background-color: #f44336; /* רקע אדום */
+    color: #fff; /* טקסט לבן */
+    padding: 10px;
+  }
+  
+  /* עיצוב התוכן */
+  .album-content {
+    padding: 20px;
+    font-size: 1.2rem;
+    color: #000; /* טקסט שחור */
+  }
+  
+  /* עיצוב פסקאות */
+  .album-content p {
+    margin: 0;
+    font-weight: bold;
+  }

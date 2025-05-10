@@ -1,0 +1,43 @@
+<div class="statistics-container">
+    <h2 class="statistics-title">סטטיסטיקות נרשמים חודשיים</h2>
+
+    <!-- הודעת טעינה -->
+    <div *ngIf="isLoading" class="loading-message">
+        <div class="loading-spinner"></div>
+        <span>טוען נתונים, אנא המתן...</span>
+    </div>
+
+    <!-- הודעת שגיאה -->
+    <div *ngIf="errorMessage && !isLoading" class="error-message">
+        {{ errorMessage }}
+    </div>
+
+    <!-- תוכן הגרף והנתונים -->
+    <div *ngIf="!isLoading && !errorMessage" class="statistics-content">
+        <!-- קופסת הגרף -->
+        <div class="chart-box">
+            <canvas baseChart [datasets]="chartData.datasets" [labels]="chartData.labels" [options]="chartOptions"
+                [type]="'line'">
+            </canvas>
+        </div>
+
+        <!-- אזור הקופסאות המסכמות -->
+        <div class="summary-boxes">
+            <div class="summary-box">
+                <div class="box-title">סה"כ נרשמים</div>
+                <div class="box-value">{{ totalRegistrations }}</div>
+            </div>
+
+            <div class="summary-box">
+                <div class="box-title">ממוצע חודשי</div>
+                <div class="box-value">{{ averageRegistrations }}</div>
+            </div>
+
+            <div class="summary-box">
+                <div class="box-title">שיא נרשמים</div>
+                <div class="box-value">{{ maxRegistrations }}</div>
+                <div class="box-subtitle">בחודש {{ maxRegistrationMonth }}</div>
+            </div>
+        </div>
+    </div>
+</div>
