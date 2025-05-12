@@ -12,7 +12,6 @@ import {
     Box,
     Button,
     Typography,
-    useTheme,
     Container,
     Grid,
     Breadcrumbs,
@@ -47,6 +46,8 @@ import CopyMoveModal from "./CopyMoveModal"
 import photoUploadStore from "../../stores/photoUploaderStore"
 import albumStore from "../../stores/albumStore"
 import { motion } from "framer-motion"
+import { Album } from "../../models/Album"
+import { Photo } from "../../models/Photo"
 
 const PhotoGallery: React.FC = observer(() => {
     const { albumId: currentAlbumId } = useParams<{ albumId: string }>()
@@ -71,7 +72,7 @@ const PhotoGallery: React.FC = observer(() => {
         type: "success",
     })
 
-    const theme = useTheme()
+    // const theme = useTheme()
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -209,10 +210,10 @@ const PhotoGallery: React.FC = observer(() => {
                 case "name":
                     comparison = a.photoName.localeCompare(b.photoName)
                     break
-                case "date":
-                    // Assuming there's a date field, replace with actual field
-                    comparison = new Date(a.createdAt || 0).getTime() - new Date(b.createdAt || 0).getTime()
-                    break
+                // case "date":
+                //     // Assuming there's a date field, replace with actual field
+                //     comparison = new Date(a.createdAt || 0).getTime() - new Date(b.createdAt || 0).getTime()
+                //     break
                 default:
                     comparison = 0
             }
@@ -361,9 +362,8 @@ const PhotoGallery: React.FC = observer(() => {
                         sx={{ mb: 3 }}
                     />
                 </Box>
-
                 <PhotoGrid
-                    photos={sortedPhotos}
+                    photos={sortedPhotos.filter((photo) => photo.id !== undefined) as Photo[]}
                     onPhotoClick={handlePhotoClick}
                     onCopyMoveClick={openCopyMoveDialog}
                     viewMode={viewMode}
@@ -374,7 +374,7 @@ const PhotoGallery: React.FC = observer(() => {
                     onClose={closeCopyMoveDialog}
                     isCopyOperation={isCopyOperation}
                     targetAlbumId={copyMoveTargetAlbumId}
-                    albums={albumStore.albums}
+                    albums={albumStore.albums.filter((album) => album.id !== undefined) as Album[]}
                     onAlbumChange={handleCopyMoveTargetAlbumChange}
                     onConfirm={handleCopyMovePhoto}
                 />

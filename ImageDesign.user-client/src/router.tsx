@@ -24,8 +24,6 @@ import Gggg from "./components/HomePage/Home";
 import DeleteAlbum from "./components/DeleteAlbum";
 import FileUploader from "./components/FileUploader";
 import Register from "./components/Register";
-import GetPhotos from "./components/GetPhotos";
-import UserPhotos from "./components/Collage/UserPhotos";
 import UserPhotosDialog from "./components/Collage/UserPhotos";
 import PhotoGallery from "./components/PhotosGallery";
 import TinPhoto from "./components/TinPhoto";

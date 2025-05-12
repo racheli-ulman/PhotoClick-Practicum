@@ -1,4 +1,4 @@
-import React, { JSX } from 'react';
+import { JSX } from 'react';
 import { 
   Box, 
   Typography, 
@@ -6,7 +6,7 @@ import {
   Grid, 
   Paper, 
   Avatar,
-  useTheme 
+  // useTheme 
 } from '@mui/material';
 import FamilyRestroomIcon from '@mui/icons-material/FamilyRestroom';
 import PregnantWomanIcon from '@mui/icons-material/PregnantWoman';
@@ -20,7 +20,7 @@ interface Audience {
 }
 
 function TargetAudience() {
-  const theme = useTheme();
+  // const theme = useTheme();
   
   const audiences: Audience[] = [
     {

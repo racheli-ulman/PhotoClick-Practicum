@@ -17,11 +17,12 @@ import {
 } from "@mui/icons-material"
 import { motion } from "framer-motion"
 import photoUploadStore from "../../stores/photoUploaderStore"
+import { Photo } from "../../models/Photo"
 
-interface Photo {
-  photoPath: string
-  photoName: string
-}
+// interface Photo {
+//   photoPath: string
+//   photoName: string
+// }
 
 interface PhotoDetailModalProps {
   open: boolean
@@ -79,6 +80,7 @@ const PhotoDetailModal: React.FC<PhotoDetailModalProps> = ({
             .catch((error) => console.error('שגיאה בשיתוף התמונה:', error));
     } else {
         // אם אפשרות השיתוף לא זמינה, העתק את ה-URL ללוח
+        if(photo.photoPath === undefined) return
         navigator.clipboard.writeText(photo.photoPath)
             .then(() => alert('הקישור הועתק ללוח'))
             .catch((error) => console.error('שגיאה בהעתקת הקישור:', error));

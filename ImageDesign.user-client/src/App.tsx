@@ -1,17 +1,17 @@
-import React from 'react';
+// import React from 'react';
 import { ThemeProvider, createTheme, responsiveFontSizes } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import { Container } from '@mui/material';
+// import { Container } from '@mui/material';
 import rtlPlugin from 'stylis-plugin-rtl';
 import { prefixer } from 'stylis';
 import { CacheProvider } from '@emotion/react';
 import createCache from '@emotion/cache';
 // import Header from '../src/components/Header';
-import Hero from './components/HomePage/Hero';
-import Features from './components/HomePage/Features';
-import TargetAudience from './components/HomePage/TargetAudience';
+// import Hero from './components/HomePage/Hero';
+// import Features from './components/HomePage/Features';
+// import TargetAudience from './components/HomePage/TargetAudience';
 // import CtaSection from './components/CtaSection';
-import Footer from './components/HomePage/Footer';
+// import Footer from './components/HomePage/Footer';
 import { RouterProvider } from 'react-router-dom';
 import { Router } from './router';
 

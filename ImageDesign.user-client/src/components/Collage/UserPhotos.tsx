@@ -40,6 +40,7 @@ interface UserPhotosDialogProps {
 const UserPhotosDialog: React.FC<UserPhotosDialogProps> = observer(({ open, onClose }) => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+    console.log(isMobile);
     
     const userData = sessionStorage.getItem("user");
     const user = userData ? JSON.parse(userData) : null;
@@ -48,9 +49,10 @@ const UserPhotosDialog: React.FC<UserPhotosDialogProps> = observer(({ open, onCl
     const [selectedPhotos, setSelectedPhotos] = useState<number[]>([]);
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
-    const [error, setError] = useState<string | null>(null);
+    const [error,setError] = useState<string | null>(null);
     const [collageDialogOpen, setCollageDialogOpen] = useState<boolean>(false);
     const [hoveredPhotoId, setHoveredPhotoId] = useState<number | null>(null);
+console.log(setError);
 
     useEffect(() => {
         if (open && userId) {

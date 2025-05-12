@@ -41,12 +41,21 @@ namespace ImageDesign.Service
 
         public async Task<PhotoDto> AddPhotoAsync(PhotoDto photo)
         {
-            //var photos = await _repositoryManager.PhotoM.GetAllPhotosAsync();
-            //foreach(var p in photos)
-            //{
-            //    if (!p.IsDeleted && p.PhotoName == photo.PhotoName)
-            //        return null;
-            //}
+            int? albumId = photo.AlbumId; // נניח שזה הערך שלך
+            if (albumId.HasValue)
+            {
+                int id = albumId.Value; // המרה מפורשת
+                var photos = await _repositoryManager.PhotoM.GetNotPhotosByAlbumIdAsync(id);
+                foreach (var p in photos)
+                {
+                    if (!p.IsDeleted && p.PhotoName == photo.PhotoName)
+                        return null;
+                }
+
+            }
+
+
+
 
             var addPhoto = _mapper.Map<Photo>(photo);
             //if (_repositoryManager.AlbumM.GetAlbumByIdAsync(photo.Id) == null)

@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom"
 import albumStore from "../stores/albumStore"
 import photoUploadStore from "../stores/photoUploaderStore"
 import CreateNewAlbum from "./CreateNewAlbum"
-import type { SelectedAlbum } from "../models/Album"
+import type { Album} from "../models/Album"
 import userStore from "../stores/userStore"
 // import { Button } from "@mui/material"
 
@@ -64,7 +64,7 @@ const UserAlbums: React.FC = () => {
   const [openCreateModal, setOpenCreateModal] = useState<boolean>(false)
   const [openEditModal, setOpenEditModal] = useState<boolean>(false)
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false)
-  const [selectedAlbum, setSelectedAlbum] = useState<SelectedAlbum | null>(null)
+  const [selectedAlbum, setSelectedAlbum] = useState<Album | null>(null)
   const [newAlbumName, setNewAlbumName] = useState<string>("")
   const [newAlbumDescription, setNewAlbumDescription] = useState<string>("")
   const [searchTerm, setSearchTerm] = useState<string>("")
@@ -89,8 +89,15 @@ useEffect(() => {
 
         // טוען את מספר התמונות עבור כל אלבום
         const counts: { [key: number]: number } = {}
-        for (const album of albumStore.albums) {
-          const count = await photoUploadStore.fetchPhotosByAlbumId(album.id)
+        for (const  album of albumStore.albums) {
+       
+          if (!album.id) continue // Skip if album ID is not available
+          const count = await photoUploadStore.fetchPhotosByAlbumId(album.id)   
+          console.log("album ",album);
+          console.log("album-id",album.id);
+          console.log("album-name",album.albumName);
+          console.log("count",count);
+          
           counts[album.id] = count
         }
         setPhotoCounts(counts)
@@ -137,18 +144,18 @@ useEffect(() => {
     handleSortMenuClose()
   }
 
-  const handleEditAlbum = (album: SelectedAlbum) => {
+  const handleEditAlbum = (album: Album) => {
     setSelectedAlbum(album)
-    setNewAlbumName(album.albumName)
+    setNewAlbumName(album.albumName || "")
     setNewAlbumDescription(album.description || "")
     setOpenEditModal(true)
-    handleMenuClose(album.id)
+    handleMenuClose(album.id!)
   }
 
-  const handleDeleteAlbum = (album: SelectedAlbum) => {
+  const handleDeleteAlbum = (album: Album) => {
     setSelectedAlbum(album)
     setOpenDeleteModal(true)
-    handleMenuClose(album.id)
+    handleMenuClose(album.id!)
   }
 
   const handleUpdateAlbum = async () => {
@@ -158,11 +165,12 @@ useEffect(() => {
     }
 
     try {
-      const updatedAlbum = {
+      const updatedAlbum: Album = {
         id: selectedAlbum.id,
         albumName: newAlbumName.trim(),
         userId: userId,
         description: newAlbumDescription.trim(),
+        createdAt: selectedAlbum.createdAt, // Ensure createdAt is included
       }
 
       await albumStore.updateAlbum(updatedAlbum)
@@ -181,7 +189,7 @@ useEffect(() => {
     if (!selectedAlbum) return
 
     try {
-      await albumStore.deleteAlbum(selectedAlbum.id)
+      await albumStore.deleteAlbum(selectedAlbum.id!)
       setOpenDeleteModal(false)
       setSelectedAlbum(null)
       showNotification("האלבום נמחק בהצלחה", "success")
@@ -439,16 +447,16 @@ useEffect(() => {
                                 bgcolor: "white",
                               },
                             }}
-                            onClick={(e) => handleMenuOpen(e, album.id)}
+                            onClick={(e) => handleMenuOpen(e, album.id!)}
                           >
                             <MoreVert fontSize="small" />
                           </IconButton>
                           <Menu
                             id={`album-menu-${album.id}`}
-                            anchorEl={menuAnchorEl[album.id]}
+                            anchorEl={menuAnchorEl[album.id!]}
                             keepMounted
-                            open={Boolean(menuAnchorEl[album.id])}
-                            onClose={() => handleMenuClose(album.id)}
+                            open={Boolean(menuAnchorEl[album.id!])}
+                            onClose={() => handleMenuClose(album.id!)}
                           >
                             <MenuItem onClick={() => handleEditAlbum(album)}>
                               <ListItemIcon>
@@ -465,7 +473,7 @@ useEffect(() => {
                             <MenuItem
                               onClick={() => {
                                 // Handle share
-                                handleMenuClose(album.id)
+                                handleMenuClose(album.id!)
                               }}
                             >
                               <ListItemIcon>
@@ -476,7 +484,7 @@ useEffect(() => {
                             <MenuItem
                               onClick={() => {
                                 // Handle info
-                                handleMenuClose(album.id)
+                                handleMenuClose(album.id!)
                               }}
                             >
                               <ListItemIcon>
@@ -511,7 +519,7 @@ useEffect(() => {
                       <CardActions sx={{ justifyContent: "space-between", px: 2, pb: 2 }}>
                         <Chip
                           icon={<PhotoLibrary fontSize="small" />}
-                          label={`${photoCounts[album.id] || 7} תמונות`}
+                          label={`${photoCounts[album.id!] || 0} תמונות`}
                           size="small"
                           variant="outlined"
                         />

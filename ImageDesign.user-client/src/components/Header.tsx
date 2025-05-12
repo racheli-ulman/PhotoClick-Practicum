@@ -350,7 +350,7 @@ const Header: React.FC = () => {
                         }}
                         onClick={() => {
                           item.action()
-                          toggleDrawer(false)()
+                          toggleDrawer(false)({ type: "click" } as React.MouseEvent)
                         }}
                       >
                         {item.label}

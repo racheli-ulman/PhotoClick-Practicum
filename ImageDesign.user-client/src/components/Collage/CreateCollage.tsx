@@ -24,13 +24,12 @@ import {
   Select,
   MenuItem,
   InputLabel,
-  Stack
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import SaveIcon from '@mui/icons-material/Save';
 import DownloadIcon from '@mui/icons-material/Download';
 import TextFieldsIcon from '@mui/icons-material/TextFields';
-import FormatColorFillIcon from '@mui/icons-material/FormatColorFill';
+// import FormatColorFillIcon from '@mui/icons-material/FormatColorFill';
 import albumStore from '../../stores/albumStore';
 import html2canvas from 'html2canvas';
 
@@ -116,6 +115,8 @@ const CollageCreator: React.FC<CollageCreatorProps> = ({ open, onClose, selected
 
   const handleGapSizeChange = (event: Event, newValue: number | number[]) => {
     setGapSize(newValue as number);
+    console.log(event, newValue);
+    
   };
 
   const handleBackgroundColorChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -126,16 +127,18 @@ const CollageCreator: React.FC<CollageCreatorProps> = ({ open, onClose, selected
     setNotification({ ...notification, open: false });
   };
 
-  const handleTextPositionChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setTextPosition(event.target.value as TextPositionType);
-  };
+  // const handleTextPositionChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+  //   setTextPosition(event.target.value as TextPositionType);
+  // };
 
-  const handleTextStyleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setTextStyle(event.target.value as FontStyleType);
-  };
+  // const handleTextStyleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+  //   setTextStyle(event.target.value as FontStyleType);
+  // };
 
   const handleTextSizeChange = (event: Event, newValue: number | number[]) => {
     setTextSize(newValue as number);
+    console.log(event, newValue);
+    
   };
 
   // Helper function to preload images and convert them to data URLs
@@ -157,7 +160,9 @@ const CollageCreator: React.FC<CollageCreatorProps> = ({ open, onClose, selected
         img.crossOrigin = "anonymous";
        
         // Create a promise to wait for the image to load
-        await new Promise<void>((resolve, reject) => {
+        await new Promise<void>((resolve) => {
+          // console.log(reject);
+          
           img.onload = () => resolve();
           img.onerror = () => {
             console.error(`Failed to load image: ${photo.photoPath}`);

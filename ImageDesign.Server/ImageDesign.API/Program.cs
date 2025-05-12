@@ -97,13 +97,12 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-builder.Services.AddDbContext<DataContext>();
-//var connectionString = Environment.GetEnvironmentVariable("ConnectionStrings");
-
-
-//builder.Services.AddDbContext<DataContext>(options =>
-//    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString), options => options.CommandTimeout(60)));
 //builder.Services.AddDbContext<DataContext>();
+var connectionString = Environment.GetEnvironmentVariable("ConnectionStrings");
+
+
+builder.Services.AddDbContext<DataContext>(options =>
+    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString), options => options.CommandTimeout(60)));
 
 
 

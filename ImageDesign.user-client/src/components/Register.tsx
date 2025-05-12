@@ -112,7 +112,7 @@ const Register: React.FC = observer(() => {
         setError(userStore.error);
       } else {
         setError('');
-        navigate('/userAlbums');
+        navigate('/personal-area/userAlbums');
       }
     } catch (err) {
       setError('Registration failed. Please try again.');

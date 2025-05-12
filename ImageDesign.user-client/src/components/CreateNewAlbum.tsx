@@ -13,9 +13,7 @@ import {
   DialogActions,
   Slide,
   FormHelperText,
-  Fade,
-  Chip,
-  Divider,
+  Fade
 } from "@mui/material";
 import { TransitionProps } from "@mui/material/transitions";
 import CloseIcon from "@mui/icons-material/Close";

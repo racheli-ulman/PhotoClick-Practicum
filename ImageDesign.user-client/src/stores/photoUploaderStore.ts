@@ -283,6 +283,7 @@ class PhotoUploadStore {
             console.error('שגיאה בקבלת התמונות:', error);
             this.setError('שגיאה בקבלת התמונות.');
         }
+        return this.photos.length;
     }
 
     async deletePhoto(photoId: number) {
@@ -392,15 +393,25 @@ class PhotoUploadStore {
                 userId: userId,
                 photoName: selectedFile.name,
                 albumId: albumId,
-                photoPath: downloadUrl,
+                photoPath: downloadUrl?.toString() || "", // נשתמש ב-URL של התמונה שהועלתה
                 photoSize: selectedFile.size,
                 tagId: tagId, // הוספת ה-ID של התג
 
             };
             console.log("data being sent: ", data); // לוג של הנתונים
 
-            await this.addPhoto(data);
-            this.setImageUrl(downloadUrl);
+            if (data.photoPath) {
+                if (data.photoPath) {
+                    await this.addPhoto(data);
+                } else {
+                    this.setError('התרחשה שגיאה: נתיב התמונה אינו תקין.');
+                }
+            } else {
+                this.setError('התרחשה שגיאה: נתיב התמונה אינו תקין.');
+            }
+            if (downloadUrl) {
+                this.setImageUrl(downloadUrl);
+            }
             this.setError("");
             // }
             // console.log("photoPath ",photoPath);

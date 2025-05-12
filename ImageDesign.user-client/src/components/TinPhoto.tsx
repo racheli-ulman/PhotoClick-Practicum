@@ -88,10 +88,10 @@ const TinPhoto: React.FC = observer(() => {
                             <img 
                                 src={photo.photoPath} 
                                 alt={photo.photoName} 
-                                onClick={() => handleImageClick(photo.photoPath)}
+                                onClick={() => photo.photoPath && handleImageClick(photo.photoPath)}
                             />
                             <div className="photo-overlay">
-                                <ZoomIn className="zoom-icon" onClick={() => handleImageClick(photo.photoPath)} />
+                                <ZoomIn className="zoom-icon" onClick={() => photo.photoPath && handleImageClick(photo.photoPath)} />
                             </div>
                         </div>
                         <div className="photo-info">
@@ -101,7 +101,7 @@ const TinPhoto: React.FC = observer(() => {
                         <div className="photo-actions">
                             <button 
                                 className="action-button restore-button"
-                                onClick={() => handleRestorePhoto(photo.id)}
+                                onClick={() => handleRestorePhoto(photo.id!)}
                                 title="שחזור תמונה"
                             >
                                 <Restore />
@@ -109,7 +109,7 @@ const TinPhoto: React.FC = observer(() => {
                             </button>
                             <button 
                                 className="action-button delete-button"
-                                onClick={() => handlePermanentDelete(photo.id)}
+                                onClick={() => handlePermanentDelete(photo.id!)}
                                 title="מחיקה סופית"
                             >
                                 <DeleteForever />
