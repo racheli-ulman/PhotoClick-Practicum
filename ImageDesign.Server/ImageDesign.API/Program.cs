@@ -165,8 +165,8 @@ app.UseHttpsRedirection();
 
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
+//if (app.Environment.IsDevelopment())
+//{
     app.MapOpenApi();
     app.UseDeveloperExceptionPage();
     app.UseSwagger();
@@ -175,7 +175,7 @@ if (app.Environment.IsDevelopment())
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "ImageDesign API V1");
         c.RoutePrefix = string.Empty;
     });
-}
+//}
 
 ////////////////////////////////////////////////////////////////////
 
