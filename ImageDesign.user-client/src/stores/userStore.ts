@@ -4,16 +4,13 @@ import axios from "axios";
 
 class UserStore {
 
-
-
   user: any = null;
   error: string | null = null;
-  baseUrl: string;
 
   constructor() {
     makeAutoObservable(this);
     this.loadUserFromSession();
-    this.baseUrl = process.env.REACT_APP_BASEURL || "http://localhost:5083"; // ערך ברירת מחדל
+   
   }
 
   setUser(user: any) {
@@ -33,34 +30,36 @@ class UserStore {
   }
 
   async login(email: string, password: string) {
+    console.log("llllllllllllllllogin function called");
+    
     try {
       this.logout(); // התנתקות מהמשתמש הקודם
-      console.log("email", email); // הדפסת המייל והסיסמה לקונסולה
-      console.log("password", password); // הדפסת המייל והסיסמה לקונסולה
+      console.log("email",email); // הדפסת המייל והסיסמה לקונסולה
+      console.log("password",password); // הדפסת המייל והסיסמה לקונסולה
       console.log("login function called"); // הדפסת המייל והסיסמה לקונסולה
-
-
+      
+            
       const response = await axios.post("http://localhost:5083/api/Auth/login", { email, password });
-
+  
       this.setUser(response.data); // שמירה ב-sessionStorage
       this.setError(null);
     } catch (err: any) {
       this.setError(err.message || "Error logging in");
     }
   }
+  
 
-
-  //   async login(email: string, password: string) {
-  //     try {
-  //         const response = await axios.post("http://localhost:5083/api/Auth/login", { email, password });
-  //         this.setUser(response.data); // שמירה ב-sessionStorage
-  //         this.setError(null);
-  //         return { success: true, user: response.data }; // החזרת אובייקט עם הצלחה
-  //     } catch (err: any) {
-  //         this.setError(err.message || "Error logging in");
-  //         return { success: false, error: this.error }; // החזרת אובייקט עם שגיאה
-  //     }
-  // }
+//   async login(email: string, password: string) {
+//     try {
+//         const response = await axios.post("http://localhost:5083/api/Auth/login", { email, password });
+//         this.setUser(response.data); // שמירה ב-sessionStorage
+//         this.setError(null);
+//         return { success: true, user: response.data }; // החזרת אובייקט עם הצלחה
+//     } catch (err: any) {
+//         this.setError(err.message || "Error logging in");
+//         return { success: false, error: this.error }; // החזרת אובייקט עם שגיאה
+//     }
+// }
 
 
 

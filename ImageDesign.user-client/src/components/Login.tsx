@@ -52,6 +52,7 @@ const Login: React.FC = () => {
     setError("")
 
     try {
+      
       await userStore.login(userEmail, password)
 
       if (userStore.error) {
