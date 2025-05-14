@@ -236,14 +236,14 @@ class PhotoUploadStore {
     tag: { id: number, tagName: string }[] = []; // מערך של אובייקטים עם ID ושם התג
     photos: Photo[] = []; // מערך של תמונות
     recyclingPhotos: Photo[] = []; // מערך של תמונות שנמחקו
-    baseUrl: string;
+  baseUrl: string;
 
 
     constructor() {
         makeAutoObservable(this);
-        this.fetchTags(); // קריאת התיוגים מהשרת בעת יצירת האובייקט
+         // קריאת התיוגים מהשרת בעת יצירת האובייקט
         this.baseUrl = import.meta.env.VITE_API_URL;
-
+        this.fetchTags();
     }
 
     setFile(file: File | null) {
@@ -263,6 +263,8 @@ class PhotoUploadStore {
     }
 
     async fetchTags() {
+        console.log("baseUrl ",this.baseUrl);
+        
         try {
             const response = await axios.get(`${this.baseUrl}/Tag`);
             this.tag = response.data; // השאר את זה כמו שזה אם אתה רוצה לשמור את התגים
