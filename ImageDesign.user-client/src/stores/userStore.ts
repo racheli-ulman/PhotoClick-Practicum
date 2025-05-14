@@ -66,7 +66,7 @@ baseUrl:string;
 
   async register(firstName: string, lastName: string, email: string, password: string, roleName: string) {
     try {
-      const response = await axios.post("http://localhost:5083/api/Auth/register", {
+      const response = await axios.post(`${this.baseUrl}/Auth/register`, {
         firstName,
         lastName,
         email,

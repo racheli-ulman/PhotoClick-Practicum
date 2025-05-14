@@ -199,9 +199,12 @@ class AlbumStore {
   albums: Album[] = [];
   photos: any[] = []; // הוסף מערך עבור התמונות
   error: string | null = null;
+  baseUrl: string;
 
   constructor() {
     makeAutoObservable(this);
+    this.baseUrl = import.meta.env.VITE_API_URL;
+
   }
 
   setAlbums(albums: Album[]) {
@@ -221,7 +224,7 @@ class AlbumStore {
     if (!userId) return; // אם לא קיים userId, אל תבצע שום דבר
 
     try {
-      const response = await axios.get(`http://localhost:5083/api/Album/user/${userId}`);
+      const response = await axios.get(`${this.baseUrl}/Album/user/${userId}`);
       this.setAlbums(response.data);
     } catch (err: any) {
       this.setError(err.message || "Error fetching albums");
@@ -234,7 +237,7 @@ class AlbumStore {
     if (!userId) return; // אם לא קיים userId, אל תבצע שום דבר
 
     try {
-      const response = await axios.get(`http://localhost:5083/api/Album/user/${userId}/photos`);
+      const response = await axios.get(`${this.baseUrl}/Album/user/${userId}/photos`);
       this.setPhotos(response.data); // שמור את התמונות במערך
     } catch (err: any) {
       this.setError(err.message || "Error fetching photos");
