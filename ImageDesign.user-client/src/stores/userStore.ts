@@ -6,11 +6,12 @@ class UserStore {
 
   user: any = null;
   error: string | null = null;
-
+baseUrl:string;
   constructor() {
     makeAutoObservable(this);
     this.loadUserFromSession();
-   
+   this.baseUrl =import.meta.env.VITE_API_URL;
+
   }
 
   setUser(user: any) {
@@ -30,7 +31,7 @@ class UserStore {
   }
 
   async login(email: string, password: string) {
-    console.log("llllllllllllllllogin function called");
+    console.log("llllllllllllllllogin function called",this.baseUrl);
     
     try {
       this.logout(); // התנתקות מהמשתמש הקודם
@@ -39,7 +40,7 @@ class UserStore {
       console.log("login function called"); // הדפסת המייל והסיסמה לקונסולה
       
             
-      const response = await axios.post("http://localhost:5083/api/Auth/login", { email, password });
+      const response = await axios.post(`${this.baseUrl}/Auth/login`, { email, password });
   
       this.setUser(response.data); // שמירה ב-sessionStorage
       this.setError(null);
