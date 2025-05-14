@@ -7,9 +7,12 @@ class TagStore {
   albums: Tag[] = [];
   // photos: any[] = []; // הוסף מערך עבור התמונות
   error: string | null = null;
+  baseUrl: string;
 
   constructor() {
     makeAutoObservable(this);
+    this.baseUrl = import.meta.env.VITE_API_URL;
+
   }
 
   setError(error: string | null) {
@@ -22,7 +25,7 @@ class TagStore {
     if (!tagId) return; // אם לא קיים tagId, אל תבצע שום דבר
 
     try {
-      const response = await axios.get(`http://localhost:5083/api/Tag/${tagId}`);
+      const response = await axios.get(`${this.baseUrl}/Tag/${tagId}`);
       console.log("response", response);
 
     } catch (err: any) {

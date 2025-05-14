@@ -236,11 +236,14 @@ class PhotoUploadStore {
     tag: { id: number, tagName: string }[] = []; // מערך של אובייקטים עם ID ושם התג
     photos: Photo[] = []; // מערך של תמונות
     recyclingPhotos: Photo[] = []; // מערך של תמונות שנמחקו
+    baseUrl: string;
 
 
     constructor() {
         makeAutoObservable(this);
         this.fetchTags(); // קריאת התיוגים מהשרת בעת יצירת האובייקט
+        this.baseUrl = import.meta.env.VITE_API_URL;
+
     }
 
     setFile(file: File | null) {
@@ -261,7 +264,7 @@ class PhotoUploadStore {
 
     async fetchTags() {
         try {
-            const response = await axios.get('http://localhost:5083/api/Tag');
+            const response = await axios.get(`${this.baseUrl}/Tag`);
             this.tag = response.data; // השאר את זה כמו שזה אם אתה רוצה לשמור את התגים
         } catch (error) {
             console.error('שגיאה בקבלת התיוגים:', error);
@@ -272,7 +275,7 @@ class PhotoUploadStore {
     async fetchPhotosByAlbumId(albumId: number) {
         try {
             console.log(albumId);
-            const response = await axios.get(`http://localhost:5083/api/Photo/photo/album/${albumId}`);
+            const response = await axios.get(`${this.baseUrl}/Photo/photo/album/${albumId}`);
             this.photos = response.data;
             console.log("images ", this.photos);
             console.log("response", response);
@@ -288,11 +291,11 @@ class PhotoUploadStore {
 
     async deletePhoto(photoId: number) {
         console.log("photoId in deletePhoto: ", photoId);
-        
+
         try {
-            await axios.delete(`http://localhost:5083/api/Photo/${photoId}`);
+            await axios.delete(`${this.baseUrl}/Photo/${photoId}`);
             console.log("photoId ", photoId);
-            
+
             this.photos = this.photos.filter(photo => photo.id !== photoId);
             // אם יש צורך, תוכל לקרוא שוב ל-fetchPhotosByAlbumId כאן
         } catch (error: any) {
@@ -306,7 +309,7 @@ class PhotoUploadStore {
         try {
             // Call the API to copy the photo
             const response = await axios.post(
-                `http://localhost:5083/api/Photo/copy/${photoId}/to-album/${targetAlbumId}`
+                `${this.baseUrl}/Photo/copy/${photoId}/to-album/${targetAlbumId}`
             );
             console.log("Photo copied successfully:", response.data);
             return response.data;
@@ -322,7 +325,7 @@ class PhotoUploadStore {
         try {
             // Call the API to move the photo
             const response = await axios.put(
-                `http://localhost:5083/api/Photo/move/${photoId}/from-album/${sourceAlbumId}/to-album/${targetAlbumId}`
+                `${this.baseUrl}/Photo/move/${photoId}/from-album/${sourceAlbumId}/to-album/${targetAlbumId}`
             );
             console.log("Photo moved successfully:", response.data);
             return response.data;
@@ -369,7 +372,7 @@ class PhotoUploadStore {
         if (!selectedFile) return;
 
         try {
-            const response = await axios.get('http://localhost:5083/api/upload/presigned-url', {
+            const response = await axios.get(`${this.baseUrl}/upload/presigned-url`, {
                 params: { fileName: selectedFile.name },
             });
             const presignedUrl = response.data.url;
@@ -425,13 +428,13 @@ class PhotoUploadStore {
     async addPhoto(data: { userId: number | null, photoName: string, albumId: number, photoPath: string, photoSize: number, tagId: number | null }) { // שינינו ל-tagId
 
         try {
-            await axios.post('http://localhost:5083/api/Photo', data, {
+            await axios.post(`${this.baseUrl}/Photo`, data, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
             });
         } catch (error: any) {
-            if(error=="there is photo in this album whith the same name please change name")
+            if (error == "there is photo in this album whith the same name please change name")
                 alert("אנא שנה אץ שם התמונה לפני ההעלאה");
             console.error('שגיאה בהוספת התמונה:', error);
             console.error('תוכן השגיאה:', error.response?.data);
@@ -441,8 +444,8 @@ class PhotoUploadStore {
 
     async getDownloadUrl(fileName: string) {
         try {
-            const response = await axios.get(`http://localhost:5083/api/Download/download-url/${fileName}`);
-            
+            const response = await axios.get(`${this.baseUrl}/Download/download-url/${fileName}`);
+
             // בדיקה שהתגובה מהשרת מכילה URL תקין
             if (response.data && typeof response.data === 'string' && response.data.startsWith('http')) {
                 return response.data;
@@ -461,24 +464,24 @@ class PhotoUploadStore {
 
     async fetchRecyclingPhotos(userId: number) {
         console.log("userId in fetchRecyclingPhotos: ", userId);
-        
+
         try {
-            const response = await axios.get(`http://localhost:5083/api/Photo/Recycling-photos/user/${userId}`);
+            const response = await axios.get(`${this.baseUrl}/Photo/Recycling-photos/user/${userId}`);
             this.recyclingPhotos = response.data; // שמירה של התמונות שנמחקו
             console.log("Recycling photos response: ", response.data);
-            
+
             console.log("Recycling photos: ", this.recyclingPhotos);
         } catch (error) {
             console.error('שגיאה בקבלת התמונות שנמחקו:', error);
             this.setError('שגיאה בקבלת התמונות שנמחקו.');
         }
     }
-    
 
-//שחזור תמונה
+
+    //שחזור תמונה
     async restorePhoto(photoId: number) {
         try {
-            const response = await axios.post(`http://localhost:5083/api/Photo/restore/photo/${photoId}`);
+            const response = await axios.post(`${this.baseUrl}/Photo/restore/photo/${photoId}`);
             console.log("Photo restored successfully:", response.data);
             // אם יש צורך, תוכל לעדכן את המערך של recyclingPhotos או לבצע קריאה מחדש ל-fetchRecyclingPhotos
             await this.fetchRecyclingPhotos(userStore.user?.user?.id); // עדכון המערך של התמונות שנמחקו

@@ -6,9 +6,12 @@ class PhotoUploadStore {
     imageUrl = null;
     isUploading = false;
     error = null;
+    baseUrl: string;
 
     constructor() {
         makeAutoObservable(this);
+        this.baseUrl = import.meta.env.VITE_API_URL;
+
     }
 
     async uploadFile(file: any) {
@@ -19,7 +22,7 @@ class PhotoUploadStore {
         try {
             // שלב 1: קבלת Presigned URL מהשרת
             console.log("file.name ", file.name);
-            const response = await axios.get('http://localhost:5083/api/Upload/presigned-url', {
+            const response = await axios.get(`${this.baseUrl}/Upload/presigned-url`, {
                 params: { fileName: file.name }
             });
             const presignedUrl = response.data.url;
@@ -35,7 +38,7 @@ class PhotoUploadStore {
                     );
                     this.progress = percent;
                     console.log("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
-                    
+
                 },
             });
 
@@ -55,7 +58,7 @@ class PhotoUploadStore {
 
     async getImageUrl(fileName: string) {
         try {
-            const response = await axios.get(`http://localhost:5083/api/Download/download-url/${fileName}`);
+            const response = await axios.get(`${this.baseUrl}/Download/download-url/${fileName}`);
             return response.data;
         } catch (error: any) {
             this.error = error.message;
