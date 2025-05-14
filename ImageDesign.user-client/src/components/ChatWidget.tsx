@@ -27,6 +27,7 @@ const ChatComponent: React.FC<ChatComponentProps> = ({ onClose }) => {
     const messagesEndRef = useRef<null | HTMLDivElement>(null);
     const [messages, setMessages] = useState<{ sender: 'user' | 'bot'; text: string }[]>([]);
     const [status, setStatus] = useState<'idle' | 'loading' | 'error'>('idle');
+const baseURL= import.meta.env.VITE_API_URL
 
     // נושאים מוצעים לשיחות על תמונות
     const suggestedTopics = [
@@ -58,7 +59,7 @@ const ChatComponent: React.FC<ChatComponentProps> = ({ onClose }) => {
         setInput('');
 
         try {
-            const response = await axios.post('http://localhost:5083/api/Chat', {
+            const response = await axios.post(`${baseURL}/Chat`, {
                 Question: input,
             });
             const botResponse = response.data?.choices?.[0]?.message?.content || 'אני מצטער, קרתה שגיאה.';
