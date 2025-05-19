@@ -72,5 +72,14 @@ namespace ImageDesign.API.Controllers
             if (!success) return NotFound();
             return Ok(success);
         }
+
+        [HttpGet("name/{tagName}")]
+        public async Task<ActionResult<TagDto>> GetTagByName(string tagName)
+        {
+            var tag = await _tagService.GetTagByNameAsync(tagName);
+            if (tag == null) return NotFound();
+            return Ok(tag);
+        }
+
     }
 }

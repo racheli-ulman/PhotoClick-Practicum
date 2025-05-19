@@ -22,6 +22,7 @@ namespace ImageDesign.Core.IServices
         Task<IEnumerable<PhotoDto>> GetNotPhotosByAlbumIdAsync(int albumId);
         Task<bool> RestorePhoto(int photoId);
         Task<IEnumerable<PhotoDto>> GetAllDeletedPhotosAsync();
+        Task<IEnumerable<PhotoDto>> GetPhotosByTagIdAsync(int tagId);
 
 
         //Task<IEnumerable<PhotoDto>> GetDeletedPhotosAsync();

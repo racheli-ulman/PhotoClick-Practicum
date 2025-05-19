@@ -235,17 +235,17 @@ class PhotoUploadStore {
     imageUrl: string | null = null;
     error: string | null = null;
     // tag: { id: number, tagName: string }[] = []; // מערך של אובייקטים עם ID ושם התג
-    tag:Tag[] = []; // מערך של אובייקטים עם ID ושם התג
+    tag: Tag[] = []; // מערך של אובייקטים עם ID ושם התג
     photos: Photo[] = []; // מערך של תמונות
     recyclingPhotos: Photo[] = []; // מערך של תמונות שנמחקו
-  baseUrl: string;
+    baseUrl: string;
 
 
     constructor() {
         makeAutoObservable(this);
-         // קריאת התיוגים מהשרת בעת יצירת האובייקט
+        // קריאת התיוגים מהשרת בעת יצירת האובייקט
         // this.baseUrl = import.meta.env.VITE_API_URL;
-    this.baseUrl = "http://localhost:5083/api"; // עדכון כאן
+        this.baseUrl = "http://localhost:5083/api"; // עדכון כאן
 
         this.fetchTags();
     }
@@ -267,8 +267,8 @@ class PhotoUploadStore {
     }
 
     async fetchTags() {
-        console.log("baseUrl ",this.baseUrl);
-        
+        console.log("baseUrl ", this.baseUrl);
+
         try {
             const response = await axios.get(`${this.baseUrl}/Tag`);
             this.tag = response.data; // השאר את זה כמו שזה אם אתה רוצה לשמור את התגים
@@ -500,24 +500,51 @@ class PhotoUploadStore {
 
 
 
-async fetchPhotosByTag(tagName: string) {
-    const tag = this.tag.find(t => t.tagName === tagName); // חיפוש ה-ID של התג לפי השם
-    if (tag) {
+    // async fetchPhotosByTag(tagName: string) {
+    //     const tag = this.tag.find(t => t.tagName === tagName); // חיפוש ה-ID של התג לפי השם
+    //     if (tag) {
+    //         try {
+    //             const response = await axios.get(`${this.baseUrl}/Photo/tag/${tag.Id}`); // הנחה שיש API שמחזיר תמונות לפי ID של תג
+    //             this.photos = response.data; // עדכון המערך של התמונות
+    //         } catch (error) {
+    //             console.error('שגיאה בקבלת התמונות לפי תג:', error);
+    //             this.setError('שגיאה בקבלת התמונות לפי תג.');
+    //         }
+    //     } else {
+    //         console.error('תג לא נמצא');
+    //         this.setError('תג לא נמצא.');
+    //     }
+    // }
+
+
+    async fetchTagIdByTagName(tagName: string): Promise<number | null> {
         try {
-            const response = await axios.get(`${this.baseUrl}/Photo/tag/${tag.Id}`); // הנחה שיש API שמחזיר תמונות לפי ID של תג
-            this.photos = response.data; // עדכון המערך של התמונות
+            const response = await axios.get(`${this.baseUrl}/Tag/name/${tagName}`);
+            return response.data.id; // הנחה שה-API מחזיר אובייקט עם ID
         } catch (error) {
-            console.error('שגיאה בקבלת התמונות לפי תג:', error);
-            this.setError('שגיאה בקבלת התמונות לפי תג.');
+            console.error('שגיאה בקבלת ID של תג:', error);
+            this.setError('שגיאה בקבלת ID של תג.');
+            return null;
         }
-    } else {
-        console.error('תג לא נמצא');
-        this.setError('תג לא נמצא.');
+
     }
-}
 
 
 
+    async fetchPhotosByTag(tagId: number) {
+        try {
+            const response = await fetch(`/api/Photo/tag/${tagId}`) // הנחה על ה-API שלך
+            if (!response.ok) {
+                throw new Error("Network response was not ok")
+            }
+            const data = await response.json()
+            console.log("data", data);
+
+            this.photos = data.photos // הנחה שהנתונים מגיעים במבנה הזה
+        } catch (error) {
+            console.error("Error fetching photos by tag:", error)
+        }
+    }
 
 
 

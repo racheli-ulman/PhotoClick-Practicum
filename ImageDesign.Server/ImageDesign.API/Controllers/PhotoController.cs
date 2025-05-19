@@ -166,5 +166,16 @@ namespace ImageDesign.API.Controllers
             return Ok(success);
         }
 
+
+        [HttpGet("tag/{tagId}")]
+        public async Task<ActionResult<IEnumerable<PhotoDto>>> GetPhotosByTagIdAsync(int tagId)
+        {
+            if (tagId <= 0) return BadRequest("Invalid tag ID");
+
+            var photos = await _photoService.GetPhotosByTagIdAsync(tagId);
+            return Ok(photos);
+        }
+
+
     }
 }

@@ -28,6 +28,7 @@ namespace ImageDesign.Data.Repositories
             return await _dataContext.Tags.FindAsync(id);
         }
 
+
         public async Task<Tag> AddTagAsync(Tag tag)
         {
             await _dataContext.Tags.AddAsync(tag);
@@ -55,5 +56,12 @@ namespace ImageDesign.Data.Repositories
             _dataContext.Tags.Remove(tag);
             return await _dataContext.SaveChangesAsync() > 0;
         }
+
+        public async Task<Tag> GetTagByNameAsync(string tagName)
+        {
+            return await _dataContext.Tags.FirstOrDefaultAsync(t => t.TagName == tagName);
+        }
+
+
     }
 }

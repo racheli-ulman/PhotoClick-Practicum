@@ -154,5 +154,14 @@ namespace ImageDesign.Data.Repositories
 
             return photo;
         }
+
+
+        public async Task<IEnumerable<Photo>> GetPhotosByTagIdAsync(int tagId)
+        {
+            return await _dataContext.Photos
+                .Where(photo => photo.TagId == tagId) // הנחה שיש שדה TagId ב-Photo
+                .ToListAsync();
+        }
+
     }
 }

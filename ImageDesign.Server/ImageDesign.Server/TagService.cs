@@ -69,8 +69,19 @@ namespace ImageDesign.Service
             return await _repositoryManager.TagM.DeleteTagAsync(id);
         }
 
+        //public async Task<bool> GetTagIdByTagName(int id)
+        //{
+        //    await _repositoryManager.saveAsync();
+
+        //    return await _repositoryManager.TagM.DeleteTagAsync(id);
+        //}
+        public async Task<TagDto> GetTagByNameAsync(string tagName)
+        {
+            var tag = await _repositoryManager.TagM.GetTagByNameAsync(tagName);
+            return _mapper.Map<TagDto>(tag);
+        }
 
 
-       
+
     }
 }

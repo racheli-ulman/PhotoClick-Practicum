@@ -15,5 +15,7 @@ namespace ImageDesign.Core.IServices
         Task<TagDto> AddTagAsync(TagDto tag);
         Task<TagDto> UpdateTagAsync(int id, TagDto tag);
         Task<bool> DeleteTagAsync(int id);
+        Task<TagDto> GetTagByNameAsync(string tagName);
+
     }
 }

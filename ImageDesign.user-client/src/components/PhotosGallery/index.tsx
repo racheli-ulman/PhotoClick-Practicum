@@ -1,13 +1,9 @@
-"use client"
+"use client";
 
-// import { Button } from "@/components/ui/button"
-
-import type React from "react"
-import { useState, useEffect } from "react"
-import { observer } from "mobx-react-lite"
-import { useParams, useNavigate } from "react-router-dom"
-// import { Button } from "@mui/material"
-
+import type React from "react";
+import { useState, useEffect } from "react";
+import { observer } from "mobx-react-lite";
+import { useParams, useNavigate } from "react-router-dom";
 import {
     Box,
     Button,
@@ -27,7 +23,9 @@ import {
     Skeleton,
     Alert,
     Snackbar,
-} from "@mui/material"
+    Select,
+    SelectChangeEvent
+} from "@mui/material";
 import {
     ArrowBack,
     Home,
@@ -39,190 +37,201 @@ import {
     SortByAlpha,
     CalendarMonth,
     AccessTime,
-} from "@mui/icons-material"
-import PhotoGrid from "./PhotoGrid"
-import PhotoDetailModal from "./PhotoDetailModal"
-import CopyMoveModal from "./CopyMoveModal"
-import photoUploadStore from "../../stores/photoUploaderStore"
-import albumStore from "../../stores/albumStore"
-import { motion } from "framer-motion"
-import { Album } from "../../models/Album"
-import { Photo } from "../../models/Photo"
+} from "@mui/icons-material";
+import PhotoGrid from "./PhotoGrid";
+import PhotoDetailModal from "./PhotoDetailModal";
+import CopyMoveModal from "./CopyMoveModal";
+import photoUploadStore from "../../stores/photoUploaderStore";
+import albumStore from "../../stores/albumStore";
+import { motion } from "framer-motion";
+import { Album } from "../../models/Album";
 
 const PhotoGallery: React.FC = observer(() => {
-    const { albumId: currentAlbumId } = useParams<{ albumId: string }>()
-    const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number | null>(null)
-    const [zoomLevel, setZoomLevel] = useState(1)
-    const userData = sessionStorage.getItem("user")
-    const user = userData ? JSON.parse(userData) : null
-    const userId = user ? user.user.id : null
-    const [copyMoveTargetAlbumId, setCopyMoveTargetAlbumId] = useState<number | "">("")
-    const [selectedPhotoIdForOperation, setSelectedPhotoIdForOperation] = useState<number | null>(null)
-    const [isCopyMoveDialogOpen, setIsCopyMoveDialogOpen] = useState(false)
-    const [isCopyOperation, setIsCopyOperation] = useState(false)
-    const [albumName, setAlbumName] = useState<string>("")
-    const [viewMode, setViewMode] = useState<"grid" | "compact">("grid")
-    const [sortAnchorEl, setSortAnchorEl] = useState<null | HTMLElement>(null)
-    const [sortBy, setSortBy] = useState<string>("name")
-    const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc")
-    const [loading, setLoading] = useState(true)
+    const { albumId: currentAlbumId } = useParams<{ albumId: string }>();
+    const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number | null>(null);
+    const [zoomLevel, setZoomLevel] = useState(1);
+    const [copyMoveTargetAlbumId, setCopyMoveTargetAlbumId] = useState<number | "">("");
+    const [selectedPhotoIdForOperation, setSelectedPhotoIdForOperation] = useState<number | null>(null);
+    const [isCopyMoveDialogOpen, setIsCopyMoveDialogOpen] = useState(false);
+    const [isCopyOperation, setIsCopyOperation] = useState(false);
+    const [albumName, setAlbumName] = useState<string>("");
+    const [viewMode, setViewMode] = useState<"grid" | "compact">("grid");
+    const [sortAnchorEl, setSortAnchorEl] = useState<null | HTMLElement>(null);
+    const [sortBy, setSortBy] = useState<string>("name");
+    const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
+    const [loading, setLoading] = useState(true);
     const [notification, setNotification] = useState<{ show: boolean; message: string; type: "success" | "error" }>({
         show: false,
         message: "",
         type: "success",
-    })
+    });
+    const [selectedTag, setSelectedTag] = useState<string>("");
+    const [selectedTagId, setSelectedTagId] = useState<number | null>(null); // הוספת מצב ל-tagId
 
-    // const theme = useTheme()
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchData = async () => {
-            setLoading(true)
+            setLoading(true);
             if (currentAlbumId) {
-                await photoUploadStore.fetchPhotosByAlbumId(Number(currentAlbumId))
-                const album = albumStore.albums.find((album) => album.id === Number(currentAlbumId))
-                setAlbumName(album ? album.albumName : "אלבום לא נמצא")
+                await photoUploadStore.fetchPhotosByAlbumId(Number(currentAlbumId));
+                const album = albumStore.albums.find((album) => album.id === Number(currentAlbumId));
+                setAlbumName(album ? album.albumName : "אלבום לא נמצא");
             }
-            if (userId) {
-                await albumStore.fetchAlbums(userId)
-            }
-            setLoading(false)
-        }
+            setLoading(false);
+        };
 
-        fetchData()
-    }, [currentAlbumId, userId])
+        fetchData();
+    }, [currentAlbumId]);
 
     const handlePhotoClick = (index: number) => {
-        setSelectedPhotoIndex(index)
-        setZoomLevel(1)
-    }
+        setSelectedPhotoIndex(index);
+        setZoomLevel(1);
+    };
 
     const handleCloseModal = () => {
-        setSelectedPhotoIndex(null)
-        setZoomLevel(1)
-    }
+        setSelectedPhotoIndex(null);
+        setZoomLevel(1);
+    };
 
     const handleZoomIn = () => {
-        setZoomLevel((prevZoom) => Math.min(prevZoom * 1.5, 3))
-    }
+        setZoomLevel((prevZoom) => Math.min(prevZoom * 1.5, 3));
+    };
 
     const handleZoomOut = () => {
-        setZoomLevel((prevZoom) => Math.max(prevZoom / 1.5, 1))
-    }
+        setZoomLevel((prevZoom) => Math.max(prevZoom / 1.5, 1));
+    };
 
     const handleNextPhoto = () => {
         if (selectedPhotoIndex !== null) {
-            const nextIndex = (selectedPhotoIndex + 1) % photoUploadStore.photos.length
-            setSelectedPhotoIndex(nextIndex)
-            setZoomLevel(1)
+            const nextIndex = (selectedPhotoIndex + 1) % photoUploadStore.photos.length;
+            setSelectedPhotoIndex(nextIndex);
+            setZoomLevel(1);
         }
-    }
+    };
 
     const handlePrevPhoto = () => {
         if (selectedPhotoIndex !== null) {
-            const prevIndex = (selectedPhotoIndex - 1 + photoUploadStore.photos.length) % photoUploadStore.photos.length
-            setSelectedPhotoIndex(prevIndex)
-            setZoomLevel(1)
+            const prevIndex = (selectedPhotoIndex - 1 + photoUploadStore.photos.length) % photoUploadStore.photos.length;
+            setSelectedPhotoIndex(prevIndex);
+            setZoomLevel(1);
         }
-    }
+    };
 
     const openCopyMoveDialog = (photoId: number, isCopy: boolean) => {
-        setSelectedPhotoIdForOperation(photoId)
-        setIsCopyOperation(isCopy)
-        setCopyMoveTargetAlbumId("")
-        setIsCopyMoveDialogOpen(true)
-    }
+        setSelectedPhotoIdForOperation(photoId);
+        setIsCopyOperation(isCopy);
+        setCopyMoveTargetAlbumId("");
+        setIsCopyMoveDialogOpen(true);
+    };
 
     const closeCopyMoveDialog = () => {
-        setIsCopyMoveDialogOpen(false)
-        setSelectedPhotoIdForOperation(null)
-        setIsCopyOperation(false)
-        setCopyMoveTargetAlbumId("")
-    }
+        setIsCopyMoveDialogOpen(false);
+        setSelectedPhotoIdForOperation(null);
+        setIsCopyOperation(false);
+        setCopyMoveTargetAlbumId("");
+    };
 
     const handleCopyMoveTargetAlbumChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-        setCopyMoveTargetAlbumId(event.target.value as number)
-    }
+        setCopyMoveTargetAlbumId(event.target.value as number);
+    };
 
     const handleCopyMovePhoto = async () => {
         if (!selectedPhotoIdForOperation || !copyMoveTargetAlbumId) {
-            showNotification("נא לבחור אלבום יעד", "error")
-            return
+            showNotification("נא לבחור אלבום יעד", "error");
+            return;
         }
         try {
-            const targetAlbumId = Number(copyMoveTargetAlbumId)
+            const targetAlbumId = Number(copyMoveTargetAlbumId);
             if (isCopyOperation) {
-                await photoUploadStore.copyPhotoToAlbum(selectedPhotoIdForOperation, targetAlbumId)
-                showNotification("התמונה הועתקה בהצלחה", "success")
+                await photoUploadStore.copyPhotoToAlbum(selectedPhotoIdForOperation, targetAlbumId);
+                showNotification("התמונה הועתקה בהצלחה", "success");
             } else {
                 if (currentAlbumId === null) {
-                    showNotification("לא ניתן להעביר תמונה מחוץ לאלבום", "error")
-                    return
+                    showNotification("לא ניתן להעביר תמונה מחוץ לאלבום", "error");
+                    return;
                 }
-                await photoUploadStore.movePhotoToAlbum(selectedPhotoIdForOperation, Number(currentAlbumId), targetAlbumId)
-                showNotification("התמונה הועברה בהצלחה", "success")
+                await photoUploadStore.movePhotoToAlbum(selectedPhotoIdForOperation, Number(currentAlbumId), targetAlbumId);
+                showNotification("התמונה הועברה בהצלחה", "success");
                 if (currentAlbumId) {
-                    photoUploadStore.fetchPhotosByAlbumId(Number(currentAlbumId))
+                    photoUploadStore.fetchPhotosByAlbumId(Number(currentAlbumId));
                 }
             }
-            closeCopyMoveDialog()
+            closeCopyMoveDialog();
         } catch (error) {
-            console.error("שגיאה בפעולת העתקה/העברה:", error)
-            showNotification("שגיאה בפעולת העתקה/העברה", "error")
+            console.error("שגיאה בפעולת העתקה/העברה:", error);
+            showNotification("שגיאה בפעולת העתקה/העברה", "error");
         }
-    }
+    };
 
     const showNotification = (message: string, type: "success" | "error") => {
         setNotification({
             show: true,
             message,
             type,
-        })
-    }
+        });
+    };
 
     const handleSortMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-        setSortAnchorEl(event.currentTarget)
-    }
+        setSortAnchorEl(event.currentTarget);
+    };
 
     const handleSortMenuClose = () => {
-        setSortAnchorEl(null)
-    }
+        setSortAnchorEl(null);
+    };
 
     const handleSortChange = (sortType: string) => {
         if (sortBy === sortType) {
-            // Toggle direction if same sort type
-            setSortDirection(sortDirection === "asc" ? "desc" : "asc")
+            setSortDirection(sortDirection === "asc" ? "desc" : "asc");
         } else {
-            setSortBy(sortType)
-            setSortDirection("asc")
+            setSortBy(sortType);
+            setSortDirection("asc");
         }
-        handleSortMenuClose()
-    }
+        handleSortMenuClose();
+    };
 
     const getSortedPhotos = () => {
-        if (!photoUploadStore.photos || photoUploadStore.photos.length === 0) return []
+        if (!photoUploadStore.photos || photoUploadStore.photos.length === 0) return [];
 
         return [...photoUploadStore.photos].sort((a, b) => {
-            let comparison = 0
-            console.log("a.pphoto name ", a.photoName);
-
+            let comparison = 0;
             switch (sortBy) {
                 case "name":
-                    comparison = a.photoName.localeCompare(b.photoName)
-                    break
-                // case "date":
-                //     // Assuming there's a date field, replace with actual field
-                //     comparison = new Date(a.createdAt || 0).getTime() - new Date(b.createdAt || 0).getTime()
-                //     break
+                    comparison = a.photoName.localeCompare(b.photoName);
+                    break;
                 default:
-                    comparison = 0
+                    comparison = 0;
             }
 
-            return sortDirection === "asc" ? comparison : -comparison
-        })
-    }
+            return sortDirection === "asc" ? comparison : -comparison;
+        });
+    };
 
-    const sortedPhotos = getSortedPhotos()
+    const sortedPhotos = getSortedPhotos();
+
+
+    const handleTagChange = async (event: SelectChangeEvent<string>) => {
+        const tagName = event.target.value as string;
+        setSelectedTag(tagName);
+
+        if (tagName === "") { // אם נבחרה האופציה "כל התמונות"
+            await photoUploadStore.fetchPhotosByAlbumId(Number(currentAlbumId)); // טען את כל התמונות
+            setSelectedTagId(null); // הגדר את selectedTagId ל-null
+        }
+
+        else {
+            // כאן נוודא שה- tagName אינו ריק לפני הקריאה
+            const tagId = await photoUploadStore.fetchTagIdByTagName(tagName);
+            if (tagId) {
+                setSelectedTagId(tagId); // שמור את ה-tagId במצב רק אם הוא קיים
+            } else {
+                console.error("לא נמצא ID עבור התג:", tagName);
+            }
+        }
+    };
+
+
+
 
     if (loading) {
         return (
@@ -240,7 +249,7 @@ const PhotoGallery: React.FC = observer(() => {
                     ))}
                 </Grid>
             </Container>
-        )
+        );
     }
 
     if (photoUploadStore.error) {
@@ -253,7 +262,7 @@ const PhotoGallery: React.FC = observer(() => {
                     חזרה לאלבומים
                 </Button>
             </Container>
-        )
+        );
     }
 
     if (!photoUploadStore.photos || photoUploadStore.photos.length === 0) {
@@ -271,7 +280,7 @@ const PhotoGallery: React.FC = observer(() => {
                     </Button>
                 </Box>
             </Container>
-        )
+        );
     }
 
     return (
@@ -361,9 +370,20 @@ const PhotoGallery: React.FC = observer(() => {
                         size="small"
                         sx={{ mb: 3 }}
                     />
+
+                    <Select value={selectedTag} onChange={handleTagChange} displayEmpty>
+                        <MenuItem value="" disabled>בחר תגית</MenuItem>
+                        <MenuItem value="">כל התמונות</MenuItem> {/* הוספת אפשרות לבחור את כל התמונות */}
+                        {photoUploadStore.tag.map(tag => (
+                            <MenuItem key={tag.Id} value={tag.tagName}>
+                                {tag.tagName}
+                            </MenuItem>
+                        ))}
+                    </Select>
                 </Box>
+
                 <PhotoGrid
-                    photos={sortedPhotos.filter((photo) => photo.id !== undefined) as Photo[]}
+                    photos={sortedPhotos.filter(photo => selectedTagId === null || Number(photo.tagId) === selectedTagId)} // הצג כל התמונות אם selectedTagId הוא null
                     onPhotoClick={handlePhotoClick}
                     onCopyMoveClick={openCopyMoveDialog}
                     viewMode={viewMode}
@@ -408,7 +428,7 @@ const PhotoGallery: React.FC = observer(() => {
                 </Snackbar>
             </Container>
         </Box>
-    )
-})
+    );
+});
 
-export default PhotoGallery
+export default PhotoGallery;

@@ -175,5 +175,11 @@ namespace ImageDesign.Service
             return _mapper.Map<PhotoDto>(updatedPhoto);
         }
 
+        public async Task<IEnumerable<PhotoDto>> GetPhotosByTagIdAsync(int tagId)
+        {
+            var photos = await _repositoryManager.PhotoM.GetPhotosByTagIdAsync(tagId);
+            return _mapper.Map<IEnumerable<PhotoDto>>(photos);
+        }
+
     }
 }
