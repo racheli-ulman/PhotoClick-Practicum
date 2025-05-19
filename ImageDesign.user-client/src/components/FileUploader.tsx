@@ -400,8 +400,8 @@ const FileUploader = observer(() => {
                 >
                   {photoUploadStore.tag.map((tag) => (
                     <MenuItem
-                      key={tag.id}
-                      value={tag.id}
+                      key={tag.Id}
+                      value={tag.Id}
                       sx={{
                         display: "flex",
                         alignItems: "center",

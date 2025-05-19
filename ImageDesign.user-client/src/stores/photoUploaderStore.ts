@@ -227,13 +227,15 @@ import { makeAutoObservable } from "mobx";
 import axios from "axios";
 import userStore from './userStore';
 import { Photo } from "../models/Photo";
+import { Tag } from "../models/Tag";
 
 class PhotoUploadStore {
     file: File | null = null;
     progress: number = 0;
     imageUrl: string | null = null;
     error: string | null = null;
-    tag: { id: number, tagName: string }[] = []; // מערך של אובייקטים עם ID ושם התג
+    // tag: { id: number, tagName: string }[] = []; // מערך של אובייקטים עם ID ושם התג
+    tag:Tag[] = []; // מערך של אובייקטים עם ID ושם התג
     photos: Photo[] = []; // מערך של תמונות
     recyclingPhotos: Photo[] = []; // מערך של תמונות שנמחקו
   baseUrl: string;
@@ -242,7 +244,9 @@ class PhotoUploadStore {
     constructor() {
         makeAutoObservable(this);
          // קריאת התיוגים מהשרת בעת יצירת האובייקט
-        this.baseUrl = import.meta.env.VITE_API_URL;
+        // this.baseUrl = import.meta.env.VITE_API_URL;
+    this.baseUrl = "http://localhost:5083/api"; // עדכון כאן
+
         this.fetchTags();
     }
 
@@ -492,6 +496,32 @@ class PhotoUploadStore {
             this.setError('התרחשה שגיאה במהלך שחזור התמונה.');
         }
     }
+
+
+
+
+async fetchPhotosByTag(tagName: string) {
+    const tag = this.tag.find(t => t.tagName === tagName); // חיפוש ה-ID של התג לפי השם
+    if (tag) {
+        try {
+            const response = await axios.get(`${this.baseUrl}/Photo/tag/${tag.Id}`); // הנחה שיש API שמחזיר תמונות לפי ID של תג
+            this.photos = response.data; // עדכון המערך של התמונות
+        } catch (error) {
+            console.error('שגיאה בקבלת התמונות לפי תג:', error);
+            this.setError('שגיאה בקבלת התמונות לפי תג.');
+        }
+    } else {
+        console.error('תג לא נמצא');
+        this.setError('תג לא נמצא.');
+    }
+}
+
+
+
+
+
+
+
 }
 
 const photoUploadStore = new PhotoUploadStore();

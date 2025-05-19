@@ -1,5 +1,5 @@
 import Features from "./Features";
-import Footer from "./Footer";
+// import Footer from "./Footer";
 import Hero from "./Hero";
 import TargetAudience from "./TargetAudience";
 
@@ -9,7 +9,7 @@ const Gggg = () => {
       <Hero />
       <Features />
       <TargetAudience />
-      <Footer/>
+      {/* <Footer/> */}
     </div>
   );
 };

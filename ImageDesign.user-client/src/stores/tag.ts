@@ -11,7 +11,9 @@ class TagStore {
 
   constructor() {
     makeAutoObservable(this);
-    this.baseUrl = import.meta.env.VITE_API_URL;
+    // this.baseUrl = import.meta.env.VITE_API_URL;
+    this.baseUrl = "http://localhost:5083/api"; // עדכון כאן
+
 
   }
 

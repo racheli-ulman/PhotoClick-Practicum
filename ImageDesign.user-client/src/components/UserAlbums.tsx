@@ -7,10 +7,8 @@ import { useNavigate } from "react-router-dom"
 import albumStore from "../stores/albumStore"
 import photoUploadStore from "../stores/photoUploaderStore"
 import CreateNewAlbum from "./CreateNewAlbum"
-import type { Album} from "../models/Album"
+import type { Album } from "../models/Album"
 import userStore from "../stores/userStore"
-// import { Button } from "@mui/material"
-
 import {
   Box,
   Button,
@@ -38,6 +36,7 @@ import {
   Alert,
   Snackbar,
   Fade,
+  CircularProgress,
 } from "@mui/material"
 import {
   Add,
@@ -77,40 +76,32 @@ const UserAlbums: React.FC = () => {
     message: "",
     type: "success",
   })
-
   const [photoCounts, setPhotoCounts] = useState<{ [key: number]: number }>({})
+  const [isLoading, setIsLoading] = useState<boolean>(false) // מצב טעינה
 
-useEffect(() => {
-  const fetchAlbumsAndPhotos = async () => {
-    if (userId) {
-      try {
-        setLoading(true)
-        await albumStore.fetchAlbums(userId)
+  useEffect(() => {
+    const fetchAlbumsAndPhotos = async () => {
+      if (userId) {
+        try {
+          setLoading(true)
+          await albumStore.fetchAlbums(userId)
 
-        // טוען את מספר התמונות עבור כל אלבום
-        const counts: { [key: number]: number } = {}
-        for (const  album of albumStore.albums) {
-       
-          if (!album.id) continue // Skip if album ID is not available
-          const count = await photoUploadStore.fetchPhotosByAlbumId(album.id)   
-          console.log("album ",album);
-          console.log("album-id",album.id);
-          console.log("album-name",album.albumName);
-          console.log("count",count);
-          
-          counts[album.id] = count
+          const counts: { [key: number]: number } = {}
+          for (const album of albumStore.albums) {
+            if (!album.id) continue
+            const count = await photoUploadStore.fetchPhotosByAlbumId(album.id)
+            counts[album.id] = count
+          }
+          setPhotoCounts(counts)
+          setLoading(false)
+        } catch (err: any) {
+          setError(err.message)
+          setLoading(false)
         }
-        setPhotoCounts(counts)
-        setLoading(false)
-      } catch (err: any) {
-        setError(err.message)
-        setLoading(false)
       }
     }
-  }
-  fetchAlbumsAndPhotos()
-}, [userId])
-
+    fetchAlbumsAndPhotos()
+  }, [userId])
 
   const handleAlbumClick = (albumId: number) => {
     navigate(`/personal-area/get-photos/${albumId}`)
@@ -135,7 +126,6 @@ useEffect(() => {
 
   const handleSortChange = (sortType: string) => {
     if (sortBy === sortType) {
-      // Toggle direction if same sort type
       setSortDirection(sortDirection === "asc" ? "desc" : "asc")
     } else {
       setSortBy(sortType)
@@ -164,13 +154,15 @@ useEffect(() => {
       return
     }
 
+    setIsLoading(true) // התחלת טעינה
+
     try {
       const updatedAlbum: Album = {
         id: selectedAlbum.id,
         albumName: newAlbumName.trim(),
         userId: userId,
         description: newAlbumDescription.trim(),
-        createdAt: selectedAlbum.createdAt, // Ensure createdAt is included
+        createdAt: selectedAlbum.createdAt,
       }
 
       await albumStore.updateAlbum(updatedAlbum)
@@ -182,6 +174,8 @@ useEffect(() => {
     } catch (err: any) {
       setError(err.message)
       showNotification("שגיאה בעדכון האלבום", "error")
+    } finally {
+      setIsLoading(false) // סיום טעינה
     }
   }
 
@@ -218,7 +212,6 @@ useEffect(() => {
           comparison = a.albumName.localeCompare(b.albumName)
           break
         case "date":
-          // Assuming there's a date field, replace with actual field
           comparison = new Date(a.createdAt || 0).getTime() - new Date(b.createdAt || 0).getTime()
           break
         default:
@@ -233,7 +226,6 @@ useEffect(() => {
     album.albumName.toLowerCase().includes(searchTerm.toLowerCase()),
   )
 
-  // Animation variants
   const container = {
     hidden: { opacity: 0 },
     show: {
@@ -284,13 +276,7 @@ useEffect(() => {
           sx={{ mb: 4 }}
         >
           <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 4 }}>
-            <Typography
-              variant="h4"
-              sx={{
-                fontWeight: "bold",
-                color: "text.primary",
-              }}
-            >
+            <Typography variant="h4" sx={{ fontWeight: "bold", color: "text.primary" }}>
               האלבומים שלי
             </Typography>
 
@@ -298,12 +284,7 @@ useEffect(() => {
               variant="contained"
               startIcon={<Add />}
               onClick={() => setOpenCreateModal(true)}
-              sx={{
-                px: 3,
-                py: 1,
-                borderRadius: 2,
-                boxShadow: 2,
-              }}
+              sx={{ px: 3, py: 1, borderRadius: 2, boxShadow: 2 }}
             >
               אלבום חדש
             </Button>
@@ -472,7 +453,6 @@ useEffect(() => {
                             </MenuItem>
                             <MenuItem
                               onClick={() => {
-                                // Handle share
                                 handleMenuClose(album.id!)
                               }}
                             >
@@ -483,7 +463,6 @@ useEffect(() => {
                             </MenuItem>
                             <MenuItem
                               onClick={() => {
-                                // Handle info
                                 handleMenuClose(album.id!)
                               }}
                             >
@@ -545,17 +524,14 @@ useEffect(() => {
         </Box>
       </Container>
 
-      {/* Floating Action Button for mobile */}
       <Box sx={{ display: { xs: "block", md: "none" }, position: "fixed", bottom: 16, right: 16 }}>
         <Fab color="primary" aria-label="add album" onClick={() => setOpenCreateModal(true)}>
           <Add />
         </Fab>
       </Box>
 
-      {/* Create Album Modal */}
       {openCreateModal && <CreateNewAlbum onClose={() => setOpenCreateModal(false)} />}
 
-      {/* Edit Album Modal */}
       <Dialog open={openEditModal} onClose={() => setOpenEditModal(false)} maxWidth="sm" fullWidth>
         <DialogTitle>
           <Box display="flex" justifyContent="space-between" alignItems="center">
@@ -598,13 +574,17 @@ useEffect(() => {
           <Button variant="outlined" onClick={() => setOpenEditModal(false)}>
             ביטול
           </Button>
-          <Button variant="contained" onClick={handleUpdateAlbum} disabled={!newAlbumName.trim()}>
-            שמור שינויים
+          <Button
+            variant="contained"
+            onClick={handleUpdateAlbum}
+            disabled={!newAlbumName.trim() || isLoading}
+            startIcon={isLoading ? <CircularProgress size={20} /> : null}
+          >
+            {isLoading ? "שומר..." : "שמור שינויים"}
           </Button>
         </DialogActions>
       </Dialog>
 
-      {/* Delete Album Modal */}
       <Dialog open={openDeleteModal} onClose={() => setOpenDeleteModal(false)} maxWidth="xs" fullWidth>
         <DialogTitle>
           <Box display="flex" justifyContent="space-between" alignItems="center">
@@ -630,7 +610,6 @@ useEffect(() => {
         </DialogActions>
       </Dialog>
 
-      {/* Notification */}
       <Snackbar
         open={notification.show}
         autoHideDuration={4000}

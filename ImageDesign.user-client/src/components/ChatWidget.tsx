@@ -10,7 +10,8 @@ import {
     Paper,
     Slide,
     Fade,
-    Chip
+    Chip,
+    useTheme,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import SendIcon from '@mui/icons-material/Send';
@@ -22,6 +23,8 @@ interface ChatComponentProps {
 }
 
 const ChatComponent: React.FC<ChatComponentProps> = ({ onClose }) => {
+      const theme = useTheme()
+    
     const [input, setInput] = useState('');
     const [isExpanded, setIsExpanded] = useState(false);
     const messagesEndRef = useRef<null | HTMLDivElement>(null);
@@ -112,7 +115,7 @@ const baseURL= import.meta.env.VITE_API_URL
                 <Box
                     sx={{
                         p: 2,
-                        bgcolor: '#4caf50', // צבע ירוק לתמונות
+                        bgcolor: theme.palette.primary.dark, // צבע ירוק לתמונות
                         display: 'flex',
                         justifyContent: 'space-between',
                         alignItems: 'center',
@@ -178,9 +181,9 @@ const baseURL= import.meta.env.VITE_API_URL
                                                 label={topic}
                                                 onClick={() => handleTopicClick(topic)}
                                                 sx={{
-                                                    bgcolor: '#4caf50',
+                                                    bgcolor: theme.palette.primary.dark,
                                                     color: '#fff',
-                                                    '&:hover': { bgcolor: '#388e3c' },
+                                                    '&:hover': { bgcolor: 'lightblue' },
                                                     fontSize: '0.75rem',
                                                     mb: 1
                                                 }}
@@ -205,7 +208,7 @@ const baseURL= import.meta.env.VITE_API_URL
                                                 width: 28,
                                                 height: 28,
                                                 borderRadius: '50%',
-                                                bgcolor: '#81c784', // ירוק בהיר יותר למשתמש
+                                                bgcolor: 'theme.palette.primary.dark', // ירוק בהיר יותר למשתמש
                                                 display: 'flex',
                                                 alignItems: 'center',
                                                 justifyContent: 'center',
@@ -242,7 +245,7 @@ const baseURL= import.meta.env.VITE_API_URL
                                                 width: 28,
                                                 height: 28,
                                                 borderRadius: '50%',
-                                                bgcolor: '#4caf50',
+                                                bgcolor: theme.palette.primary.dark,
                                                 display: 'flex',
                                                 alignItems: 'center',
                                                 justifyContent: 'center',
@@ -275,7 +278,7 @@ const baseURL= import.meta.env.VITE_API_URL
                                 <Box
                                     sx={{
                                         p: 2,
-                                        bgcolor: '#4caf50',
+                                        bgcolor: theme.palette.primary.dark,
                                         borderRadius: '18px 18px 4px 18px',
                                         display: 'flex',
                                         justifyContent: 'center'
@@ -295,7 +298,7 @@ const baseURL= import.meta.env.VITE_API_URL
                         display: 'flex',
                         p: 2,
                         borderTop: '1px solid #e0e0e0',
-                        bgcolor: '#4caf50'
+                        bgcolor: theme.palette.primary.dark
                     }}
                 >
                     <Button
@@ -308,7 +311,7 @@ const baseURL= import.meta.env.VITE_API_URL
                             height: 40,
                             borderRadius: '50%',
                             bgcolor: '#ffffff',
-                            color: '#4caf50',
+                            color: theme.palette.primary.dark,
                             '&:hover': {
                                 bgcolor: '#e0e0e0',
                             }
@@ -330,18 +333,18 @@ const baseURL= import.meta.env.VITE_API_URL
                                 backgroundColor: '#ffffff',
                                 color: '#333',
                                 '& fieldset': {
-                                    borderColor: '#a5d6a7', // ירוק בהיר לגבול
+                                    borderColor: theme.palette.primary.dark, // ירוק בהיר לגבול
                                 },
                                 '&:hover fieldset': {
-                                    borderColor: '#81c784',
+                                    borderColor: theme.palette.primary.dark,
                                 },
                                 '&.Mui-focused fieldset': {
-                                    borderColor: '#388e3c',
+                                    borderColor: theme.palette.primary.dark,
                                 },
                             },
                             '& .MuiInputBase-input': {
                                 '&::placeholder': {
-                                    color: '#a5d6a7',
+                                    color: theme.palette.primary.dark,
                                     opacity: 1,
                                 },
                             },

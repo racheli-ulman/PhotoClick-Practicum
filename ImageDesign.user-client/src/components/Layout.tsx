@@ -30,13 +30,13 @@ const Layout = () => {
                 <Outlet />
             </main>
 
-            <Tooltip title="פתח צ'אט עם מיכל - מומחית האמנות" placement="bottom">
+            <Tooltip title="פתח צ'אט עם אורית - מומחית תחום התמונות והצילום " placement="bottom">
                 <Button
                     onClick={handleOpenChat}
                     startIcon={<ChatIcon />}
                     variant="contained"
                     sx={{
-                        background: 'linear-gradient(45deg,rgb(39, 25, 226) 30%,rgb(242, 67, 245) 90%)',
+                            background: 'linear-gradient(45deg,rgb(39, 25, 226) 30%,rgb(98, 128, 249) 90%)',
                         color: 'white',
                         borderRadius: '25px',
                         padding: '8px 20px',
@@ -48,7 +48,7 @@ const Layout = () => {
                         whiteSpace: 'nowrap',
                         textTransform: 'none', // אותיות לא גדולות
                         '&:hover': {
-                            background: 'linear-gradient(45deg,rgb(39, 25, 226) 30%,rgb(242, 67, 245) 90%)',
+                            background: 'linear-gradient(45deg,rgb(39, 25, 226) 30%,rgb(98, 128, 249) 90%)',
                             boxShadow: '0 6px 15px rgba(28, 14, 153, 0.5)',
                             transform: 'translateY(-2px)',
                         },

@@ -30,7 +30,7 @@ import {
 } from "@mui/icons-material"
 import photoUploadStore from "../../stores/photoUploaderStore"
 import { motion } from "framer-motion"
-import FilterBAndWIcon from '@mui/icons-material/FilterBAndW'; // או PaletteIcon
+import FilterBAndWIcon from '@mui/icons-material/FilterBAndW';
 
 interface Photo {
     id: number
@@ -47,6 +47,14 @@ interface PhotoGridProps {
 
 const PhotoGrid: React.FC<PhotoGridProps> = ({ photos, onPhotoClick, onCopyMoveClick, viewMode }) => {
     const [anchorEl, setAnchorEl] = React.useState<{ [key: number]: HTMLElement | null }>({})
+    const [grayscale, setGrayscale] = React.useState<{ [key: number]: boolean }>({});
+
+    const handleGrayscaleToggle = (photoId: number) => {
+        setGrayscale(prevGrayscale => ({
+            ...prevGrayscale,
+            [photoId]: !prevGrayscale[photoId],
+        }));
+    };
 
     const handleDownload = async (photo: { photoName: string; photoPath: string }) => {
         try {
@@ -140,6 +148,7 @@ const PhotoGrid: React.FC<PhotoGridProps> = ({ photos, onPhotoClick, onCopyMoveC
                                             transform: "scale(1.05)",
                                         },
                                         cursor: "pointer",
+                                        filter: grayscale[photo.id] ? 'grayscale(100%)' : 'none',
                                     }}
                                     onClick={() => onPhotoClick(index)}
                                 />
@@ -244,17 +253,17 @@ const PhotoGrid: React.FC<PhotoGridProps> = ({ photos, onPhotoClick, onCopyMoveC
                                             <ListItemIcon>
                                                 <Edit fontSize="small" />
                                             </ListItemIcon>
-                                            <ListItemText>ערוך תמונה</ListItemText>
+                                            <ListItemText>שנה שם תמונה</ListItemText>
                                         </MenuItem>
                                         <MenuItem
                                             onClick={() => {
-                                                // Handle share
-                                                handleMenuClose(photo.id)
+                                                handleGrayscaleToggle(photo.id);
+                                                handleMenuClose(photo.id);
                                             }}
                                         >
-                                            <FilterBAndWIcon >
-                                                <Edit fontSize="small" />
-                                            </FilterBAndWIcon >
+                                            <ListItemIcon>
+                                                <FilterBAndWIcon fontSize="small" />
+                                            </ListItemIcon>
                                             <ListItemText>שנה את התמונה לשחור לבן</ListItemText>
                                         </MenuItem>
                                         <MenuItem
@@ -317,6 +326,7 @@ const PhotoGrid: React.FC<PhotoGridProps> = ({ photos, onPhotoClick, onCopyMoveC
                             height: "100%",
                             objectFit: "cover",
                             cursor: "pointer",
+                            filter: grayscale[photo.id] ? 'grayscale(100%)' : 'none',
                         }}
                     />
 
@@ -402,6 +412,17 @@ const PhotoGrid: React.FC<PhotoGridProps> = ({ photos, onPhotoClick, onCopyMoveC
                                         <DeleteOutlined fontSize="small" />
                                     </ListItemIcon>
                                     <ListItemText>מחק תמונה</ListItemText>
+                                </MenuItem>
+                                <MenuItem
+                                    onClick={() => {
+                                        handleGrayscaleToggle(photo.id);
+                                        handleMenuClose(photo.id);
+                                    }}
+                                >
+                                    <ListItemIcon>
+                                        <FilterBAndWIcon fontSize="small" />
+                                    </ListItemIcon>
+                                    <ListItemText>שנה את התמונה לשחור לבן</ListItemText>
                                 </MenuItem>
                             </Menu>
                         </Box>
