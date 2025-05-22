@@ -1549,7 +1549,7 @@ console.log(event);
               <Typography gutterBottom>גודל מברשת</Typography>
               <Slider
                 value={brushSize}
-                onChange={(e, newValue) => setBrushSize(newValue as number)}
+                onChange={(_, newValue) => setBrushSize(newValue as number)}
                 min={1}
                 max={20}
                 step={1}
