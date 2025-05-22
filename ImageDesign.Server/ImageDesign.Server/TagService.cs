@@ -42,6 +42,7 @@ namespace ImageDesign.Service
             var addeTag = _mapper.Map<Tag>(tag);
             //if (_repositoryManager.TagM.GetTagByIdAsync(tag.Id) == null)
             //{
+            addeTag.CreatedAt = DateTime.UtcNow;
                 var createTag = await _repositoryManager.TagM.AddTagAsync(addeTag);
             await _repositoryManager.saveAsync();
 

@@ -25,7 +25,11 @@ import { Link, useNavigate } from "react-router-dom"
 import userStore from "../stores/userStore"
 import { Home, PhotoLibrary, Login, Logout, Person, Settings, Info, Help } from "@mui/icons-material"
 
-const Header: React.FC = () => {
+interface HeaderProps {
+  onOpenChat?: () => void; // הוספת פרופס לפתיחת הצ'אט
+}
+
+const Header: React.FC<HeaderProps> = ({ onOpenChat }) => {
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false)
@@ -57,12 +61,24 @@ const Header: React.FC = () => {
     handleMenuClose()
     navigate("/")
   }
+  
+  // פונקציה לטיפול בלחיצה על עזרה
+  const handleHelpClick = (e: React.MouseEvent) => {
+    e.preventDefault(); // מניעת ניווט כברירת מחדל
+    if (onOpenChat) {
+      onOpenChat(); // פתיחת הצ'אט
+    }
+    // סגירת התפריט הנייד אם פתוח
+    if (drawerOpen) {
+      setDrawerOpen(false);
+    }
+  }
 
   const menuItems = [
-    { label: "בית", icon: <Home fontSize="small" />, path: "/" },
-    { label: "אודות", icon: <Info fontSize="small" />, path: "#about" },
-    { label: "עזרה", icon: <Help fontSize="small" />, path: "#help" },
-    { label: "התחברות", icon: <Login fontSize="small" />, path: "/login" },
+    { label: "בית", icon: <Home fontSize="small" />, path: "/", action: undefined },
+    { label: "אודות", icon: <Info fontSize="small" />, path: "#about", action: undefined },
+    { label: "עזרה", icon: <Help fontSize="small" />, path: "#help", action: handleHelpClick },
+    { label: "התחברות", icon: <Login fontSize="small" />, path: "/login", action: undefined },
   ]
 
   const profileMenuItems = isLoggedIn
@@ -150,8 +166,9 @@ const Header: React.FC = () => {
               {menuItems.map((item) => (
                 <Button
                   key={item.label}
-                  component={Link}
-                  to={item.path}
+                  component={item.action ? "button" : Link}
+                  to={item.action ? undefined : item.path}
+                  onClick={item.action}
                   sx={{
                     color: "text.primary",
                     "&:hover": { color: theme.palette.primary.main },
@@ -300,9 +317,13 @@ const Header: React.FC = () => {
                 {menuItems.map((item) => (
                   <Button
                     key={item.label}
-                    component={Link}
-                    to={item.path}
+                    component={item.action ? "button" : Link}
+                    to={item.action ? undefined : item.path}
                     startIcon={item.icon}
+                    onClick={item.action ? (e:any) => {
+                      item.action && item.action(e);
+                      if (!item.action) toggleDrawer(false)({ type: "click" } as React.MouseEvent);
+                    } : toggleDrawer(false)}
                     sx={{
                       justifyContent: "flex-start",
                       px: 2,
@@ -313,7 +334,6 @@ const Header: React.FC = () => {
                         color: theme.palette.primary.main,
                       },
                     }}
-                    onClick={toggleDrawer(false)}
                   >
                     {item.label}
                   </Button>

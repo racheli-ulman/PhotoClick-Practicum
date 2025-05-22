@@ -26,8 +26,8 @@ import {
 import CloseIcon from '@mui/icons-material/Close';
 import PhotoLibraryIcon from '@mui/icons-material/PhotoLibrary';
 import SearchIcon from '@mui/icons-material/Search';
-import FilterListIcon from '@mui/icons-material/FilterList';
-import SortIcon from '@mui/icons-material/Sort';
+// import FilterListIcon from '@mui/icons-material/FilterList';
+// import SortIcon from '@mui/icons-material/Sort';
 import ImageIcon from '@mui/icons-material/Image';
 import albumStore from '../../stores/albumStore';
 import CollageCreator from './CreateCollage';
@@ -41,7 +41,7 @@ const UserPhotosDialog: React.FC<UserPhotosDialogProps> = observer(({ open, onCl
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     console.log(isMobile);
-    
+
     const userData = sessionStorage.getItem("user");
     const user = userData ? JSON.parse(userData) : null;
     const userId = user ? user.user.id : null;
@@ -49,10 +49,10 @@ const UserPhotosDialog: React.FC<UserPhotosDialogProps> = observer(({ open, onCl
     const [selectedPhotos, setSelectedPhotos] = useState<number[]>([]);
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(false);
-    const [error,setError] = useState<string | null>(null);
+    const [error, setError] = useState<string | null>(null);
     const [collageDialogOpen, setCollageDialogOpen] = useState<boolean>(false);
     const [hoveredPhotoId, setHoveredPhotoId] = useState<number | null>(null);
-console.log(setError);
+    console.log(setError);
 
     useEffect(() => {
         if (open && userId) {
@@ -75,7 +75,7 @@ console.log(setError);
     }, []);
 
     const filteredPhotos = useMemo(() => {
-        return albumStore.photos.filter((photo: any) => 
+        return albumStore.photos.filter((photo: any) =>
             photo.photoName?.toLowerCase().includes(searchTerm.toLowerCase())
         );
     }, [albumStore.photos, searchTerm]);
@@ -98,10 +98,10 @@ console.log(setError);
 
     return (
         <>
-            <Dialog 
-                open={open} 
-                onClose={onClose} 
-                maxWidth="md" 
+            <Dialog
+                open={open}
+                onClose={onClose}
+                maxWidth="md"
                 fullWidth
                 PaperProps={{
                     sx: {
@@ -112,31 +112,32 @@ console.log(setError);
                     }
                 }}
             >
-                <DialogTitle sx={{ 
-                    p: 2, 
+                <DialogTitle sx={{
+                    p: 2,
                     bgcolor: 'rgba(196, 104, 104, 0.05)',
                     borderBottom: '1px solid rgba(196, 104, 104, 0.1)'
                 }}>
                     <Box display="flex" justifyContent="space-between" alignItems="center">
-                        <Typography variant="h6" component="h2" sx={{ 
-                            display: 'flex', 
+                        <IconButton
+                            onClick={onClose}
+                            sx={{
+                                color: '#c46868',
+                                '&:hover': {
+                                    bgcolor: 'rgba(196, 104, 104, 0.1)'
+                                }
+                            }}
+                        >
+                            <CloseIcon />
+                        </IconButton>
+                        <Typography variant="h6" component="h2" sx={{
+                            display: 'flex',
                             alignItems: 'center',
                             fontWeight: 600,
                             color: '#c46868'
                         }}>
                             <PhotoLibraryIcon sx={{ mr: 1 }} /> בחר תמונות לקולאז'
                         </Typography>
-                        <IconButton 
-                            onClick={onClose}
-                            sx={{ 
-                                color: '#c46868',
-                                '&:hover': { 
-                                    bgcolor: 'rgba(196, 104, 104, 0.1)' 
-                                } 
-                            }}
-                        >
-                            <CloseIcon />
-                        </IconButton>
+
                     </Box>
                 </DialogTitle>
 
@@ -156,7 +157,7 @@ console.log(setError);
                                             <SearchIcon sx={{ color: '#c46868' }} />
                                         </InputAdornment>
                                     ),
-                                    sx: { 
+                                    sx: {
                                         borderRadius: 2,
                                         '&.Mui-focused': {
                                             '& .MuiOutlinedInput-notchedOutline': {
@@ -168,26 +169,26 @@ console.log(setError);
                             />
                         </Grid>
                         <Grid item xs={12} md={6} sx={{ display: 'flex', justifyContent: { xs: 'flex-start', md: 'flex-end' }, gap: 1 }}>
-                            <Chip 
-                                icon={<FilterListIcon />} 
-                                label="סינון" 
-                                variant="outlined" 
-                                onClick={() => {}} 
+                            {/* <Chip
+                                icon={<FilterListIcon />}
+                                label="סינון"
+                                variant="outlined"
+                                onClick={() => { }}
                                 sx={{ borderColor: '#c46868', color: '#c46868' }}
                             />
-                            <Chip 
-                                icon={<SortIcon />} 
-                                label="מיון" 
-                                variant="outlined" 
-                                onClick={() => {}} 
+                            <Chip
+                                icon={<SortIcon />}
+                                label="מיון"
+                                variant="outlined"
+                                onClick={() => { }}
                                 sx={{ borderColor: '#c46868', color: '#c46868' }}
-                            />
-                            <Chip 
-                                label={selectedPhotos.length === filteredPhotos.length ? "בטל הכל" : "בחר הכל"} 
-                                variant="outlined" 
-                                onClick={handleSelectAll} 
-                                sx={{ 
-                                    borderColor: '#c46868', 
+                            /> */}
+                            <Chip
+                                label={selectedPhotos.length === filteredPhotos.length ? "בטל הכל" : "בחר הכל"}
+                                variant="outlined"
+                                onClick={handleSelectAll}
+                                sx={{
+                                    borderColor: '#c46868',
                                     color: '#c46868',
                                     bgcolor: selectedPhotos.length === filteredPhotos.length ? 'rgba(196, 104, 104, 0.1)' : 'transparent'
                                 }}
@@ -203,11 +204,11 @@ console.log(setError);
                             <Typography variant="body1" color="text.secondary">טוען תמונות...</Typography>
                         </Box>
                     ) : error ? (
-                        <Box 
-                            sx={{ 
-                                p: 3, 
-                                bgcolor: '#fff5f5', 
-                                borderRadius: 2, 
+                        <Box
+                            sx={{
+                                p: 3,
+                                bgcolor: '#fff5f5',
+                                borderRadius: 2,
                                 border: '1px solid #ffcccc',
                                 textAlign: 'center'
                             }}
@@ -215,11 +216,11 @@ console.log(setError);
                             <Typography color="error">{error}</Typography>
                         </Box>
                     ) : filteredPhotos.length === 0 ? (
-                        <Box 
-                            sx={{ 
-                                display: 'flex', 
-                                flexDirection: 'column', 
-                                alignItems: 'center', 
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
                                 justifyContent: 'center',
                                 height: '100%',
                                 p: 3
@@ -236,9 +237,9 @@ console.log(setError);
                             {filteredPhotos.map((photo: any) => (
                                 <Grid item xs={12} sm={6} md={4} key={photo.id}>
                                     <Zoom in={true} style={{ transitionDelay: '100ms' }}>
-                                        <Paper 
-                                            elevation={3} 
-                                            sx={{ 
+                                        <Paper
+                                            elevation={3}
+                                            sx={{
                                                 position: 'relative',
                                                 borderRadius: 2,
                                                 overflow: 'hidden',
@@ -253,11 +254,11 @@ console.log(setError);
                                             onMouseEnter={() => setHoveredPhotoId(photo.id)}
                                             onMouseLeave={() => setHoveredPhotoId(null)}
                                         >
-                                            <Box 
-                                                sx={{ 
-                                                    position: 'absolute', 
-                                                    top: 8, 
-                                                    right: 8, 
+                                            <Box
+                                                sx={{
+                                                    position: 'absolute',
+                                                    top: 8,
+                                                    right: 8,
                                                     zIndex: 2,
                                                     bgcolor: 'rgba(255, 255, 255, 0.8)',
                                                     borderRadius: '50%',
@@ -273,7 +274,7 @@ console.log(setError);
                                                 <Checkbox
                                                     checked={selectedPhotos.includes(photo.id)}
                                                     onChange={(e) => handlePhotoSelect(photo.id, e.target.checked)}
-                                                    sx={{ 
+                                                    sx={{
                                                         p: 0,
                                                         color: '#c46868',
                                                         '&.Mui-checked': {
@@ -282,8 +283,8 @@ console.log(setError);
                                                     }}
                                                 />
                                             </Box>
-                                            <Box 
-                                                sx={{ 
+                                            <Box
+                                                sx={{
                                                     position: 'relative',
                                                     overflow: 'hidden',
                                                     paddingTop: '75%', // 4:3 aspect ratio
@@ -292,7 +293,7 @@ console.log(setError);
                                                 <img
                                                     src={photo.photoPath || "/placeholder.svg"}
                                                     alt={photo.photoName}
-                                                    style={{ 
+                                                    style={{
                                                         position: 'absolute',
                                                         top: 0,
                                                         left: 0,
@@ -304,8 +305,8 @@ console.log(setError);
                                                     }}
                                                 />
                                                 <Fade in={selectedPhotos.includes(photo.id)}>
-                                                    <Box 
-                                                        sx={{ 
+                                                    <Box
+                                                        sx={{
                                                             position: 'absolute',
                                                             top: 0,
                                                             left: 0,
@@ -318,9 +319,9 @@ console.log(setError);
                                                 </Fade>
                                             </Box>
                                             <Box sx={{ p: 1.5 }}>
-                                                <Typography 
-                                                    variant="body2" 
-                                                    sx={{ 
+                                                <Typography
+                                                    variant="body2"
+                                                    sx={{
                                                         fontWeight: 500,
                                                         whiteSpace: 'nowrap',
                                                         overflow: 'hidden',
@@ -346,9 +347,9 @@ console.log(setError);
                         {selectedPhotos.length} תמונות נבחרו
                     </Typography>
                     <Box>
-                        <Button 
+                        <Button
                             onClick={onClose}
-                            sx={{ 
+                            sx={{
                                 color: '#666',
                                 mr: 1,
                                 '&:hover': {
@@ -358,11 +359,11 @@ console.log(setError);
                         >
                             ביטול
                         </Button>
-                        <Button 
-                            variant="contained" 
-                            onClick={handleCreateCollage} 
+                        <Button
+                            variant="contained"
+                            onClick={handleCreateCollage}
                             disabled={selectedPhotos.length === 0}
-                            sx={{ 
+                            sx={{
                                 bgcolor: '#c46868',
                                 '&:hover': {
                                     bgcolor: '#b45757'
@@ -372,10 +373,10 @@ console.log(setError);
                                 }
                             }}
                         >
-                            <Badge 
-                                badgeContent={selectedPhotos.length} 
+                            <Badge
+                                badgeContent={selectedPhotos.length}
                                 color="error"
-                                sx={{ 
+                                sx={{
                                     '& .MuiBadge-badge': {
                                         bgcolor: 'white',
                                         color: '#c46868'

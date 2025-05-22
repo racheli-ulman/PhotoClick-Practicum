@@ -23,7 +23,7 @@ const Layout = () => {
     return (
         <div style={{ width: '100%', position: 'relative', minHeight: '100vh' }}> {/* הוספת position: 'relative' */}
             <AppBar position="static">
-                <Header />
+                <Header onOpenChat={handleOpenChat} />
             </AppBar>
 
             <main style={{ paddingTop: '64px' }}> {/* Adjust padding based on AppBar height */}
@@ -36,7 +36,7 @@ const Layout = () => {
                     startIcon={<ChatIcon />}
                     variant="contained"
                     sx={{
-                            background: 'linear-gradient(45deg,rgb(39, 25, 226) 30%,rgb(98, 128, 249) 90%)',
+                            background: 'linear-gradient(45deg,rgb(90, 80, 228) 30%,rgb(123, 147, 245) 90%)',
                         color: 'white',
                         borderRadius: '25px',
                         padding: '8px 20px',
@@ -48,7 +48,7 @@ const Layout = () => {
                         whiteSpace: 'nowrap',
                         textTransform: 'none', // אותיות לא גדולות
                         '&:hover': {
-                            background: 'linear-gradient(45deg,rgb(39, 25, 226) 30%,rgb(98, 128, 249) 90%)',
+                            background: 'linear-gradient(45deg,rgb(90, 80, 228) 30%,rgb(123, 147, 245) 90%)',
                             boxShadow: '0 6px 15px rgba(28, 14, 153, 0.5)',
                             transform: 'translateY(-2px)',
                         },

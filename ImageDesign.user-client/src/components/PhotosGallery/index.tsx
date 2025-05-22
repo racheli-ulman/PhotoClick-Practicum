@@ -1,7 +1,7 @@
 "use client";
 
 import type React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { observer } from "mobx-react-lite";
 import { useParams, useNavigate } from "react-router-dom";
 import {
@@ -24,7 +24,17 @@ import {
     Alert,
     Snackbar,
     Select,
-    SelectChangeEvent
+    SelectChangeEvent,
+    TextField,
+    InputAdornment,
+    // Card,
+    // CardContent,
+    // Stack,
+    // Divider,
+    FormControl,
+    InputLabel,
+    // Collapse,
+    Paper
 } from "@mui/material";
 import {
     ArrowBack,
@@ -36,14 +46,21 @@ import {
     Add,
     SortByAlpha,
     CalendarMonth,
-    AccessTime,
+    // AccessTime,
+    Search,
+    Clear,
+    FilterList,
+    ExpandMore,
+    ExpandLess,
+    Tag,
+    PhotoCamera
 } from "@mui/icons-material";
 import PhotoGrid from "./PhotoGrid";
 import PhotoDetailModal from "./PhotoDetailModal";
 import CopyMoveModal from "./CopyMoveModal";
 import photoUploadStore from "../../stores/photoUploaderStore";
 import albumStore from "../../stores/albumStore";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Album } from "../../models/Album";
 
 const PhotoGallery: React.FC = observer(() => {
@@ -66,7 +83,11 @@ const PhotoGallery: React.FC = observer(() => {
         type: "success",
     });
     const [selectedTag, setSelectedTag] = useState<string>("");
-    const [selectedTagId, setSelectedTagId] = useState<number | null>(null); // הוספת מצב ל-tagId
+    const [selectedTagId, setSelectedTagId] = useState<number | null>(null);
+    
+    // New search states
+    const [searchTerm, setSearchTerm] = useState<string>("");
+    const [filtersExpanded, setFiltersExpanded] = useState(false);
 
     const navigate = useNavigate();
 
@@ -104,7 +125,7 @@ const PhotoGallery: React.FC = observer(() => {
 
     const handleNextPhoto = () => {
         if (selectedPhotoIndex !== null) {
-            const nextIndex = (selectedPhotoIndex + 1) % photoUploadStore.photos.length;
+            const nextIndex = (selectedPhotoIndex + 1) % filteredAndSortedPhotos.length;
             setSelectedPhotoIndex(nextIndex);
             setZoomLevel(1);
         }
@@ -112,7 +133,7 @@ const PhotoGallery: React.FC = observer(() => {
 
     const handlePrevPhoto = () => {
         if (selectedPhotoIndex !== null) {
-            const prevIndex = (selectedPhotoIndex - 1 + photoUploadStore.photos.length) % photoUploadStore.photos.length;
+            const prevIndex = (selectedPhotoIndex - 1 + filteredAndSortedPhotos.length) % filteredAndSortedPhotos.length;
             setSelectedPhotoIndex(prevIndex);
             setZoomLevel(1);
         }
@@ -190,48 +211,77 @@ const PhotoGallery: React.FC = observer(() => {
         handleSortMenuClose();
     };
 
-    const getSortedPhotos = () => {
-        if (!photoUploadStore.photos || photoUploadStore.photos.length === 0) return [];
-
-        return [...photoUploadStore.photos].sort((a, b) => {
-            let comparison = 0;
-            switch (sortBy) {
-                case "name":
-                    comparison = a.photoName.localeCompare(b.photoName);
-                    break;
-                default:
-                    comparison = 0;
-            }
-
-            return sortDirection === "asc" ? comparison : -comparison;
-        });
-    };
-
-    const sortedPhotos = getSortedPhotos();
-
-
     const handleTagChange = async (event: SelectChangeEvent<string>) => {
         const tagName = event.target.value as string;
         setSelectedTag(tagName);
 
-        if (tagName === "") { // אם נבחרה האופציה "כל התמונות"
-            await photoUploadStore.fetchPhotosByAlbumId(Number(currentAlbumId)); // טען את כל התמונות
-            setSelectedTagId(null); // הגדר את selectedTagId ל-null
-        }
-
-        else {
-            // כאן נוודא שה- tagName אינו ריק לפני הקריאה
+        if (tagName === "") {
+            await photoUploadStore.fetchPhotosByAlbumId(Number(currentAlbumId));
+            setSelectedTagId(null);
+        } else {
             const tagId = await photoUploadStore.fetchTagIdByTagName(tagName);
             if (tagId) {
-                setSelectedTagId(tagId); // שמור את ה-tagId במצב רק אם הוא קיים
+                setSelectedTagId(tagId);
             } else {
                 console.error("לא נמצא ID עבור התג:", tagName);
             }
         }
     };
 
+    const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchTerm(event.target.value);
+    };
 
+    const handleClearSearch = () => {
+        setSearchTerm("");
+    };
 
+    const handleClearFilters = () => {
+        setSearchTerm("");
+        setSelectedTag("");
+        setSelectedTagId(null);
+    };
+
+    // Enhanced filtering and sorting logic
+    const filteredAndSortedPhotos = useMemo(() => {
+        if (!photoUploadStore.photos || photoUploadStore.photos.length === 0) return [];
+
+        let filtered = [...photoUploadStore.photos];
+
+        // Filter by tag
+        if (selectedTagId !== null) {
+            filtered = filtered.filter(photo => Number(photo.tagId) === selectedTagId);
+        }
+
+        // Filter by search term
+        if (searchTerm.trim()) {
+            const search = searchTerm.toLowerCase().trim();
+            filtered = filtered.filter(photo => 
+                photo.photoName.toLowerCase().includes(search)
+            );
+        }
+
+        // Sort
+        filtered.sort((a, b) => {
+            let comparison = 0;
+            switch (sortBy) {
+                case "name":
+                    comparison = a.photoName.localeCompare(b.photoName);
+                    break;
+                case "date":
+                    // Assuming photos have a date property, adjust as needed
+                    comparison = 0;
+                    break;
+                default:
+                    comparison = 0;
+            }
+            return sortDirection === "asc" ? comparison : -comparison;
+        });
+
+        return filtered;
+    }, [photoUploadStore.photos, selectedTagId, searchTerm, sortBy, sortDirection]);
+
+    const hasActiveFilters = searchTerm.trim() || selectedTag;
 
     if (loading) {
         return (
@@ -356,6 +406,15 @@ const PhotoGallery: React.FC = observer(() => {
                                 </IconButton>
                             </Tooltip>
 
+                            <Tooltip title="סינון וחיפוש">
+                                <IconButton 
+                                    onClick={() => setFiltersExpanded(!filtersExpanded)}
+                                    color={hasActiveFilters ? "primary" : "default"}
+                                >
+                                    <FilterList />
+                                </IconButton>
+                            </Tooltip>
+
                             <Tooltip title="העלאת תמונה">
                                 <IconButton color="primary" onClick={() => navigate("/personal-area/add-photo")}>
                                     <Add />
@@ -364,26 +423,185 @@ const PhotoGallery: React.FC = observer(() => {
                         </Box>
                     </Box>
 
-                    <Chip
-                        icon={<AccessTime fontSize="small" />}
-                        label={`${sortedPhotos.length} תמונות`}
-                        size="small"
-                        sx={{ mb: 3 }}
-                    />
+                    {/* Compact Search and Filter Section */}
+                    <AnimatePresence>
+                        {filtersExpanded && (
+                            <motion.div
+                                initial={{ opacity: 0, height: 0 }}
+                                animate={{ opacity: 1, height: "auto" }}
+                                exit={{ opacity: 0, height: 0 }}
+                                transition={{ duration: 0.3 }}
+                            >
+                                <Paper 
+                                    elevation={1} 
+                                    sx={{ 
+                                        p: 2, 
+                                        mb: 3, 
+                                        borderRadius: 2,
+                                        background: 'rgba(255, 255, 255, 0.95)',
+                                        backdropFilter: 'blur(10px)',
+                                        border: '1px solid rgba(255, 255, 255, 0.2)'
+                                    }}
+                                >
+                                    <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', flexWrap: 'wrap' }}>
+                                        {/* Search Field - Compact */}
+                                        <TextField
+                                            size="small"
+                                            variant="outlined"
+                                            placeholder="חיפוש לפי שם תמונה..."
+                                            value={searchTerm}
+                                            onChange={handleSearchChange}
+                                            sx={{ 
+                                                minWidth: 220,
+                                                flex: '1 1 auto',
+                                                '& .MuiOutlinedInput-root': {
+                                                    backgroundColor: 'white',
+                                                    borderRadius: 1.5,
+                                                    height: 40,
+                                                    '&:hover': {
+                                                        backgroundColor: '#fafafa',
+                                                    },
+                                                },
+                                            }}
+                                            InputProps={{
+                                                startAdornment: (
+                                                    <InputAdornment position="start">
+                                                        <Search sx={{ color: '#666', fontSize: 20 }} />
+                                                    </InputAdornment>
+                                                ),
+                                                endAdornment: searchTerm && (
+                                                    <InputAdornment position="end">
+                                                        <IconButton onClick={handleClearSearch} size="small">
+                                                            <Clear sx={{ fontSize: 18 }} />
+                                                        </IconButton>
+                                                    </InputAdornment>
+                                                ),
+                                            }}
+                                        />
 
-                    <Select value={selectedTag} onChange={handleTagChange} displayEmpty>
-                        <MenuItem value="" disabled>בחר תגית</MenuItem>
-                        <MenuItem value="">כל התמונות</MenuItem> {/* הוספת אפשרות לבחור את כל התמונות */}
-                        {photoUploadStore.tag.map(tag => (
-                            <MenuItem key={tag.Id} value={tag.tagName}>
-                                {tag.tagName}
-                            </MenuItem>
-                        ))}
-                    </Select>
+                                        {/* Tag Filter - Compact */}
+                                        <FormControl size="small" sx={{ minWidth: 180 }}>
+                                            <InputLabel id="tag-filter-label">סינון לפי תג</InputLabel>
+                                            <Select
+                                                labelId="tag-filter-label"
+                                                value={selectedTag}
+                                                onChange={handleTagChange}
+                                                label="סינון לפי תג"
+                                                sx={{
+                                                    backgroundColor: 'white',
+                                                    borderRadius: 1.5,
+                                                    height: 40,
+                                                    '&:hover': {
+                                                        backgroundColor: '#fafafa',
+                                                    },
+                                                }}
+                                            >
+                                                <MenuItem value="">כל התמונות</MenuItem>
+                                                {photoUploadStore.tag.map(tag => (
+                                                    <MenuItem key={tag.id} value={tag.tagName}>
+                                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                                            <Tag fontSize="small" color="action" />
+                                                            {tag.tagName}
+                                                        </Box>
+                                                    </MenuItem>
+                                                ))}
+                                            </Select>
+                                        </FormControl>
+
+                                        {/* Clear Filters Button - Compact */}
+                                        {hasActiveFilters && (
+                                            <motion.div
+                                                initial={{ opacity: 0, scale: 0.8 }}
+                                                animate={{ opacity: 1, scale: 1 }}
+                                                exit={{ opacity: 0, scale: 0.8 }}
+                                                transition={{ duration: 0.2 }}
+                                            >
+                                                <Button
+                                                    size="small"
+                                                    variant="outlined"
+                                                    startIcon={<Clear sx={{ fontSize: 16 }} />}
+                                                    onClick={handleClearFilters}
+                                                    sx={{ 
+                                                        height: 40,
+                                                        whiteSpace: 'nowrap',
+                                                        borderColor: '#ddd',
+                                                        color: '#666',
+                                                        '&:hover': {
+                                                            borderColor: '#bbb',
+                                                            backgroundColor: '#f5f5f5',
+                                                        }
+                                                    }}
+                                                >
+                                                    נקה
+                                                </Button>
+                                            </motion.div>
+                                        )}
+                                    </Box>
+                                </Paper>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+
+                    {/* Results Summary */}
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+                        <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+                            <Chip
+                                icon={<PhotoCamera fontSize="small" />}
+                                label={`${filteredAndSortedPhotos.length} תמונות`}
+                                size="small"
+                                color={hasActiveFilters ? "primary" : "default"}
+                                variant={hasActiveFilters ? "filled" : "outlined"}
+                            />
+                            
+                            {hasActiveFilters && (
+                                <motion.div
+                                    initial={{ opacity: 0, scale: 0.8 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    transition={{ duration: 0.2 }}
+                                >
+                                    <Chip
+                                        icon={<FilterList fontSize="small" />}
+                                        label="מסונן"
+                                        size="small"
+                                        color="secondary"
+                                        variant="outlined"
+                                    />
+                                </motion.div>
+                            )}
+                        </Box>
+
+                        <Button
+                            variant="text"
+                            size="small"
+                            onClick={() => setFiltersExpanded(!filtersExpanded)}
+                            endIcon={filtersExpanded ? <ExpandLess /> : <ExpandMore />}
+                            sx={{ color: 'text.secondary' }}
+                        >
+                            {filtersExpanded ? 'הסתר מסננים' : 'הצג מסננים'}
+                        </Button>
+                    </Box>
+
+                    {/* No Results Message */}
+                    {filteredAndSortedPhotos.length === 0 && hasActiveFilters && (
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.3 }}
+                        >
+                            <Alert severity="info" sx={{ mb: 3 }}>
+                                <Typography variant="body1">
+                                    לא נמצאו תמונות התואמות לקריטריונים שנבחרו
+                                </Typography>
+                                <Button size="small" onClick={handleClearFilters} sx={{ mt: 1 }}>
+                                    נקה מסננים
+                                </Button>
+                            </Alert>
+                        </motion.div>
+                    )}
                 </Box>
 
                 <PhotoGrid
-                    photos={sortedPhotos.filter(photo => selectedTagId === null || Number(photo.tagId) === selectedTagId)} // הצג כל התמונות אם selectedTagId הוא null
+                    photos={filteredAndSortedPhotos}
                     onPhotoClick={handlePhotoClick}
                     onCopyMoveClick={openCopyMoveDialog}
                     viewMode={viewMode}
@@ -399,10 +617,10 @@ const PhotoGallery: React.FC = observer(() => {
                     onConfirm={handleCopyMovePhoto}
                 />
 
-                {selectedPhotoIndex !== null && photoUploadStore.photos[selectedPhotoIndex] && (
+                {selectedPhotoIndex !== null && filteredAndSortedPhotos[selectedPhotoIndex] && (
                     <PhotoDetailModal
                         open={selectedPhotoIndex !== null}
-                        photo={photoUploadStore.photos[selectedPhotoIndex]}
+                        photo={filteredAndSortedPhotos[selectedPhotoIndex]}
                         zoomLevel={zoomLevel}
                         onClose={handleCloseModal}
                         onZoomIn={handleZoomIn}

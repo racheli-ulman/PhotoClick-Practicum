@@ -266,7 +266,7 @@ const UserAlbums: React.FC = () => {
   }
 
   return (
-    <Box sx={{ bgcolor: "background.default", minHeight: "100vh", pt: 10, pb: 8 }}>
+    <Box sx={{ bgcolor: "background.default", minHeight: "100vh", pt: 1, pb: 8 }}>
       <Container maxWidth="lg">
         <Box
           component={motion.div}

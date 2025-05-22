@@ -5,6 +5,7 @@ import axios from "axios";
 
 class TagStore {
   albums: Tag[] = [];
+  tags: Tag[] = [];
   // photos: any[] = []; // הוסף מערך עבור התמונות
   error: string | null = null;
   baseUrl: string;
@@ -36,6 +37,24 @@ class TagStore {
 
     }
   }
+
+
+
+async addTag(tagName: string): Promise<Tag | null> {
+    try {
+      const response = await axios.post<Tag>(`${this.baseUrl}/Tag`, { tagName })
+      this.tags.push(response.data) // Add the new tag to the store's list
+      this.setError(null)
+      return response.data
+    } catch (err: any) {
+      this.setError(err.message || "Error adding new tag")
+      console.error("Error adding new tag:", err)
+      return null
+    }
+  }
+
+
+
 }
 const tagStore = new TagStore();
 export default tagStore;

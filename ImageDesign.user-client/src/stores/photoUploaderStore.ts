@@ -546,9 +546,6 @@ class PhotoUploadStore {
         }
     }
 
-
-
-
 }
 
 const photoUploadStore = new PhotoUploadStore();

@@ -23,14 +23,14 @@ interface ChatComponentProps {
 }
 
 const ChatComponent: React.FC<ChatComponentProps> = ({ onClose }) => {
-      const theme = useTheme()
+    const theme = useTheme()
     
     const [input, setInput] = useState('');
     const [isExpanded, setIsExpanded] = useState(false);
     const messagesEndRef = useRef<null | HTMLDivElement>(null);
     const [messages, setMessages] = useState<{ sender: 'user' | 'bot'; text: string }[]>([]);
     const [status, setStatus] = useState<'idle' | 'loading' | 'error'>('idle');
-const baseURL= import.meta.env.VITE_API_URL
+    const baseURL= import.meta.env.VITE_API_URL
 
     // נושאים מוצעים לשיחות על תמונות
     const suggestedTopics = [
@@ -89,6 +89,20 @@ const baseURL= import.meta.env.VITE_API_URL
                 onClose();
             }
         }, 300);
+    };
+
+    // טיפול במקש Enter עם או בלי Shift
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+        if (e.key === 'Enter') {
+            if (e.shiftKey) {
+                // אם נלחץ Shift+Enter, פשוט מוסיפים ירידת שורה (ברירת המחדל)
+                return;
+            } else {
+                // אם נלחץ רק Enter, שולחים את ההודעה ומונעים ירידת שורה
+                e.preventDefault();
+                handleSend();
+            }
+        }
     };
 
     return (
@@ -208,14 +222,14 @@ const baseURL= import.meta.env.VITE_API_URL
                                                 width: 28,
                                                 height: 28,
                                                 borderRadius: '50%',
-                                                bgcolor: 'theme.palette.primary.dark', // ירוק בהיר יותר למשתמש
+                                                bgcolor: 'lightblue', // ירוק בהיר יותר למשתמש
                                                 display: 'flex',
                                                 alignItems: 'center',
                                                 justifyContent: 'center',
                                                 ml: 1
                                             }}
                                         >
-                                            <PersonIcon sx={{ fontSize: 16, color: '#fff' }} />
+                                            <PersonIcon sx={{ fontSize: 16, color: 'blue' }} />
                                         </Box>
                                     )}
 
@@ -229,6 +243,7 @@ const baseURL= import.meta.env.VITE_API_URL
                                                 ? '18px 18px 18px 4px'
                                                 : '18px 18px 4px 18px',
                                             position: 'relative',
+                                            whiteSpace: 'pre-wrap', // שומר על ירידות שורה
                                         }}
                                     >
                                         {msg.sender !== 'user' && (
@@ -323,10 +338,12 @@ const baseURL= import.meta.env.VITE_API_URL
                         fullWidth
                         size="small"
                         variant="outlined"
-                        placeholder="הקלד/י הודעה..."
+                        placeholder="...הקלד/י הודעה"
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
-                        onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+                        onKeyDown={handleKeyDown}
+                        multiline
+                        maxRows={4}
                         sx={{
                             '& .MuiOutlinedInput-root': {
                                 borderRadius: 5,

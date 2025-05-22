@@ -54,6 +54,8 @@ export const Router = createBrowserRouter([
                     {path:"get-photos/:albumId",element:<PhotoGallery/>},
                     {path:"all-photoes-of-user",element:<UserPhotosDialog open={true} onClose={() => {}} />},
                     {path:"tin-photo",element:<TinPhoto/>},
+                    
+                    
                 ]
             },
             // {index:true,element:<userAlbums/>},
