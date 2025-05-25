@@ -91,7 +91,7 @@ const PersonalArea: React.FC = () => {
                 {/* כותרת הסיידבר */}
                 <Box sx={{ 
                     p: sidebarOpen ? 2.5 : 1.5,
-                    bgcolor: theme.palette.primary.main,
+                  background: "linear-gradient(135deg,rgb(234, 102, 203),rgb(189, 132, 246), #f093fb, #00d4ff)",
                     color: 'white',
                     display: 'flex',
                     alignItems: 'center',

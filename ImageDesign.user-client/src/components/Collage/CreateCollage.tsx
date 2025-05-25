@@ -2,13 +2,10 @@
 
 import type React from "react"
 import { useState, useEffect, useRef } from "react"
+import { useNavigate, useLocation } from "react-router-dom"
 import {
   Box,
   Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
   Grid,
   IconButton,
   Typography,
@@ -31,8 +28,11 @@ import {
   Tab,
   Tooltip,
   Divider,
+  Container,
+  AppBar,
+  Toolbar,
 } from "@mui/material"
-import CloseIcon from "@mui/icons-material/Close"
+// import ArrowBackIcon from "@mui/icons-material/ArrowBack"
 import SaveIcon from "@mui/icons-material/Save"
 import DownloadIcon from "@mui/icons-material/Download"
 import TextFieldsIcon from "@mui/icons-material/TextFields"
@@ -50,12 +50,6 @@ import { DrawingCanvas } from "./DrawingCanvas"
 import { ShapesPanel } from "./ShapesPanel"
 import { StickersPanel } from "./StickersPanel"
 import { BrushPanel } from "./BrushPanel"
-
-interface CollageCreatorProps {
-  open: boolean
-  onClose: () => void
-  selectedPhotoIds: number[]
-}
 
 type LayoutType = "grid" | "horizontal" | "vertical" | "random"
 type TextPositionType = "top" | "center" | "bottom"
@@ -76,7 +70,13 @@ interface DrawingElement {
   zIndex: number
 }
 
-const CollageCreator: React.FC<CollageCreatorProps> = ({ open, onClose, selectedPhotoIds }) => {
+const CollageCreatorPage: React.FC = () => {
+  const navigate = useNavigate()
+  const location = useLocation()
+  
+  // Get selected photo IDs from navigation state
+  const selectedPhotoIds: number[] = location.state?.selectedPhotoIds || []
+
   const [photos, setPhotos] = useState<any[]>([])
   const [loading, setLoading] = useState<boolean>(true)
   const [layout, setLayout] = useState<LayoutType>("grid")
@@ -118,7 +118,6 @@ const CollageCreator: React.FC<CollageCreatorProps> = ({ open, onClose, selected
 
   const canvasRef = useRef<HTMLDivElement>(null)
   const drawingCanvasRef = useRef<HTMLCanvasElement>(null)
-  // Reference to store preloaded photos for download/save operations
   const preloadedPhotosRef = useRef<any[]>([])
   const originalPhotosRef = useRef<any[]>([])
 
@@ -129,9 +128,17 @@ const CollageCreator: React.FC<CollageCreatorProps> = ({ open, onClose, selected
   const [resizeStartSize, setResizeStartSize] = useState<{ width: number; height: number }>({ width: 0, height: 0 })
   const [resizeStartPos, setResizeStartPos] = useState<{ x: number; y: number }>({ x: 0, y: 0 })
 
+  // Check if user came from photo selection, if not redirect
+  useEffect(() => {
+    if (selectedPhotoIds.length === 0) {
+      navigate('/personal-area/all-photoes-of-user')
+      return
+    }
+  }, [selectedPhotoIds, navigate])
+
   // Load selected photos
   useEffect(() => {
-    if (open && selectedPhotoIds.length > 0) {
+    if (selectedPhotoIds.length > 0) {
       setLoading(true)
 
       try {
@@ -141,7 +148,6 @@ const CollageCreator: React.FC<CollageCreatorProps> = ({ open, onClose, selected
         if (selectedPhotos.length > 0) {
           console.log("Selected photos loaded:", selectedPhotos.length)
           setPhotos(selectedPhotos)
-          // Store original photos for reference
           originalPhotosRef.current = [...selectedPhotos]
         } else {
           console.warn("No matching photos found in albumStore")
@@ -162,23 +168,25 @@ const CollageCreator: React.FC<CollageCreatorProps> = ({ open, onClose, selected
         setLoading(false)
       }
     }
-  }, [open, selectedPhotoIds])
+  }, [selectedPhotoIds])
 
-  // Reset drawing elements when dialog opens
+  // Reset drawing elements when component mounts
   useEffect(() => {
-    if (open) {
-      setDrawingElements([])
-      setUndoStack([])
-      setRedoStack([])
-      setSelectedElement(null)
-      setDrawingMode(false)
-      setActiveTab("layout")
-      setPlacementMode("none")
-      setPendingSticker(null)
-      setPendingShape(null)
-      setPendingText(null)
-    }
-  }, [open])
+    setDrawingElements([])
+    setUndoStack([])
+    setRedoStack([])
+    setSelectedElement(null)
+    setDrawingMode(false)
+    setActiveTab("layout")
+    setPlacementMode("none")
+    setPendingSticker(null)
+    setPendingShape(null)
+    setPendingText(null)
+  }, [])
+
+  // const handleGoBack = () => {
+  //   navigate('/personal-area/all-photoes-of-user')
+  // }
 
   const handleLayoutChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setLayout(event.target.value as LayoutType)
@@ -187,7 +195,6 @@ const CollageCreator: React.FC<CollageCreatorProps> = ({ open, onClose, selected
   const handleGapSizeChange = (event: Event, newValue: number | number[]) => {
     setGapSize(newValue as number)
     console.log(event);
-    
   }
 
   const handleBackgroundColorChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -201,20 +208,17 @@ const CollageCreator: React.FC<CollageCreatorProps> = ({ open, onClose, selected
   const handleTextSizeChange = (event: Event, newValue: number | number[]) => {
     setTextSize(newValue as number)
     console.log(event);
-    
   }
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: EditorTabType) => {
-    // Cancel any pending placement when switching tabs
     setPlacementMode("none")
     setPendingSticker(null)
     setPendingShape(null)
     setPendingText(null)
-console.log(event);
+    console.log(event);
 
     setActiveTab(newValue)
 
-    // Turn on drawing mode when switching to draw tab
     if (newValue === "draw") {
       setDrawingMode(true)
     } else {
@@ -224,7 +228,6 @@ console.log(event);
 
   // Add a new drawing element
   const addDrawingElement = (element: Omit<DrawingElement, "id" | "zIndex">) => {
-    // Save current state for undo
     setUndoStack([...undoStack, [...drawingElements]])
     setRedoStack([])
 
@@ -238,14 +241,6 @@ console.log(event);
     setSelectedElement(newElement.id)
     return newElement.id
   }
-
-  // Update an existing drawing element
-  // const updateDrawingElement = (id: string, updates: Partial<DrawingElement>) => {
-  //   setUndoStack([...undoStack, [...drawingElements]])
-  //   setRedoStack([])
-
-  //   setDrawingElements((elements) => elements.map((el) => (el.id === id ? { ...el, ...updates } : el)))
-  // }
 
   // Remove a drawing element
   const removeDrawingElement = (id: string) => {
@@ -278,13 +273,11 @@ console.log(event);
 
   // Select a shape to add to the canvas
   const selectShape = (shapeType: string) => {
-    // Set placement mode to shape
     setPlacementMode("shape")
     setPendingShape(shapeType)
     setPendingSticker(null)
     setPendingText(null)
 
-    // Show notification to guide the user
     setNotification({
       open: true,
       message: "לחץ על הקולאז' כדי למקם את הצורה",
@@ -294,13 +287,11 @@ console.log(event);
 
   // Select a sticker to add to the canvas
   const selectSticker = (stickerUrl: string) => {
-    // Set placement mode to sticker
     setPlacementMode("sticker")
     setPendingSticker(stickerUrl)
     setPendingShape(null)
     setPendingText(null)
 
-    // Show notification to guide the user
     setNotification({
       open: true,
       message: "לחץ על הקולאז' כדי למקם את המדבקה",
@@ -310,13 +301,11 @@ console.log(event);
 
   // Select text to add to the canvas
   const selectText = (text: string) => {
-    // Set placement mode to text
     setPlacementMode("text")
     setPendingText(text)
     setPendingSticker(null)
     setPendingShape(null)
 
-    // Show notification to guide the user
     setNotification({
       open: true,
       message: "לחץ על הקולאז' כדי למקם את הטקסט",
@@ -328,13 +317,11 @@ console.log(event);
   const handleCanvasClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (placementMode === "none") return
 
-    // Get click position relative to canvas
     const rect = e.currentTarget.getBoundingClientRect()
     const x = e.clientX - rect.left
     const y = e.clientY - rect.top
 
     if (placementMode === "shape" && pendingShape) {
-      // Add shape at the clicked position
       const newShape = {
         type: "shape" as const,
         x,
@@ -352,17 +339,13 @@ console.log(event);
       }
 
       addDrawingElement(newShape)
-
-      // Reset placement mode
       setPlacementMode("none")
       setPendingShape(null)
     } else if (placementMode === "sticker" && pendingSticker) {
-      // Create a new image element to get dimensions
       const img = new Image()
       img.src = pendingSticker
 
       img.onload = () => {
-        // Calculate aspect ratio to maintain proportions
         const aspectRatio = img.width / img.height
         const width = 100
         const height = width / aspectRatio
@@ -380,13 +363,10 @@ console.log(event);
         }
 
         addDrawingElement(newSticker)
-
-        // Reset placement mode
         setPlacementMode("none")
         setPendingSticker(null)
       }
     } else if (placementMode === "text" && pendingText) {
-      // Add text at the clicked position
       const newText = {
         type: "text" as const,
         x,
@@ -401,8 +381,6 @@ console.log(event);
       }
 
       addDrawingElement(newText)
-
-      // Reset placement mode
       setPlacementMode("none")
       setPendingText(null)
     }
@@ -422,23 +400,19 @@ console.log(event);
     for (let i = 0; i < preloadedPhotos.length; i++) {
       const photo = preloadedPhotos[i]
       try {
-        // Create a new image element
         const img = new Image()
         img.crossOrigin = "anonymous"
 
-        // Create a promise to wait for the image to load
         await new Promise<void>((resolve) => {
           img.onload = () => resolve()
           img.onerror = () => {
             console.error(`Failed to load image: ${photo.photoPath}`)
             failedIndices.push(i)
-            resolve() // Continue with other images even if this one fails
+            resolve()
           }
 
-          // Try to load with cache busting to avoid CORS issues
           img.src = `${photo.photoPath}${photo.photoPath.includes("?") ? "&" : "?"}cacheBust=${new Date().getTime()}`
 
-          // Set a timeout in case the image takes too long to load
           setTimeout(() => {
             if (!img.complete) {
               console.warn(`Image load timeout: ${photo.photoPath}`)
@@ -449,18 +423,15 @@ console.log(event);
         })
 
         if (!failedIndices.includes(i)) {
-          // Create a canvas to draw the image
           const canvas = document.createElement("canvas")
           canvas.width = img.width
           canvas.height = img.height
           const ctx = canvas.getContext("2d")
 
           if (ctx) {
-            // Draw the image on the canvas
             ctx.drawImage(img, 0, 0)
 
             try {
-              // Convert to data URL
               const dataUrl = canvas.toDataURL("image/png")
               preloadedPhotos[i] = {
                 ...photo,
@@ -510,16 +481,13 @@ console.log(event);
     try {
       setProcessing(true)
 
-      // If we haven't preloaded images yet or need to refresh them
       if (preloadedPhotosRef.current.length === 0) {
         preloadedPhotosRef.current = await preloadImages(photos)
       }
 
-      // Store original photos and use preloaded ones temporarily
       const backupPhotos = [...photos]
       setPhotos(preloadedPhotosRef.current)
 
-      // Allow time for DOM to update with preloaded images
       await new Promise((resolve) => setTimeout(resolve, 1000))
 
       setNotification({
@@ -530,10 +498,7 @@ console.log(event);
 
       const element = canvasRef.current
 
-      // Wait for all images to be loaded before proceeding
       await ensureImagesLoaded()
-
-      // Additional delay to ensure rendering is complete
       await new Promise((resolve) => setTimeout(resolve, 500))
 
       const canvas = await html2canvas(element, {
@@ -545,12 +510,10 @@ console.log(event);
         foreignObjectRendering: false,
         imageTimeout: 0,
         onclone: (documentClone) => {
-          // Ensure all images in the clone are set to complete
           const images = documentClone.querySelectorAll("img")
           images.forEach((img) => {
             if (!img.complete) {
               console.warn("Found incomplete image in clone, forcing complete")
-              // Force image complete (this is a hack but can help)
               img.setAttribute("data-html2canvas-ignore", "false")
             }
           })
@@ -558,13 +521,11 @@ console.log(event);
         },
       })
 
-      // Create download link
       const link = document.createElement("a")
       link.download = `collage_${new Date().toISOString().slice(0, 10)}.png`
       link.href = canvas.toDataURL("image/png")
       link.click()
 
-      // Restore original photos
       setPhotos(backupPhotos)
 
       setNotification({
@@ -574,7 +535,6 @@ console.log(event);
       })
     } catch (error) {
       console.error("Error generating collage:", error)
-      // More detailed error handling
       if (error instanceof Error) {
         if (error.message.includes("SecurityError") || error.message.includes("cross-origin")) {
           setNotification({
@@ -608,16 +568,13 @@ console.log(event);
     try {
       setProcessing(true)
 
-      // If we haven't preloaded images yet
       if (preloadedPhotosRef.current.length === 0) {
         preloadedPhotosRef.current = await preloadImages(photos)
       }
 
-      // Store original photos and use preloaded ones temporarily
       const backupPhotos = [...photos]
       setPhotos(preloadedPhotosRef.current)
 
-      // Allow time for DOM to update with preloaded images
       await new Promise((resolve) => setTimeout(resolve, 1000))
 
       setNotification({
@@ -628,10 +585,7 @@ console.log(event);
 
       const element = canvasRef.current
 
-      // Wait for all images to be loaded before proceeding
       await ensureImagesLoaded()
-
-      // Additional delay to ensure rendering is complete
       await new Promise((resolve) => setTimeout(resolve, 500))
 
       const canvas = await html2canvas(element, {
@@ -644,7 +598,6 @@ console.log(event);
         imageTimeout: 0,
       })
 
-      // Convert to image blob
       const imageBlob = await new Promise<Blob>((resolve, reject) => {
         canvas.toBlob((blob) => {
           if (blob) resolve(blob)
@@ -652,13 +605,10 @@ console.log(event);
         }, "image/png")
       })
 
-      // Here you would send the blob to the server
       console.log("Image blob created, ready to upload:", imageBlob.size, "bytes")
 
-      // Restore original photos
       setPhotos(backupPhotos)
 
-      // Fake server request
       await new Promise((resolve) => setTimeout(resolve, 1000))
 
       setNotification({
@@ -667,9 +617,8 @@ console.log(event);
         severity: "success",
       })
 
-      // Close dialog after saving
       setTimeout(() => {
-        onClose()
+        navigate('/personal-area/userAlbums')
       }, 1500)
     } catch (error) {
       console.error("Error saving collage:", error)
@@ -691,7 +640,6 @@ console.log(event);
   // Preload images when component mounts or photos change
   useEffect(() => {
     if (photos.length > 0 && !loading) {
-      // Preload images in the background
       const doPreload = async () => {
         try {
           const preloaded = await preloadImages(photos)
@@ -705,15 +653,6 @@ console.log(event);
       doPreload()
     }
   }, [photos, loading])
-
-  // Debug function to log photo information
-  const debugPhotos = () => {
-    console.log("Current photos in state:", photos)
-    console.log("Selected photo IDs:", selectedPhotoIds)
-    console.log("Album store photos:", albumStore.photos)
-    console.log("Preloaded photos:", preloadedPhotosRef.current)
-    console.log("Drawing elements:", drawingElements)
-  }
 
   // Generate text styles based on user selection
   const getTextStyle = () => {
@@ -735,12 +674,10 @@ console.log(event);
         break
     }
 
-    // Text shadow style
     const shadow = textShadow
       ? "2px 2px 4px rgba(0,0,0,0.7), -2px -2px 4px rgba(0,0,0,0.7), 2px -2px 4px rgba(0,0,0,0.7), -2px 2px 4px rgba(0,0,0,0.7)"
       : "none"
 
-    // Position styles
     const positionStyle: React.CSSProperties = {
       position: "absolute",
       width: "100%",
@@ -757,12 +694,10 @@ console.log(event);
       justifyContent: "center",
     }
 
-    // Add background if enabled
     if (showTextBackground) {
       positionStyle.backgroundColor = textBackgroundColor
     }
 
-    // Set position based on user selection
     switch (textPosition) {
       case "top":
         positionStyle.top = 0
@@ -786,7 +721,6 @@ console.log(event);
     setIsDragging(true)
     setDragStartPos({ x: e.clientX, y: e.clientY })
 
-    // Add event listeners for drag
     document.addEventListener("mousemove", handleElementDrag)
     document.addEventListener("mouseup", handleElementDragEnd)
   }
@@ -794,7 +728,6 @@ console.log(event);
   const handleElementDrag = (e: MouseEvent) => {
     if (!isDragging || !selectedElement) return
 
-    // Find the element
     const elementIndex = drawingElements.findIndex((el) => el.id === selectedElement)
     if (elementIndex === -1) return
 
@@ -802,7 +735,6 @@ console.log(event);
     const dx = e.clientX - dragStartPos.x
     const dy = e.clientY - dragStartPos.y
 
-    // Update element position
     const updatedElements = [...drawingElements]
     updatedElements[elementIndex] = {
       ...element,
@@ -819,7 +751,6 @@ console.log(event);
     document.removeEventListener("mousemove", handleElementDrag)
     document.removeEventListener("mouseup", handleElementDragEnd)
 
-    // Save state for undo
     if (selectedElement) {
       setUndoStack([...undoStack, [...drawingElements]])
       setRedoStack([])
@@ -834,13 +765,11 @@ console.log(event);
     setIsResizing(true)
     setResizeStartPos({ x: e.clientX, y: e.clientY })
 
-    // Find the element
     const element = drawingElements.find((el) => el.id === id)
     if (!element || !element.width || !element.height) return
 
     setResizeStartSize({ width: element.width, height: element.height })
 
-    // Add event listeners for resize
     document.addEventListener("mousemove", handleResize)
     document.addEventListener("mouseup", handleResizeEnd)
   }
@@ -848,7 +777,6 @@ console.log(event);
   const handleResize = (e: MouseEvent) => {
     if (!isResizing || !selectedElement) return
 
-    // Find the element
     const elementIndex = drawingElements.findIndex((el) => el.id === selectedElement)
     if (elementIndex === -1) return
 
@@ -858,7 +786,6 @@ console.log(event);
     const dx = e.clientX - resizeStartPos.x
     const dy = e.clientY - resizeStartPos.y
 
-    // Update element size
     const updatedElements = [...drawingElements]
     updatedElements[elementIndex] = {
       ...element,
@@ -874,7 +801,6 @@ console.log(event);
     document.removeEventListener("mousemove", handleResize)
     document.removeEventListener("mouseup", handleResizeEnd)
 
-    // Save state for undo
     if (selectedElement) {
       setUndoStack([...undoStack, [...drawingElements]])
       setRedoStack([])
@@ -926,13 +852,10 @@ console.log(event);
       return <Typography align="center">אין תמונות נבחרות ליצירת קולאז'</Typography>
     }
 
-    // Log for debugging
     console.log(`Rendering collage with ${photos.length} photos, layout: ${layout}`)
 
-    // Component to render the overlay text
     const TextOverlay = () => (overlayText ? <Box sx={getTextStyle()}>{overlayText}</Box> : null)
 
-    // Render drawing elements
     const renderDrawingElements = () => (
       <>
         {drawingElements.map((element) => {
@@ -1348,14 +1271,6 @@ console.log(event);
     }
   }
 
-  // Effect to log when photos change
-  useEffect(() => {
-    console.log("Photos state updated, count:", photos.length)
-  }, [photos])
-
-  // Add debug button in development
-  const isDevelopment = process.env.NODE_ENV === "development"
-
   // Render the editor panel based on active tab
   const renderEditorPanel = () => {
     switch (activeTab) {
@@ -1602,7 +1517,6 @@ console.log(event);
 
   // Dummy renderShape function
   const renderShape = (shapeType: string, color: string, fillColor: string, width: number, height: number) => {
-    // Replace this with your actual shape rendering logic
     return (
       <Box
         sx={{
@@ -1666,183 +1580,194 @@ console.log(event);
     )
   }
 
-  return (
-    <>
-      <Dialog open={open} onClose={onClose} maxWidth="lg" fullWidth>
-        <DialogTitle>
-          <Box display="flex" justifyContent="space-between" alignItems="center">
-            <Typography variant="h6" component="h2">
-              יצירת קולאז'
-            </Typography>
-            <IconButton onClick={onClose}>
-              <CloseIcon />
-            </IconButton>
+  if (loading) {
+    return (
+      <Container maxWidth="lg" sx={{ py: 4 }}>
+        <Box display="flex" justifyContent="center" alignItems="center" minHeight="60vh">
+          <Box textAlign="center">
+            <CircularProgress sx={{ mb: 2 }} />
+            <Typography>טוען תמונות...</Typography>
           </Box>
-        </DialogTitle>
-        <DialogContent>
-          {loading ? (
-            <Box display="flex" justifyContent="center" alignItems="center" minHeight="300px">
-              <CircularProgress />
-              <Typography sx={{ ml: 2 }}>טוען תמונות...</Typography>
-            </Box>
-          ) : (
-            <>
-              {/* Editor Tabs */}
-              <Tabs
-                value={activeTab}
-                onChange={handleTabChange}
-                variant="scrollable"
-                scrollButtons="auto"
-                sx={{ mb: 2, borderBottom: 1, borderColor: "divider" }}
-              >
-                <Tab icon={<ImageIcon />} label="פריסה" value="layout" iconPosition="start" />
-                <Tab icon={<TextFieldsIcon />} label="טקסט" value="text" iconPosition="start" />
-                <Tab icon={<BrushIcon />} label="ציור" value="draw" iconPosition="start" />
-                <Tab icon={<ShapeLineIcon />} label="צורות" value="shapes" iconPosition="start" />
-                <Tab icon={<EmojiEmotionsIcon />} label="מדבקות" value="stickers" iconPosition="start" />
-                <Tab icon={<PaletteIcon />} label="מברשות" value="brush" iconPosition="start" />
-              </Tabs>
+        </Box>
+      </Container>
+    )
+  }
 
-              {/* Drawing Tools */}
-              {(activeTab === "draw" || activeTab === "shapes" || activeTab === "stickers") && (
-                <Box sx={{ mb: 2, display: "flex", gap: 1, justifyContent: "center" }}>
-                  <Tooltip title="בטל">
-                    <span>
-                      <IconButton onClick={handleUndo} disabled={undoStack.length === 0} color="primary">
-                        <UndoIcon />
-                      </IconButton>
-                    </span>
-                  </Tooltip>
-
-                  <Tooltip title="בצע שוב">
-                    <span>
-                      <IconButton onClick={handleRedo} disabled={redoStack.length === 0} color="primary">
-                        <RedoIcon />
-                      </IconButton>
-                    </span>
-                  </Tooltip>
-
-                  <Tooltip title="מחק נבחר">
-                    <span>
-                      <IconButton
-                        onClick={() => selectedElement && removeDrawingElement(selectedElement)}
-                        disabled={!selectedElement}
-                        color="error"
-                      >
-                        <DeleteIcon />
-                      </IconButton>
-                    </span>
-                  </Tooltip>
-                </Box>
-              )}
-
-              <Grid container spacing={3}>
-                <Grid item xs={12} md={4}>
-                  <Box sx={{ p: 2, border: "1px solid #ddd", borderRadius: 2, height: "100%", overflow: "auto" }}>
-                    {renderEditorPanel()}
-
-                    <Divider sx={{ my: 2 }} />
-
-                    <Box sx={{ mt: 3 }}>
-                      <Button
-                        variant="outlined"
-                        color="primary"
-                        size="small"
-                        onClick={() =>
-                          preloadImages(photos).then((preloaded) => {
-                            preloadedPhotosRef.current = preloaded
-                            setNotification({
-                              open: true,
-                              message: "התמונות עובדו מראש בהצלחה",
-                              severity: "success",
-                            })
-                          })
-                        }
-                        disabled={processing || photos.length === 0}
-                      >
-                        עבד תמונות מראש
-                      </Button>
-                    </Box>
-
-                    {isDevelopment && (
-                      <Button variant="outlined" color="info" size="small" onClick={debugPhotos} sx={{ mt: 2 }}>
-                        Debug Info
-                      </Button>
-                    )}
-                  </Box>
-                </Grid>
-
-                <Grid item xs={12} md={8}>
-                  <Paper
-                    elevation={3}
-                    sx={{
-                      p: 2,
-                      height: "100%",
-                      bgcolor: backgroundColor,
-                      overflow: "auto",
-                      minHeight: "500px",
-                      position: "relative",
-                    }}
-                  >
-                    {renderPlacementGuide()}
-                    <Box
-                      ref={canvasRef}
-                      sx={{
-                        position: "relative",
-                        cursor: getCursorStyle(),
-                        height: "100%",
-                        width: "100%",
-                      }}
-                      onClick={handleCanvasClick}
-                    >
-                      {renderCollage()}
-                      {drawingMode && (
-                        <DrawingCanvas
-                          ref={drawingCanvasRef}
-                          brushColor={brushColor}
-                          brushSize={brushSize}
-                          onDrawingComplete={(paths) => {
-                            // Add the drawing as a new element
-                            addDrawingElement({
-                              type: "brush",
-                              x: 0,
-                              y: 0,
-                              data: {
-                                paths,
-                                color: brushColor,
-                                size: brushSize,
-                              },
-                            })
-                            // Turn off drawing mode after completing
-                            setDrawingMode(false)
-                          }}
-                        />
-                      )}
-                    </Box>
-                  </Paper>
-                </Grid>
-              </Grid>
-            </>
-          )}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={onClose}>ביטול</Button>
-          <Button startIcon={<DownloadIcon />} onClick={downloadCollage} disabled={photos.length === 0 || processing}>
-            {processing ? "מעבד..." : "הורד קולאז'"}
-          </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            startIcon={<SaveIcon />}
-            onClick={saveCollage}
-            disabled={photos.length === 0 || processing}
+  return (
+    <Box sx={{ minHeight: "100vh", bgcolor: "#f5f5f5" }}>
+      {/* App Bar */}
+      <AppBar position="static" sx={{ bgcolor: "#c46868" }}>
+        <Toolbar>
+          {/* <IconButton
+            edge="start"
+            color="inherit"
+            onClick={handleGoBack}
+            sx={{ mr: 2 }}
           >
-            {processing ? "מעבד..." : "שמור קולאז'"}
-          </Button>
-        </DialogActions>
-      </Dialog>
+            <ArrowBackIcon />
+          </IconButton> */}
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            יצירת קולאז' - {selectedPhotoIds.length} תמונות נבחרו
+          </Typography>
+          <Box sx={{ display: "flex", gap: 1 }}>
+            <Button
+              color="inherit"
+              startIcon={<DownloadIcon />}
+              onClick={downloadCollage}
+              disabled={photos.length === 0 || processing}
+            >
+              {processing ? "מעבד..." : "הורד"}
+            </Button>
+            <Button
+              color="inherit"
+              startIcon={<SaveIcon />}
+              onClick={saveCollage}
+              disabled={photos.length === 0 || processing}
+              variant="outlined"
+              sx={{ borderColor: "white", "&:hover": { borderColor: "white" } }}
+            >
+              {processing ? "מעבד..." : "שמור"}
+            </Button>
+          </Box>
+        </Toolbar>
+      </AppBar>
 
-      {/* התראות */}
+      <Container maxWidth="xl" sx={{ py: 3 }}>
+        {/* Editor Tabs */}
+        <Paper sx={{ mb: 3 }}>
+          <Tabs
+            value={activeTab}
+            onChange={handleTabChange}
+            variant="scrollable"
+            scrollButtons="auto"
+            sx={{ borderBottom: 1, borderColor: "divider" }}
+          >
+            <Tab icon={<ImageIcon />} label="פריסה" value="layout" iconPosition="start" />
+            <Tab icon={<TextFieldsIcon />} label="טקסט" value="text" iconPosition="start" />
+            <Tab icon={<BrushIcon />} label="ציור" value="draw" iconPosition="start" />
+            <Tab icon={<ShapeLineIcon />} label="צורות" value="shapes" iconPosition="start" />
+            <Tab icon={<EmojiEmotionsIcon />} label="מדבקות" value="stickers" iconPosition="start" />
+            <Tab icon={<PaletteIcon />} label="מברשות" value="brush" iconPosition="start" />
+          </Tabs>
+        </Paper>
+
+        {/* Drawing Tools */}
+        {(activeTab === "draw" || activeTab === "shapes" || activeTab === "stickers") && (
+          <Paper sx={{ p: 2, mb: 3 }}>
+            <Box sx={{ display: "flex", gap: 1, justifyContent: "center" }}>
+              <Tooltip title="בטל">
+                <span>
+                  <IconButton onClick={handleUndo} disabled={undoStack.length === 0} color="primary">
+                    <UndoIcon />
+                  </IconButton>
+                </span>
+              </Tooltip>
+
+              <Tooltip title="בצע שוב">
+                <span>
+                  <IconButton onClick={handleRedo} disabled={redoStack.length === 0} color="primary">
+                    <RedoIcon />
+                  </IconButton>
+                </span>
+              </Tooltip>
+
+              <Tooltip title="מחק נבחר">
+                <span>
+                  <IconButton
+                    onClick={() => selectedElement && removeDrawingElement(selectedElement)}
+                    disabled={!selectedElement}
+                    color="error"
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </span>
+              </Tooltip>
+            </Box>
+          </Paper>
+        )}
+
+        <Grid container spacing={3}>
+          {/* Control Panel */}
+          <Grid item xs={12} lg={3}>
+            <Paper sx={{ p: 3, height: "fit-content", position: "sticky", top: 20 }}>
+              {renderEditorPanel()}
+
+              <Divider sx={{ my: 2 }} />
+
+              <Box sx={{ mt: 3 }}>
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  size="small"
+                  fullWidth
+                  onClick={() =>
+                    preloadImages(photos).then((preloaded) => {
+                      preloadedPhotosRef.current = preloaded
+                      setNotification({
+                        open: true,
+                        message: "התמונות עובדו מראש בהצלחה",
+                        severity: "success",
+                      })
+                    })
+                  }
+                  disabled={processing || photos.length === 0}
+                >
+                  עבד תמונות מראש
+                </Button>
+              </Box>
+            </Paper>
+          </Grid>
+
+          {/* Collage Canvas */}
+          <Grid item xs={12} lg={9}>
+            <Paper
+              elevation={3}
+              sx={{
+                p: 3,
+                bgcolor: backgroundColor,
+                minHeight: "70vh",
+                position: "relative",
+              }}
+            >
+              {renderPlacementGuide()}
+              <Box
+                ref={canvasRef}
+                sx={{
+                  position: "relative",
+                  cursor: getCursorStyle(),
+                  height: "100%",
+                  width: "100%",
+                }}
+                onClick={handleCanvasClick}
+              >
+                {renderCollage()}
+                {drawingMode && (
+                  <DrawingCanvas
+                    ref={drawingCanvasRef}
+                    brushColor={brushColor}
+                    brushSize={brushSize}
+                    onDrawingComplete={(paths) => {
+                      addDrawingElement({
+                        type: "brush",
+                        x: 0,
+                        y: 0,
+                        data: {
+                          paths,
+                          color: brushColor,
+                          size: brushSize,
+                        },
+                      })
+                      setDrawingMode(false)
+                    }}
+                  />
+                )}
+              </Box>
+            </Paper>
+          </Grid>
+        </Grid>
+      </Container>
+
+      {/* Notifications */}
       <Snackbar
         open={notification.open}
         autoHideDuration={6000}
@@ -1853,8 +1778,8 @@ console.log(event);
           {notification.message}
         </Alert>
       </Snackbar>
-    </>
+    </Box>
   )
 }
 
-export default CollageCreator
+export default CollageCreatorPage

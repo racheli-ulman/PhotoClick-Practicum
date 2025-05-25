@@ -36,14 +36,14 @@ const Layout = () => {
                     startIcon={<ChatIcon />}
                     variant="contained"
                     sx={{
-                            background: 'linear-gradient(45deg,rgb(90, 80, 228) 30%,rgb(123, 147, 245) 90%)',
-                        color: 'white',
+                  background: "white",
+                        color: 'lightblue',
                         borderRadius: '25px',
                         padding: '8px 20px',
                         fontWeight: 'bold',
                         letterSpacing: '0.5px',
-                        border: '2px solid rgba(255,255,255,0.3)',
-                        boxShadow: '0 4px 10px rgba(255,140,0,0.3)',
+                        border: '2px solid rgba(255, 111, 241, 0.3)',
+                        // boxShadow: '0 4px 10px rgba(255,140,0,0.3)',
                         transition: 'all 0.3s ease',
                         whiteSpace: 'nowrap',
                         textTransform: 'none', // אותיות לא גדולות

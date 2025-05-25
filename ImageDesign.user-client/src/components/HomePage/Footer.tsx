@@ -1,84 +1,378 @@
-import React from 'react';
-import { 
-  Box, 
-  Container, 
-  Typography, 
-  Link, 
-  List, 
-  ListItem,
-  useTheme 
-} from '@mui/material';
-import { styled } from '@mui/material/styles';
+"use client"
+
+import type React from "react"
+import { motion } from "framer-motion"
+import { Box, Container, Typography, Link, Grid, IconButton, Divider } from "@mui/material"
+import { Facebook, Twitter, Instagram, LinkedIn, Email, Phone, LocationOn, PhotoLibrary } from "@mui/icons-material"
 
 interface FooterProps {
-  companyName?: string;
-  year?: number;
+  companyName?: string
+  year?: number
 }
 
-// Styled component for footer links
-const FooterLink = styled(Link)(({ theme }) => ({
-  color: theme.palette.primary.contrastText,
-  textDecoration: 'none',
-  fontSize: '0.875rem',
-  fontWeight: 400,
-  marginLeft: '1rem',
-  marginRight: '1rem',
-  '&:hover': {
-    color: 'rgba(255, 255, 255, 0.7)',
-    textDecoration: 'none',
-  },
-}));
+const Footer: React.FC<FooterProps> = ({ companyName = "פוטו-קליק", year = 2025 }) => {
+  const footerLinks = [
+    { label: "צור קשר", href: "#contact" },
+    { label: "עזרה ותמיכה", href: "#support" },
+    { label: "מדיניות פרטיות", href: "#privacy" },
+    { label: "תנאי שימוש", href: "#terms" },
+    { label: "אודותינו", href: "#about" },
+    { label: "קריירה", href: "#careers" },
+  ]
 
-const Footer: React.FC<FooterProps> = ({ 
-  companyName = "פוטו-קליק", 
-  year = 2025 
-}) => {
-  const theme = useTheme();
+  const socialLinks = [
+    { icon: <Facebook />, href: "#facebook", color: "#1877f2" },
+    { icon: <Instagram />, href: "#instagram", color: "#e4405f" },
+    { icon: <Twitter />, href: "#twitter", color: "#1da1f2" },
+    { icon: <LinkedIn />, href: "#linkedin", color: "#0077b5" },
+  ]
+
+  const contactInfo = [
+    { icon: <Email />, text: "info@photo-click.com", color: "#667eea" },
+    { icon: <Phone />, text: "03-1234567", color: "#764ba2" },
+    { icon: <LocationOn />, text: "תל אביב, ישראל", color: "#f093fb" },
+  ]
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.2,
+      },
+    },
+  }
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        ease: "easeOut",
+      },
+    },
+  }
 
   return (
-    <Box 
-      component="footer" 
-      sx={{ 
-        width: '100%', 
-        bgcolor: '#737373', // כחול
-        color: theme.palette.primary.contrastText, 
-        py: 3,
-        mt: 'auto' // מיקום בתחתית האתר במקרה של תוכן קצר
+    <Box
+      component="footer"
+      sx={{
+        background: "linear-gradient(135deg, #2c3e50, #34495e, #2c3e50)",
+        color: "white",
+        position: "relative",
+        overflow: "hidden",
+        "&::before": {
+          content: '""',
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background:
+            "linear-gradient(45deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1), rgba(240, 147, 251, 0.1))",
+          backgroundSize: "400% 400%",
+          animation: "gradientShift 20s ease infinite",
+        },
+        "@keyframes gradientShift": {
+          "0%": { backgroundPosition: "0% 50%" },
+          "50%": { backgroundPosition: "100% 50%" },
+          "100%": { backgroundPosition: "0% 50%" },
+        },
       }}
-      dir="rtl"
     >
-      <Container maxWidth="lg">
-        <Box 
-          sx={{ 
-            display: 'flex', 
-            justifyContent: 'center',
-            flexWrap: 'wrap'
-          }}
+      {/* Floating Background Elements */}
+      <motion.div
+        style={{
+          position: "absolute",
+          top: "20%",
+          left: "10%",
+          width: 100,
+          height: 100,
+          background: "linear-gradient(45deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1))",
+          borderRadius: "50%",
+          filter: "blur(30px)",
+        }}
+        animate={{
+          x: [0, 30, 0],
+          y: [0, -20, 0],
+        }}
+        transition={{
+          duration: 8,
+          repeat: Number.POSITIVE_INFINITY,
+          ease: "easeInOut",
+        }}
+      />
+
+      <motion.div
+        style={{
+          position: "absolute",
+          bottom: "30%",
+          right: "15%",
+          width: 80,
+          height: 80,
+          background: "linear-gradient(45deg, rgba(240, 147, 251, 0.1), rgba(0, 212, 255, 0.1))",
+          borderRadius: "30px",
+          filter: "blur(25px)",
+        }}
+        animate={{
+          rotate: [0, 180, 360],
+          scale: [1, 1.1, 1],
+        }}
+        transition={{
+          duration: 12,
+          repeat: Number.POSITIVE_INFINITY,
+          ease: "easeInOut",
+        }}
+      />
+
+      <Container maxWidth="lg" sx={{ position: "relative", zIndex: 2 }}>
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
         >
-          <List sx={{ display: 'flex', justifyContent: 'center', p: 0 }}>
-            <ListItem sx={{ width: 'auto', p: 1 }}>
-              <FooterLink href="#">צור קשר</FooterLink>
-            </ListItem>
-            <ListItem sx={{ width: 'auto', p: 1 }}>
-              <FooterLink href="#">עזרה ותמיכה</FooterLink>
-            </ListItem>
-            <ListItem sx={{ width: 'auto', p: 1 }}>
-              <FooterLink href="#">מדיניות פרטיות</FooterLink>
-            </ListItem>
-            <ListItem sx={{ width: 'auto', p: 1 }}>
-              <FooterLink href="#">תנאי שימוש</FooterLink>
-            </ListItem>
-          </List>
-        </Box>
-        
-        <Box sx={{ textAlign: 'center', mt: 2 }}>
-          <Typography variant="body2" sx={{ fontWeight: 300 }}>
-            © {year} {companyName}. כל הזכויות שמורות.
-          </Typography>
-        </Box>
+          <Box sx={{ py: 6 }}>
+            <Grid container spacing={4}>
+              {/* Company Info */}
+              <Grid item xs={12} md={4}>
+                <motion.div variants={itemVariants}>
+                  <Box sx={{ mb: 4 }}>
+                    <Box sx={{ display: "flex", alignItems: "center", mb: 3 }}>
+                      <motion.div whileHover={{ rotate: 360 }} transition={{ duration: 0.6 }}>
+                        <Box
+                          sx={{
+                            width: 60,
+                            height: 60,
+                            borderRadius: "50%",
+                            background: "linear-gradient(45deg, #667eea, #764ba2, #f093fb)",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            marginRight: 2,
+                            boxShadow: "0 8px 32px rgba(102, 126, 234, 0.3)",
+                          }}
+                        >
+                          <PhotoLibrary sx={{ color: "white", fontSize: 30 }} />
+                        </Box>
+                      </motion.div>
+                      <Typography
+                        variant="h4"
+                        component="div"
+                        sx={{
+                          fontWeight: "bold",
+                          background: "linear-gradient(45deg, #667eea, #764ba2, #f093fb)",
+                          backgroundClip: "text",
+                          WebkitBackgroundClip: "text",
+                          WebkitTextFillColor: "transparent",
+                        }}
+                      >
+                        {companyName}
+                      </Typography>
+                    </Box>
+                    <Typography
+                      variant="body1"
+                      sx={{
+                        color: "rgba(255, 255, 255, 0.8)",
+                        lineHeight: 1.6,
+                        mb: 3,
+                      }}
+                    >
+                      הפלטפורמה המובילה לניהול ושיתוף תמונות עם טכנולוגיה מתקדמת וחוויית משתמש מעולה.
+                    </Typography>
+
+                    {/* Contact Info */}
+                    <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                      {contactInfo.map((contact, index) => (
+                        <motion.div
+                          key={index}
+                          initial={{ opacity: 0, x: -20 }}
+                          whileInView={{ opacity: 1, x: 0 }}
+                          transition={{ delay: index * 0.1, duration: 0.6 }}
+                          viewport={{ once: true }}
+                        >
+                          <Box sx={{ display: "flex", alignItems: "center" }}>
+                            <Box
+                              sx={{
+                                color: contact.color,
+                                mr: 2,
+                                p: 1,
+                                borderRadius: "8px",
+                                background: `${contact.color}20`,
+                              }}
+                            >
+                              {contact.icon}
+                            </Box>
+                            <Typography variant="body2" sx={{ color: "rgba(255, 255, 255, 0.8)" }}>
+                              {contact.text}
+                            </Typography>
+                          </Box>
+                        </motion.div>
+                      ))}
+                    </Box>
+                  </Box>
+                </motion.div>
+              </Grid>
+
+              {/* Quick Links */}
+              <Grid item xs={12} md={4}>
+                <motion.div variants={itemVariants}>
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      fontWeight: 600,
+                      mb: 3,
+                      color: "white",
+                    }}
+                  >
+                    קישורים מהירים
+                  </Typography>
+                  <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+                    {footerLinks.map((link, index) => (
+                      <motion.div
+                        key={index}
+                        initial={{ opacity: 0, x: -20 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        transition={{ delay: index * 0.1, duration: 0.6 }}
+                        viewport={{ once: true }}
+                        whileHover={{ x: 5 }}
+                      >
+                        <Link
+                          href={link.href}
+                          sx={{
+                            color: "rgba(255, 255, 255, 0.7)",
+                            textDecoration: "none",
+                            fontSize: "0.95rem",
+                            fontWeight: 400,
+                            py: 0.5,
+                            display: "block",
+                            transition: "all 0.3s ease",
+                            "&:hover": {
+                              color: "#667eea",
+                              textDecoration: "none",
+                            },
+                          }}
+                        >
+                          {link.label}
+                        </Link>
+                      </motion.div>
+                    ))}
+                  </Box>
+                </motion.div>
+              </Grid>
+
+              {/* Social Media & Newsletter */}
+              <Grid item xs={12} md={4}>
+                <motion.div variants={itemVariants}>
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      fontWeight: 600,
+                      mb: 3,
+                      color: "white",
+                    }}
+                  >
+                    עקבו אחרינו
+                  </Typography>
+                  <Box sx={{ display: "flex", gap: 2, mb: 4 }}>
+                    {socialLinks.map((social, index) => (
+                      <motion.div
+                        key={index}
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: index * 0.1, duration: 0.6 }}
+                        viewport={{ once: true }}
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
+                      >
+                        <IconButton
+                          href={social.href}
+                          sx={{
+                            color: "white",
+                            background: `${social.color}20`,
+                            border: `1px solid ${social.color}40`,
+                            "&:hover": {
+                              background: social.color,
+                              transform: "translateY(-2px)",
+                              boxShadow: `0 8px 25px ${social.color}40`,
+                            },
+                            transition: "all 0.3s ease",
+                          }}
+                        >
+                          {social.icon}
+                        </IconButton>
+                      </motion.div>
+                    ))}
+                  </Box>
+
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      color: "rgba(255, 255, 255, 0.8)",
+                      lineHeight: 1.6,
+                    }}
+                  >
+                    הישארו מעודכנים עם החדשות והעדכונים האחרונים שלנו ברשתות החברתיות.
+                  </Typography>
+                </motion.div>
+              </Grid>
+            </Grid>
+
+            <Divider
+              sx={{
+                my: 4,
+                borderColor: "rgba(255, 255, 255, 0.1)",
+                background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent)",
+                height: "1px",
+                border: "none",
+              }}
+            />
+
+            {/* Copyright */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5, duration: 0.6 }}
+              viewport={{ once: true }}
+            >
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  flexWrap: "wrap",
+                  gap: 2,
+                }}
+              >
+                <Typography
+                  variant="body2"
+                  sx={{
+                    color: "rgba(255, 255, 255, 0.6)",
+                    fontWeight: 300,
+                  }}
+                >
+                  © {year} {companyName}. כל הזכויות שמורות.
+                </Typography>
+
+                <Typography
+                  variant="body2"
+                  sx={{
+                    color: "rgba(255, 255, 255, 0.6)",
+                    fontWeight: 300,
+                  }}
+                >
+                  נבנה באהבה עם טכנולוגיות מתקדמות 💜
+                </Typography>
+              </Box>
+            </motion.div>
+          </Box>
+        </motion.div>
       </Container>
     </Box>
-  );
-};
+  )
+}
 
-export default Footer;
+export default Footer
