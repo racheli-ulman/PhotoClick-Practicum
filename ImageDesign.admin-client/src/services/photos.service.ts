@@ -22,5 +22,8 @@ export class PhotosService {
     return this.http.get<Photo[]>(`${this.baseUrl}/deleted-photos`);
     // return this.http.get(`${this.baseUrl}`);
   }
+  getPhotosByTagId(tagId: number): Observable<Photo[]> {
+    return this.http.get<Photo[]>(`${this.baseUrl}/tag/${tagId}`);
+  }
 
 }

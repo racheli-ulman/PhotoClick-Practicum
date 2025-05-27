@@ -215,12 +215,13 @@ const UserAlbums: React.FC = () => {
               sx={{
                 fontWeight: "bold",
                 color: "white",
-                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)",
+                // textShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)",
                 background: "linear-gradient(135deg,rgb(162, 75, 156), #f093fb, #00d4ff)",
                 backgroundClip: "text",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 filter: "drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3))",
+                borderRadius: "16px", // הוסף כאן את העיגול בפינות
               }}
             >
               האלבומים שלי

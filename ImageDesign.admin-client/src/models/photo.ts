@@ -1,13 +1,15 @@
 export class Photo {
     constructor(
         // Id: number,
-        UserId: number,
-        PhotoName: string,
-        AlbumId: number,
-        PhotoPath: string,
-        PhotoSize: number,
-        // UploadedAt?:Date
-        tagId: string
+       public UserId: number,
+       public PhotoName: string,
+       public AlbumId: number,
+       public PhotoPath: string,
+       public photoSize: number,
+       // UploadedAt?:Date
+       public tagId: string,
+        // photoSize?: number
+
     ) { }
 
 }

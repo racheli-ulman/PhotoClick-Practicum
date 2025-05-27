@@ -1,0 +1,209 @@
+.reports-container {
+  padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.reports-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.reports-header h2 {
+  margin: 0;
+  color: #333;
+  font-size: 28px;
+}
+
+.header-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.summary-card {
+  margin-bottom: 30px;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.summary-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border-left: 4px solid #ff0000;
+}
+
+.summary-icon {
+  font-size: 36px;
+  color: #ff0000;
+}
+
+.summary-details {
+  flex: 1;
+}
+
+.summary-value {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.summary-label {
+  font-size: 14px;
+  color: #666;
+}
+
+.report-card {
+  margin-bottom: 30px;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+.report-table {
+  width: 100%;
+  min-width: 800px;
+}
+
+.popular-albums {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.album-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+}
+
+.album-rank {
+  width: 40px;
+  height: 40px;
+  background: #ff0000;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.album-info {
+  flex: 1;
+}
+
+.album-name {
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.album-owner {
+  font-size: 14px;
+  color: #666;
+}
+
+.tags-chart-container,
+.registrations-chart-container {
+  height: 400px;
+  position: relative;
+}
+
+.storage-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.storage-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.storage-item.total {
+  border-top: 2px solid #ddd;
+  padding-top: 20px;
+  margin-top: 10px;
+}
+
+.storage-label {
+  min-width: 150px;
+  font-weight: 500;
+  color: #333;
+}
+
+.storage-bar {
+  flex: 1;
+  height: 20px;
+  background: #e9ecef;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.storage-fill {
+  height: 100%;
+  transition: width 0.3s ease;
+}
+
+.storage-fill.active {
+  background: linear-gradient(90deg, #28a745, #20c997);
+}
+
+.storage-fill.deleted {
+  background: linear-gradient(90deg, #dc3545, #fd7e14);
+}
+
+.storage-value {
+  min-width: 100px;
+  text-align: right;
+  font-weight: 500;
+  color: #333;
+}
+
+.total-value {
+  font-size: 18px;
+  font-weight: bold;
+  color: #ff0000;
+}
+
+@media (max-width: 768px) {
+  .summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .header-actions {
+    flex-direction: column;
+  }
+
+  .album-item {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .storage-item {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .storage-bar {
+    width: 100%;
+  }
+}

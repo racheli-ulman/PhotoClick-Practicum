@@ -33,7 +33,7 @@ namespace ImageDesign.API.Controllers
                 {
                     Port = 587,
 
-                    Credentials = new NetworkCredential("cheers.rh8867@gmail.com", smtpPassword),
+                    Credentials = new NetworkCredential("photoclick.ru@gmail.com", smtpPassword),
                     EnableSsl = true,
                     UseDefaultCredentials = false,
                 };
@@ -41,7 +41,7 @@ namespace ImageDesign.API.Controllers
                 // יצירת הודעת מייל עם גוף HTML וקידוד UTF-8
                 var mailMessage = new MailMessage
                 {
-                    From = new MailAddress("cheers.rh8867@gmail.com"),
+                    From = new MailAddress("photoclick.ru@gmail.com"),
                     Subject = request.Subject,
                     Body = bodyWithHtml,
                     IsBodyHtml = true,

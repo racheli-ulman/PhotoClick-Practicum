@@ -1,10 +1,10 @@
 export class User{
     constructor(
-        firstName: string,
-        lastName: string,
-        email: string,
-        password: string,
-        id?: number|undefined,
+       public firstName: string,
+       public lastName: string,
+       public email: string,
+       public password: string,
+       public id?: number|undefined,
     ){}
 }
 export class AddUser{

@@ -1,0 +1,142 @@
+<div class="album-management-container">
+    <div class="management-header">
+        <h2>ניהול אלבומים</h2>
+        <button mat-raised-button color="primary" (click)="openAddAlbumDialog()" class="add-button">
+            <mat-icon>add</mat-icon>
+            הוסף אלבום חדש
+        </button>
+    </div>
+
+    <!-- סטטיסטיקות מהירות -->
+    <div class="quick-stats">
+        <mat-card class="stat-card">
+            <mat-card-content>
+                <div class="stat-value">{{ totalAlbums }}</div>
+                <div class="stat-label">סה"כ אלבומים</div>
+            </mat-card-content>
+        </mat-card>
+        
+        <mat-card class="stat-card">
+            <mat-card-content>
+                <div class="stat-value">{{ albumsWithPhotos }}</div>
+                <div class="stat-label">אלבומים עם תמונות</div>
+            </mat-card-content>
+        </mat-card>
+        
+        <mat-card class="stat-card">
+            <mat-card-content>
+                <div class="stat-value">{{ emptyAlbums }}</div>
+                <div class="stat-label">אלבומים ריקים</div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+
+    <!-- חיפוש ופילטרים -->
+    <mat-card class="search-card">
+        <mat-card-content>
+            <div class="search-filters">
+                <mat-form-field appearance="outline" class="search-field">
+                    <mat-label>חיפוש אלבום</mat-label>
+                    <input matInput [(ngModel)]="searchTerm" (input)="filterAlbums()" placeholder="שם אלבום...">
+                    <mat-icon matSuffix>search</mat-icon>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="filter-field">
+                    <mat-label>סינון לפי משתמש</mat-label>
+                    <mat-select [(value)]="selectedUserId" (selectionChange)="filterAlbums()">
+                        <mat-option value="">כל המשתמשים</mat-option>
+                        <mat-option *ngFor="let user of users" [value]="user.id">
+                            {{ user.firstName }} {{ user.lastName }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="filter-field">
+                    <mat-label>סינון לפי סטטוס</mat-label>
+                    <mat-select [(value)]="selectedStatus" (selectionChange)="filterAlbums()">
+                        <mat-option value="">הכל</mat-option>
+                        <mat-option value="with-photos">עם תמונות</mat-option>
+                        <mat-option value="empty">ריק</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </mat-card-content>
+    </mat-card>
+
+    <!-- טבלת אלבומים -->
+    <mat-card class="table-card">
+        <mat-card-content>
+            <div class="table-container">
+                <table mat-table [dataSource]="filteredAlbums" class="albums-table" matSort>
+                    
+                    <ng-container matColumnDef="id">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>מזהה</th>
+                        <td mat-cell *matCellDef="let album">{{ album.id }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="albumName">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>שם האלבום</th>
+                        <td mat-cell *matCellDef="let album">{{ album.albumName }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="description">
+                        <th mat-header-cell *matHeaderCellDef>תיאור</th>
+                        <td mat-cell *matCellDef="let album">{{ album.description || 'ללא תיאור' }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="userId">
+                        <th mat-header-cell *matHeaderCellDef>בעלים</th>
+                        <td mat-cell *matCellDef="let album">
+                            {{ getUserName(album.userId) }}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="photosCount">
+                        <th mat-header-cell *matHeaderCellDef>מספר תמונות</th>
+                        <td mat-cell *matCellDef="let album">
+                            <mat-chip-set>
+                                <mat-chip [color]="album.photosCount > 0 ? 'primary' : 'warn'">
+                                    {{ album.photosCount || 0 }}
+                                </mat-chip>
+                            </mat-chip-set>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="actions">
+                        <th mat-header-cell *matHeaderCellDef>פעולות</th>
+                        <td mat-cell *matCellDef="let album">
+                            <div class="action-buttons">
+                                <button mat-icon-button color="primary" 
+                                        (click)="viewAlbumPhotos(album.id)"
+                                        matTooltip="צפה בתמונות">
+                                    <mat-icon>photo_library</mat-icon>
+                                </button>
+                                
+                                <button mat-icon-button color="accent" 
+                                        (click)="editAlbum(album)"
+                                        matTooltip="ערוך אלבום">
+                                    <mat-icon>edit</mat-icon>
+                                </button>
+                                
+                                <button mat-icon-button color="warn" 
+                                        (click)="deleteAlbum(album.id)"
+                                        matTooltip="מחק אלבום">
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                            </div>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+            </div>
+
+            <!-- Paginator -->
+            <mat-paginator [pageSizeOptions]="[5, 10, 20]" 
+                           showFirstLastButtons
+                           [pageSize]="10">
+            </mat-paginator>
+        </mat-card-content>
+    </mat-card>
+</div>

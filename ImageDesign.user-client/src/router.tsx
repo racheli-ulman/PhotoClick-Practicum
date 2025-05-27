@@ -27,8 +27,9 @@ import UserPhotosDialog from "./components/Collage/UserPhotos";
 import PhotoGallery from "./components/PhotosGallery";
 import TinPhoto from "./components/TinPhoto";
 import PersonalArea from "./components/PersonalArea";
-import CollageCreatorPage from "./components/Collage/CreateCollage";
+// import CollageCreatorPage from  "./components/Collage/CreateCollage";
 import UserAlbums from "../src/components/UserAlbums/UserAlbums";
+import CollageCreatorPage from "./components/Collage/collage-creator-page";
 // import Sidbar from "./components/Sidbar";
 
 // import CreateCollage from "./components/Collage/CreateCollage";

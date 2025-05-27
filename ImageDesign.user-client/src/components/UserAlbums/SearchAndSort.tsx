@@ -64,11 +64,11 @@ const SearchAndSort: React.FC<SearchAndSortProps> = ({
         sx={{
           width: { xs: "100%", sm: 350 },
           "& .MuiOutlinedInput-root": {
-            background: "rgba(87, 112, 223, 0.15)",
+            background: "white",
             backdropFilter: "blur(20px)",
             borderRadius: 3,
             border: "2px solid transparent",
-            borderImage: "linear-gradient(45deg,rgb(162, 75, 156), #f093fb, #00d4ff) 1",
+            borderImage: "linear-gradient(135deg, rgb(234, 102, 203), rgb(189, 132, 246), #f093fb, #00d4ff) 1",
             color: "white",
             fontSize: "1.1rem",
             transition: "all 0.3s ease",

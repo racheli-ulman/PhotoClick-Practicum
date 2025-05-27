@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState, useEffect } from "react"
+import { useState, useEffect} from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import {
   AppBar,
@@ -72,6 +72,20 @@ const Header: React.FC<HeaderProps> = ({ onOpenChat }) => {
     navigate("/")
   }
 
+
+
+  const handleEditUser = async () => {
+    const firstName = prompt("Enter your first name:", userStore.user.user.firstName) ?? userStore.user.user.firstName;
+    const lastName = prompt("Enter your last name:", userStore.user.user.lastName) ?? userStore.user.user.lastName;
+    const email = prompt("Enter your email:", userStore.user.user.email) ?? userStore.user.user.email;
+    // const password = prompt("Enter your password:", "");
+
+    await userStore.updateUser(firstName, lastName, email);
+    // אפשר להוסיף כאן התראה למשתמש על הצלחה או שגיאה
+  };
+
+
+
   const handleHelpClick = (e: React.MouseEvent) => {
     e.preventDefault()
     if (onOpenChat) {
@@ -107,7 +121,9 @@ const Header: React.FC<HeaderProps> = ({ onOpenChat }) => {
           handleMenuClose()
         },
       },
+
       { label: "התנתקות", icon: <Logout fontSize="small" />, action: handleLogout },
+      { label: "עריכה", icon: <Logout fontSize="small" />, action: handleEditUser },
     ]
     : [
       {

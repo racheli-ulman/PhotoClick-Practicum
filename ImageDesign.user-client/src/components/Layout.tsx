@@ -48,8 +48,8 @@ const Layout = () => {
                         whiteSpace: 'nowrap',
                         textTransform: 'none', // אותיות לא גדולות
                         '&:hover': {
-                            background: 'linear-gradient(45deg,rgb(90, 80, 228) 30%,rgb(123, 147, 245) 90%)',
-                            boxShadow: '0 6px 15px rgba(28, 14, 153, 0.5)',
+                            background: 'linear-gradient(45deg, rgb(234, 102, 203), rgb(189, 132, 246), #f093fb, #00d4ff)',
+                            boxShadow: '0 6px 15px rgba(2, 184, 250, 0.5)',
                             transform: 'translateY(-2px)',
                         },
                         '&:active': {
@@ -68,7 +68,7 @@ const Layout = () => {
                             }
                         },
                         position: 'fixed', // מיקום קבוע
-                        bottom: '20px',
+                        bottom: '10px',
                         left: '20px',
                         zIndex: 1000, // מעל תוכן אחר
                     }}

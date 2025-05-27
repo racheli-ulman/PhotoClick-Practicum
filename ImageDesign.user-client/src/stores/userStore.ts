@@ -6,11 +6,11 @@ class UserStore {
 
   user: any = null;
   error: string | null = null;
-baseUrl:string;
+  baseUrl: string;
   constructor() {
     makeAutoObservable(this);
     this.loadUserFromSession();
-  //  this.baseUrl =import.meta.env.VITE_API_URL;
+    //  this.baseUrl =import.meta.env.VITE_API_URL;
     this.baseUrl = "http://localhost:5083/api"; // עדכון כאן
 
   }
@@ -32,36 +32,36 @@ baseUrl:string;
   }
 
   async login(email: string, password: string) {
-    console.log("llllllllllllllllogin function called",this.baseUrl);
-    
+    console.log("llllllllllllllllogin function called", this.baseUrl);
+
     try {
       this.logout(); // התנתקות מהמשתמש הקודם
-      console.log("email",email); // הדפסת המייל והסיסמה לקונסולה
-      console.log("password",password); // הדפסת המייל והסיסמה לקונסולה
+      console.log("email", email); // הדפסת המייל והסיסמה לקונסולה
+      console.log("password", password); // הדפסת המייל והסיסמה לקונסולה
       console.log("login function called"); // הדפסת המייל והסיסמה לקונסולה
-      
-            
+
+
       const response = await axios.post(`${this.baseUrl}/Auth/login`, { email, password });
-  
+
       this.setUser(response.data); // שמירה ב-sessionStorage
       this.setError(null);
     } catch (err: any) {
       this.setError(err.message || "Error logging in");
     }
   }
-  
 
-//   async login(email: string, password: string) {
-//     try {
-//         const response = await axios.post("http://localhost:5083/api/Auth/login", { email, password });
-//         this.setUser(response.data); // שמירה ב-sessionStorage
-//         this.setError(null);
-//         return { success: true, user: response.data }; // החזרת אובייקט עם הצלחה
-//     } catch (err: any) {
-//         this.setError(err.message || "Error logging in");
-//         return { success: false, error: this.error }; // החזרת אובייקט עם שגיאה
-//     }
-// }
+
+  //   async login(email: string, password: string) {
+  //     try {
+  //         const response = await axios.post("http://localhost:5083/api/Auth/login", { email, password });
+  //         this.setUser(response.data); // שמירה ב-sessionStorage
+  //         this.setError(null);
+  //         return { success: true, user: response.data }; // החזרת אובייקט עם הצלחה
+  //     } catch (err: any) {
+  //         this.setError(err.message || "Error logging in");
+  //         return { success: false, error: this.error }; // החזרת אובייקט עם שגיאה
+  //     }
+  // }
 
 
 
@@ -80,6 +80,27 @@ baseUrl:string;
       this.setError(err.message || "Error registering user");
     }
   }
+
+
+  async updateUser(firstName: string, lastName: string, email: string) {
+    try {
+      console.log("userStore.user.user.id ", this.user.user.id);
+      
+      const response = await axios.put(`${this.baseUrl}/User/${this.user.user.id}`, {
+        firstName,
+        lastName,
+        email,
+        password:this.user.user.password, // שמירה על הסיסמה הקיימת
+      });
+      this.setUser(response.data); // עדכון המשתמש בסטור
+      this.setError(null);
+    } catch (err: any) {
+      this.setError(err.message || "Error updating user");
+    }
+  }
+
+
+
 
   logout() {
     this.user = null;

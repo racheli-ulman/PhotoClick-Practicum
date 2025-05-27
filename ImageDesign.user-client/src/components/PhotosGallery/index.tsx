@@ -9,7 +9,7 @@ import {
     Button,
     Typography,
     Container,
-    Grid,
+    // Grid,
     Breadcrumbs,
     Link as MuiLink,
     IconButton,
@@ -20,7 +20,7 @@ import {
     MenuItem,
     ListItemIcon,
     ListItemText,
-    Skeleton,
+    // Skeleton,
     Alert,
     Snackbar,
     Select,
@@ -37,7 +37,7 @@ import {
     Paper
 } from "@mui/material";
 import {
-    ArrowBack,
+    // ArrowBack,
     Home,
     Folder,
     Sort,
@@ -283,55 +283,54 @@ const PhotoGallery: React.FC = observer(() => {
 
     const hasActiveFilters = searchTerm.trim() || selectedTag;
 
-    if (loading) {
-        return (
-            <Container maxWidth="lg" sx={{ py: 8, mt: 8 }}>
-                <Box sx={{ mb: 4 }}>
-                    <Skeleton variant="text" width={300} height={40} />
-                    <Skeleton variant="text" width={200} height={24} sx={{ mt: 1 }} />
-                </Box>
-                <Grid container spacing={3}>
-                    {[1, 2, 3, 4, 5, 6].map((item) => (
-                        <Grid item xs={12} sm={6} md={4} lg={3} key={item}>
-                            <Skeleton variant="rectangular" width="100%" height={200} sx={{ borderRadius: 2 }} />
-                            <Skeleton variant="text" width="60%" height={24} sx={{ mt: 1 }} />
-                        </Grid>
-                    ))}
-                </Grid>
-            </Container>
-        );
-    }
-
-    if (photoUploadStore.error) {
-        return (
-            <Container maxWidth="lg" sx={{ py: 8, mt: 8 }}>
-                <Alert severity="error" sx={{ mb: 4 }}>
-                    שגיאה: {photoUploadStore.error}
-                </Alert>
-                <Button variant="outlined" startIcon={<ArrowBack />} onClick={() => navigate("/personal-area/userAlbums")}>
-                    חזרה לאלבומים
-                </Button>
-            </Container>
-        );
-    }
-
-    if (!photoUploadStore.photos || photoUploadStore.photos.length === 0) {
-        return (
-            <Container maxWidth="lg" sx={{ py: 8, mt: 8 }}>
-                <Box sx={{ textAlign: "center", py: 8 }}>
-                    <Typography variant="h5" gutterBottom>
-                        אין תמונות בתקיית {albumName}
-                    </Typography>
-                    <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>
-                        התחל להעלות תמונות לאלבום זה
-                    </Typography>
-                    <Button variant="contained" startIcon={<Add />} onClick={() => navigate("/personal-area/add-photo")}>
-                        העלאת תמונה
-                    </Button>
-                </Box>
-            </Container>
-        );
-    }
+if (loading) {
+   return (
+       <Container maxWidth="lg" sx={{ py: 8, mt: 8 }}>
+           <Box sx={{ 
+               mb: 4,
+               display: 'flex',
+               flexDirection: 'column',
+               alignItems: 'center',
+               justifyContent: 'center',
+               minHeight: '50vh'
+           }}>
+               <Box sx={{
+                   width: 80,
+                   height: 80,
+                   borderRadius: '50%',
+                //    bolder: '10px solid transparent',
+                   border: '8px solid transparent',
+                   borderTop: '8px solid rgb(234, 102, 203)',
+                   borderRight: '8px solid rgb(189, 132, 246)',
+                   borderBottom: '8px solid #f093fb',
+                   animation: 'spin 1s linear infinite',
+                   mb: 2,
+                   '@keyframes spin': {
+                       '0%': {
+                           transform: 'rotate(0deg)',
+                       },
+                       '100%': {
+                           transform: 'rotate(360deg)',
+                       },
+                   },
+               }} />
+                <Typography variant="h5" sx={{ mb: 2, color: 'text.primary' }}>
+                     טוען את התמונות...
+                </Typography>
+               {/* <Skeleton variant="text" width={300} height={40} />
+               <Skeleton variant="text" width={200} height={24} sx={{ mt: 1 }} /> */}
+           </Box>
+           {/* <Grid container spacing={3}>
+               {[1, 2, 3, 4, 5, 6].map((item) => (
+                   <Grid item xs={12} sm={6} md={4} lg={3} key={item}>
+                       <Skeleton variant="rectangular" width="100%" height={200} sx={{ borderRadius: 2 }} />
+                       <Skeleton variant="text" width="60%" height={24} sx={{ mt: 1 }} />
+                   </Grid>
+               ))}
+           </Grid> */}
+       </Container>
+   );
+}
 
     return (
         <Box

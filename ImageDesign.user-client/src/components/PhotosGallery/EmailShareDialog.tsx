@@ -223,6 +223,7 @@ const EmailShareDialog: React.FC<EmailShareDialogProps> = ({ open, onClose, phot
                         error={!!errors.senderName}
                         helperText={errors.senderName}
                         disabled={loading}
+                        placeholder="הזן את שמך"
                     />
 
                     <TextField
@@ -280,6 +281,13 @@ const EmailShareDialog: React.FC<EmailShareDialogProps> = ({ open, onClose, phot
                     disabled={loading}
                     variant="contained"
                     startIcon={loading ? <CircularProgress size={20} /> : <Send />}
+                    sx={{
+                        background: 'linear-gradient(135deg,rgb(234, 102, 203),rgb(189, 132, 246), #f093fb, #00d4ff)',
+                        color: '#fff',
+                        '&:hover': {
+                            background: 'linear-gradient(135deg, rgb(189, 132, 246), rgb(234, 102, 203), #00d4ff, #f093fb)'
+                        }
+                    }}
                 >
                     {loading ? 'שולח...' : 'שלח מייל'}
                 </Button>
