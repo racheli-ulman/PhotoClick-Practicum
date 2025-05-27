@@ -1,8 +1,8 @@
 import axios from "axios";
 
 const api = axios.create({
-  // baseURL:import.meta.env.VITE_API_URL
-      baseURL:"http://localhost:5083/api" // עדכון כאן
+  baseURL: import.meta.env.VITE_API_URL
+  // baseURL:"http://localhost:5083/api" // עדכון כאן
 
 });
 
@@ -11,9 +11,9 @@ api.interceptors.request.use(
   (config) => {
     const userData = sessionStorage.getItem("user"); // טען מה-sessionStorage
     const user = userData ? JSON.parse(userData) : null;
-    const token = user ? user.token: null;
-    console.log("token",token);
-     
+    const token = user ? user.token : null;
+    console.log("token", token);
+
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
