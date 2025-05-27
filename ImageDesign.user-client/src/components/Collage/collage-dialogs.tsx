@@ -46,6 +46,8 @@ export const CollageDialogs: React.FC<CollageDialogsProps> = ({ collageState }) 
 
   const handleGapSizeChange = (event: Event, newValue: number | number[]) => {
     collageState.setGapSize(newValue as number)
+    console.log(event);
+    
   }
 
   const handleBackgroundColorChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -54,6 +56,8 @@ export const CollageDialogs: React.FC<CollageDialogsProps> = ({ collageState }) 
 
   const handleTextSizeChange = (event: Event, newValue: number | number[]) => {
     collageState.setTextSize(newValue as number)
+    console.log(event);
+    
   }
 
   return (
