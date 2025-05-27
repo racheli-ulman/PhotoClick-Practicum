@@ -83,7 +83,9 @@ const CopyMoveModal: React.FC<CopyMoveModalProps> = ({
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
-              bgcolor: isCopyOperation ? "primary.main" : "secondary.main",
+              background: isCopyOperation
+                ? "linear-gradient(135deg, rgb(234, 102, 203), rgb(189, 132, 246), #f093fb, #00d4ff)"
+                : "linear-gradient(135deg, rgb(234, 102, 203), rgb(189, 132, 246), #f093fb, #00d4ff)",
               color: "white",
               p: 2,
             }}

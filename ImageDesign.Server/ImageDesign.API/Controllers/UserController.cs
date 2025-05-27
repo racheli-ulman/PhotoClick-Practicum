@@ -2,6 +2,7 @@
 using ImageDesign.API.Models;
 using ImageDesign.Core.DTOs;
 using ImageDesign.Core.IServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -54,6 +55,7 @@ namespace ImageDesign.API.Controllers
 
         // PUT api/<UserController>/5
         [HttpPut("{id}")]
+        [Authorize] // Requires token
         public async Task<ActionResult> Put(int id, [FromBody] UserPostModel user)
         {
             if (id < 0 || user == null) return null;

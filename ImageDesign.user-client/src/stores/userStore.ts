@@ -1,5 +1,6 @@
 import { makeAutoObservable } from "mobx";
 import axios from "axios";
+import api from "../components/api";
 
 
 class UserStore {
@@ -10,8 +11,8 @@ class UserStore {
   constructor() {
     makeAutoObservable(this);
     this.loadUserFromSession();
-    //  this.baseUrl =import.meta.env.VITE_API_URL;
-    this.baseUrl = "http://localhost:5083/api"; // עדכון כאן
+     this.baseUrl =import.meta.env.VITE_API_URL;
+    // this.baseUrl = "http://localhost:5083/api"; // עדכון כאן
 
   }
 
@@ -86,7 +87,7 @@ class UserStore {
     try {
       console.log("userStore.user.user.id ", this.user.user.id);
       
-      const response = await axios.put(`${this.baseUrl}/User/${this.user.user.id}`, {
+      const response = await api.put(`${this.baseUrl}/User/${this.user.user.id}`, {
         firstName,
         lastName,
         email,

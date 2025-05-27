@@ -45,6 +45,7 @@ const EmailShareDialog: React.FC<EmailShareDialogProps> = ({ open, onClose, phot
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState(false);
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
+    const baseUrl =import.meta.env.VITE_API_URL;
 
     const validateForm = (): boolean => {
         const newErrors: { [key: string]: string } = {};
@@ -103,7 +104,7 @@ const EmailShareDialog: React.FC<EmailShareDialogProps> = ({ open, onClose, phot
                 imageUrl: photo.photoPath
             };
             console.log('emailRequest', emailRequest);
-            const response = await fetch('http://localhost:5083/api/Mail/send-email', {
+            const response = await fetch(`${baseUrl}/Mail/send-email`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

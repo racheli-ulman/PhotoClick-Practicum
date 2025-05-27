@@ -375,7 +375,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenChat }) => {
                         borderRadius: "25px",
                         px: 4,
                         py: 1.5,
-                        background: "linear-gradient(45deg, #667eea, #764ba2, #f093fb)",
+                        background: "linear-gradient(45deg,rgb(234, 102, 203),rgb(189, 132, 246), #f093fb, #00d4ff)",
                         color: "white",
                         fontWeight: 600,
                         boxShadow: "0 8px 32px rgba(102, 126, 234, 0.3)",
@@ -388,7 +388,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenChat }) => {
                           left: "-100%",
                           width: "100%",
                           height: "100%",
-                          background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent)",
+                          background: "linear-gradient(135deg,rgb(234, 102, 203),rgb(189, 132, 246), #f093fb, #00d4ff)",
                           transition: "left 0.5s",
                         },
                         "&:hover": {

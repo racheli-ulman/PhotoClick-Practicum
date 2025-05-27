@@ -4,6 +4,7 @@ using ImageDesign.Core.DTOs;
 using ImageDesign.Core.IRepositories;
 using ImageDesign.Core.IServices;
 using ImageDesign.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;

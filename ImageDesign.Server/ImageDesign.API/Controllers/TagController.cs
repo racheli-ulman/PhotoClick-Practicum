@@ -3,6 +3,7 @@ using ImageDesign.API.Models;
 using ImageDesign.Core.DTOs;
 using ImageDesign.Core.IServices;
 using ImageDesign.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -24,6 +25,7 @@ namespace ImageDesign.API.Controllers
         }
         // GET: api/<TagController>
         [HttpGet]
+        [Authorize] // דרישת טוקן
         public async Task<ActionResult<IEnumerable<TagDto>>> Get()
         {
             var tags = await _tagService.GetAllTagsAsync();
@@ -33,6 +35,8 @@ namespace ImageDesign.API.Controllers
 
         // GET api/<TagController>/5
         [HttpGet("{id}")]
+        [Authorize] // דרישת טוקן
+
         public async Task<ActionResult<TagDto>> Get(int id)
         {
             var tag = await _tagService.GetTagByIdAsync(id);
@@ -42,6 +46,8 @@ namespace ImageDesign.API.Controllers
 
         // POST api/<TagController>
         [HttpPost]
+        [Authorize] // דרישת טוקן
+
         public async Task<ActionResult> Post([FromBody] TagPostModel tag)
         {
             if (tag == null) return null;
@@ -74,6 +80,7 @@ namespace ImageDesign.API.Controllers
         }
 
         [HttpGet("name/{tagName}")]
+        [Authorize] // דרישת טוקן
         public async Task<ActionResult<TagDto>> GetTagByName(string tagName)
         {
             var tag = await _tagService.GetTagByNameAsync(tagName);

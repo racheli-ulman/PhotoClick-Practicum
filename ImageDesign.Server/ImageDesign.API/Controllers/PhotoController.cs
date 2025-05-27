@@ -4,6 +4,7 @@ using ImageDesign.Core.DTOs;
 using ImageDesign.Core.Entities;
 using ImageDesign.Core.IServices;
 using ImageDesign.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -33,6 +34,8 @@ namespace ImageDesign.API.Controllers
         }
 
         [HttpGet("deleted-photos")]
+        //[Authorize] // דרישת טוקן
+
         public async Task<ActionResult<IEnumerable<PhotoDto>>> GetAllDeletedPhotos()
         {
             var photos = await _photoService.GetAllDeletedPhotosAsync();
@@ -53,6 +56,8 @@ namespace ImageDesign.API.Controllers
 
         // POST api/<PhotoController>
         [HttpPost]
+        [Authorize] // דרישת טוקן
+
         public async Task<ActionResult> Post([FromBody] PhotoPostModel photo)
         {
             if (photo == null) return null;
@@ -133,6 +138,8 @@ namespace ImageDesign.API.Controllers
 
 
         [HttpPost("copy/{photoId}/to-album/{targetAlbumId}")]
+        [Authorize] // דרישת טוקן
+
         public async Task<ActionResult> CopyPhotoToAlbum(int photoId, int targetAlbumId)
         {
             if (photoId <= 0 || targetAlbumId <= 0)
@@ -146,6 +153,8 @@ namespace ImageDesign.API.Controllers
         }
 
         [HttpPut("move/{photoId}/from-album/{sourceAlbumId}/to-album/{targetAlbumId}")]
+        [Authorize] // דרישת טוקן
+
         public async Task<ActionResult> MovePhotoToAlbum(int photoId, int sourceAlbumId, int targetAlbumId)
         {
             if (photoId <= 0 || sourceAlbumId <= 0 || targetAlbumId <= 0)

@@ -96,7 +96,7 @@ namespace ImageDesign.API.Controllers
 
         // שליפת תמונות מהאלבום
         [HttpGet("{albumId}/images")]
-        //[Authorize] // דרישת טוקן
+        [Authorize] // דרישת טוקן
         public async Task<IActionResult> GetImagesByAlbumId(int albumId)
         {
             var images = await _albumService.GetImagesByAlbumIdAsync(albumId);
@@ -110,7 +110,7 @@ namespace ImageDesign.API.Controllers
 
         // שליפת האלבומים לפי UserId
         [HttpGet("user/{userId}")]
-        //[Authorize] // דרישת טוקן
+        [Authorize] // דרישת טוקן
         public async Task<IActionResult> GetAlbumsByUserId(int userId)
         {
             var albums = await _albumService.GetAlbumsByUserIdAsync(userId);
@@ -139,6 +139,8 @@ namespace ImageDesign.API.Controllers
 
 
         [HttpGet("user/{userId}/photos")]
+        [Authorize] // דרישת טוקן
+
         public async Task<ActionResult<IEnumerable<PhotoDto>>> GetAllPhotosByUserId(int userId)
         {
             var photos = await _albumService.GetAllPhotosByUserIdAsync(userId);

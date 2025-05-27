@@ -1,7 +1,9 @@
 
 import { makeAutoObservable } from "mobx";
 import { Tag } from "../models/Tag";
-import axios from "axios";
+// import axios from "axios";
+import api from "../components/api";
+
 
 class TagStore {
   albums: Tag[] = [];
@@ -13,7 +15,8 @@ class TagStore {
   constructor() {
     makeAutoObservable(this);
     // this.baseUrl = import.meta.env.VITE_API_URL;
-    this.baseUrl = "http://localhost:5083/api"; // עדכון כאן
+    // this.baseUrl = "http://localhost:5083/api"; // עדכון כאן
+        this.baseUrl = import.meta.env.VITE_API_URL;
 
 
   }
@@ -28,7 +31,7 @@ class TagStore {
     if (!tagId) return; // אם לא קיים tagId, אל תבצע שום דבר
 
     try {
-      const response = await axios.get(`${this.baseUrl}/Tag/${tagId}`);
+      const response = await api.get(`${this.baseUrl}/Tag/${tagId}`);
       console.log("response", response);
 
     } catch (err: any) {
@@ -42,7 +45,7 @@ class TagStore {
 
 async addTag(tagName: string): Promise<Tag | null> {
     try {
-      const response = await axios.post<Tag>(`${this.baseUrl}/Tag`, { tagName })
+      const response = await api.post<Tag>(`${this.baseUrl}/Tag`, { tagName })
       this.tags.push(response.data) // Add the new tag to the store's list
       this.setError(null)
       return response.data

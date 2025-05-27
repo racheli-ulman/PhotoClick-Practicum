@@ -1,233 +1,10 @@
-// // stores/photoUploadStore.ts
-// import { makeAutoObservable } from "mobx";
-// import axios from "axios";
-// import { Photo } from "../models/Photo";
-
-// class PhotoUploadStore {
-//   file: File | null = null;
-//   progress: number = 0;
-//   imageUrl: string | null = null;
-//   error: string | null = null;
-//   tags: string[] = ["נוף", "חיות", "עוגות"]; // רשימת התיוגים
-
-//   constructor() {
-//     makeAutoObservable(this);
-//   }
-
-//   setFile(file: File) {
-//     this.file = file;
-//   }
-
-//   setProgress(progress: number) {
-//     this.progress = progress;
-//   }
-
-//   setImageUrl(url: string) {
-//     this.imageUrl = url;
-//   }
-
-//   setError(error: string) {
-//     this.error = error;
-//   }
-
-//   async uploadFile(selectedFile: File, userId: number, albumId: number, selectedTag: string) {
-//     if (!selectedFile) return;
-
-//     try {
-//       const response = await axios.get('http://localhost:5083/api/upload/presigned-url', {
-//         params: { fileName: selectedFile.name },
-//       });
-//       const presignedUrl = response.data.url;
-
-//       await axios.put(presignedUrl, selectedFile, {
-//         headers: {
-//           'Content-Type': selectedFile.type,
-//         },
-//         onUploadProgress: (progressEvent) => {
-//           const percent = Math.round((progressEvent.loaded * 100) / (progressEvent.total || 1));
-//           this.setProgress(percent);
-//         },
-//       });
-
-//       const photo: Photo = {
-//         UserId: userId,
-//         PhotoName: selectedFile.name,
-//         AlbumId: albumId,
-//         PhotoPath: presignedUrl, // נשתמש ב-URL של התמונה שהועלתה
-//         PhotoSize: selectedFile.size,
-//         tags: [selectedTag], // נשתמש בתג שנבחר על ידי המשתמש
-//       };
-
-//       await this.addPhoto(photo);
-//       this.setImageUrl(presignedUrl);
-//       this.setError("");
-//     } catch (error) {
-//       console.error('שגיאה בהעלאה:', error);
-//       this.setError('התרחשה שגיאה במהלך העלאת הקובץ.');
-//     }
-//   }
-
-//   async addPhoto(photo: Photo) {
-//     try {
-//       await axios.post('http://localhost:5083/api/photos', photo);
-//     } catch (error) {
-//       console.error('שגיאה בהוספת התמונה:', error);
-//     }
-//   }
-
-//   async getImageUrl(fileName: string) {
-//     try {
-//       const response = await axios.get(`http://localhost:5083/api/Download/download-url/${fileName}`);
-//       return response.data;
-//     } catch (error) {
-//       console.error('שגיאה בהבאת ה-URL:', error);
-//       return null;
-//     }
-//   }
-// }
-
-// const photoUploadStore = new PhotoUploadStore();
-// export default photoUploadStore;
-
-
-
-
-
-
-
-
-
-
-
-
-// import { makeAutoObservable } from "mobx";
-// import axios from "axios";
-// import { Photo } from "../models/Photo";
-// import userStore from './userStore';
-
-// class PhotoUploadStore {
-//     file: File | null = null;
-//     progress: number = 0;
-//     imageUrl: string | null = null;
-//     error: string | null = null;
-//     tags: { id: number, tagName: string }[] = []; // רשימת התיוגים
-
-//     constructor() {
-//         makeAutoObservable(this);
-//         this.fetchTags(); // קריאת התיוגים מהשרת בעת יצירת האובייקט
-//     }
-
-//     setFile(file: File) {
-//         this.file = file;
-//     }
-
-//     setProgress(progress: number) {
-//         this.progress = progress;
-//     }
-
-//     setImageUrl(url: string) {
-//         this.imageUrl = url;
-//     }
-
-//     setError(error: string) {
-//         this.error = error;
-//     }
-
-//     async fetchTags() {
-//         try {
-//             const response = await axios.get('http://localhost:5083/api/Tag');
-//             this.tags = response.data;
-//         } catch (error) {
-//             console.error('שגיאה בקבלת התיוגים:', error);
-//             this.setError('שגיאה בקבלת התיוגים.');
-//         }
-//     }
-
-//     async uploadFile(selectedFile: File, albumId: number, tags: string[]) {
-//         if (!selectedFile) return;
-
-//         try {
-//             const response = await axios.get('http://localhost:5083/api/upload/presigned-url', {
-//                 params: { fileName: selectedFile.name },
-//             });
-//             const presignedUrl = response.data.url;
-
-//             await axios.put(presignedUrl, selectedFile, {
-//                 headers: {
-//                     'Content-Type': selectedFile.type,
-//                 },
-//                 onUploadProgress: (progressEvent) => {
-//                     const percent = Math.round((progressEvent.loaded * 100) / (progressEvent.total || 1));
-//                     this.setProgress(percent);
-//                 },
-//             });
-
-//             const userId = userStore.user?.user?.id ?? null;
-//             console.log("albumId in upload ", selectedFile.size);
-
-//             const photoPath = await this.getImageUrl(selectedFile.name);
-//             const photo: Photo = {
-//                 UserId: userId,
-//                 PhotoName: selectedFile.name,
-//                 AlbumId: albumId,
-//                 PhotoPath: photoPath,
-//                 PhotoSize: selectedFile.size,
-//                 tags: tags,
-//             };
-//             console.log("checking1");
-
-//             await this.addPhoto(userId,selectedFile.name,albumId,photoPath,selectedFile.size,
-//                 tags
-//             );
-//             console.log("checking2");
-
-//             this.setError("");
-//         } catch (error) {
-//             console.error('שגיאה בהעלאה:', error);
-//             this.setError('התרחשה שגיאה במהלך העלאת הקובץ.');
-//         }
-//     }
-
-//     async getImageUrl(fileName: string) {
-//         try {
-//             const response = await axios.get(`http://localhost:5083/api/Download/download-url/${fileName}`);
-//             return response.data;
-//         } catch (error) {
-//             console.error('שגיאה בהבאת ה-URL:', error);
-//             return null;
-//         }
-//     }
-
-//     async addPhoto(userId:number,photoName:string,albumId:number,photoPath:string
-//         ,photoSize:number,tag:string[]
-//     ) {
-//         console.log("userId ",userId);
-
-//         try {
-//             console.log("checking addd");
-//             // console.log(photo);
-
-//             await axios.post('http://localhost:5083/api/Photo',{
-//                 userId,photoName,albumId,photoPath
-//         ,photoSize,tag
-//             } );
-//         } catch (error) {
-//             console.log("erorrrrrrrrr");
-
-//             console.error('שגיאה בהוספת התמונה:', error);
-//             this.setError('התרחשה שגיאה במהלך הוספת התמונה.');
-//         }
-//     }
-// }
-
-// const photoUploadStore = new PhotoUploadStore();
-// export default photoUploadStore;
-
 import { makeAutoObservable } from "mobx";
 import axios from "axios";
 import userStore from './userStore';
 import { Photo } from "../models/Photo";
 import { Tag } from "../models/Tag";
+import api from "../components/api";
+
 
 class PhotoUploadStore {
     file: File | null = null;
@@ -244,8 +21,8 @@ class PhotoUploadStore {
     constructor() {
         makeAutoObservable(this);
         // קריאת התיוגים מהשרת בעת יצירת האובייקט
-        // this.baseUrl = import.meta.env.VITE_API_URL;
-        this.baseUrl = "http://localhost:5083/api"; // עדכון כאן
+        this.baseUrl = import.meta.env.VITE_API_URL;
+        // this.baseUrl = "http://localhost:5083/api"; // עדכון כאן
 
         this.fetchTags();
     }
@@ -270,7 +47,7 @@ class PhotoUploadStore {
         console.log("baseUrl ", this.baseUrl);
 
         try {
-            const response = await axios.get(`${this.baseUrl}/Tag`);
+            const response = await api.get(`${this.baseUrl}/Tag`);
             this.tag = response.data; // השאר את זה כמו שזה אם אתה רוצה לשמור את התגים
         } catch (error) {
             console.error('שגיאה בקבלת התיוגים:', error);
@@ -314,8 +91,8 @@ class PhotoUploadStore {
     async copyPhotoToAlbum(photoId: number, targetAlbumId: number) {
         try {
             // Call the API to copy the photo
-            const response = await axios.post(
-                `${this.baseUrl}/Photo/copy/${photoId}/to-album/${targetAlbumId}`
+            const response = await api.post(
+                `/Photo/copy/${photoId}/to-album/${targetAlbumId}`
             );
             console.log("Photo copied successfully:", response.data);
             return response.data;
@@ -330,8 +107,8 @@ class PhotoUploadStore {
     async movePhotoToAlbum(photoId: number, sourceAlbumId: number, targetAlbumId: number) {
         try {
             // Call the API to move the photo
-            const response = await axios.put(
-                `${this.baseUrl}/Photo/move/${photoId}/from-album/${sourceAlbumId}/to-album/${targetAlbumId}`
+            const response = await api.put(
+                `/Photo/move/${photoId}/from-album/${sourceAlbumId}/to-album/${targetAlbumId}`
             );
             console.log("Photo moved successfully:", response.data);
             return response.data;
@@ -434,7 +211,7 @@ class PhotoUploadStore {
     async addPhoto(data: { userId: number | null, photoName: string, albumId: number, photoPath: string, photoSize: number, tagId: number | null }) { // שינינו ל-tagId
 
         try {
-            await axios.post(`${this.baseUrl}/Photo`, data, {
+            await api.post(`/Photo`, data, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -519,7 +296,7 @@ class PhotoUploadStore {
 
     async fetchTagIdByTagName(tagName: string): Promise<number | null> {
         try {
-            const response = await axios.get(`${this.baseUrl}/Tag/name/${tagName}`);
+            const response = await api.get(`${this.baseUrl}/Tag/name/${tagName}`);
             return response.data.id; // הנחה שה-API מחזיר אובייקט עם ID
         } catch (error) {
             console.error('שגיאה בקבלת ID של תג:', error);
