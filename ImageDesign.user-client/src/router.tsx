@@ -12,7 +12,7 @@
 //         ]
 //     }])
 
-import { createBrowserRouter } from "react-router-dom";
+import { createHashRouter } from "react-router-dom";
 // import Signup from "./components/signup"
 // import { UserContext, UserProvider, useUser } from "./context/userContext";
 import PhotoUploader from "./components/FileUploader";
@@ -35,7 +35,7 @@ import CollageCreatorPage from "./components/Collage/collage-creator-page";
 // import CreateCollage from "./components/Collage/CreateCollage";
 // import AddPhoto1 from "./components/AddPhoto";
 
-export const Router = createBrowserRouter([
+export const Router = createHashRouter([
     {
         path: '/',
         element: <Layout />,
