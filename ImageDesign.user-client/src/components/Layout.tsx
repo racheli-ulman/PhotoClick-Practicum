@@ -1,7 +1,7 @@
 import { AppBar, Button, Tooltip } from '@mui/material';
 import { Outlet } from 'react-router-dom';
 import Header from './Header';
-import Footer from './HomePage/Footer';
+// import Footer from './HomePage/Footer';
 import ChatComponent from './ChatWidget';
 import ChatIcon from '@mui/icons-material/Chat';
 import { useState } from 'react';
@@ -26,7 +26,7 @@ const Layout = () => {
                 <Header onOpenChat={handleOpenChat} />
             </AppBar>
 
-            <main style={{ paddingTop: '64px' }}> {/* Adjust padding based on AppBar height */}
+            <main style={{ paddingTop: '20px' }}> {/* Adjust padding based on AppBar height */}
                 <Outlet />
             </main>
 
@@ -80,7 +80,7 @@ const Layout = () => {
             {isChatOpen && <ChatComponent onClose={handleCloseChat} />}
 
             <AppBar position="static">
-                <Footer></Footer>
+                {/* <Footer></Footer> */}
             </AppBar>
         </div>
     );

@@ -7,7 +7,7 @@ import TextFieldsIcon from "@mui/icons-material/TextFields"
 import BrushIcon from "@mui/icons-material/Brush"
 import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions"
 import ShapeLineIcon from "@mui/icons-material/Hexagon"
-import PaletteIcon from "@mui/icons-material/Palette"
+// import PaletteIcon from "@mui/icons-material/Palette"
 import type { CollageState } from "./use-collage-state"
 
 interface CollageOptionsHeaderProps {
@@ -57,14 +57,14 @@ export const CollageOptionsHeader: React.FC<CollageOptionsHeaderProps> = ({ coll
       hoverColor: "#C2185B",
       description: "הוסף מדבקות ואימוג'ים",
     },
-    {
-      id: "brush",
-      label: "מברשת",
-      icon: <PaletteIcon />,
-      color: "#607D8B", // אפור-כחול - מברשת
-      hoverColor: "#455A64",
-      description: "הגדרות מברשת וצבעים",
-    },
+    // {
+    //   id: "brush",
+    //   label: "מברשת",
+    //   icon: <PaletteIcon />,
+    //   color: "#607D8B", // אפור-כחול - מברשת
+    //   hoverColor: "#455A64",
+    //   description: "הגדרות מברשת וצבעים",
+    // },
   ]
 
   return (

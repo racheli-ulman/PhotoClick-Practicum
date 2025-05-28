@@ -52,7 +52,7 @@
 // //     setError("")
 
 // //     try {
-      
+
 // //       await userStore.login(userEmail, password)
 
 // //       if (userStore.error) {
@@ -497,7 +497,7 @@
 //       <FloatingElement sx={{ top: "70%", right: "15%" }} delay={2} />
 //       <FloatingElement sx={{ top: "40%", left: "5%" }} delay={4} />
 //       <FloatingElement sx={{ top: "20%", right: "8%" }} delay={1} />
-      
+
 //       {/* נצנוצים */}
 //       <SparkleElement top="15%" left="25%" delay={0} />
 //       <SparkleElement top="35%" left="80%" delay={1} />
@@ -879,7 +879,7 @@
 import type React from "react"
 import { useState, useEffect } from "react"
 import { observer } from "mobx-react-lite"
-import userStore from "../stores/userStore"
+import userStore from "../../stores/userStore"
 import { Link } from "react-router-dom"
 import {
   TextField,
@@ -893,13 +893,13 @@ import {
   Alert,
   Snackbar,
   CircularProgress,
-  Divider,
+  // Divider,
   // useTheme,
   styled,
   keyframes,
 } from "@mui/material"
 import { useNavigate } from "react-router-dom"
-import { Visibility, VisibilityOff, EmailOutlined, LockOutlined, Google, Facebook } from "@mui/icons-material"
+import { Visibility, VisibilityOff} from "@mui/icons-material"
 import { motion } from "framer-motion"
 
 // אנימציות מטורפות
@@ -1102,39 +1102,39 @@ const GradientButton = styled(Button)({
   },
 })
 
-const SocialButton = styled(Button)({
-  background: "rgba(255, 255, 255, 0.9)",
-  border: "2px solid transparent",
-  borderRadius: "12px",
-  color: "#333",
-  fontWeight: "600",
-  padding: "12px 20px",
-  position: "relative",
-  transition: "all 0.3s ease",
-  "&::before": {
-    content: '""',
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    borderRadius: "12px",
-    padding: "2px",
-    background: "linear-gradient(45deg, rgba(234, 102, 203, 0.5), rgba(189, 132, 246, 0.5))",
-    mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
-    maskComposite: "xor",
-    WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
-    WebkitMaskComposite: "xor",
-    zIndex: -1,
-  },
-  "&:hover": {
-    transform: "translateY(-2px)",
-    boxShadow: "0 8px 25px rgba(234, 102, 203, 0.2)",
-    "&::before": {
-      background: "linear-gradient(45deg, rgb(234, 102, 203), rgb(189, 132, 246), #f093fb)",
-    },
-  },
-})
+// const SocialButton = styled(Button)({
+//   background: "rgba(255, 255, 255, 0.9)",
+//   border: "2px solid transparent",
+//   borderRadius: "12px",
+//   color: "#333",
+//   fontWeight: "600",
+//   padding: "12px 20px",
+//   position: "relative",
+//   transition: "all 0.3s ease",
+//   "&::before": {
+//     content: '""',
+//     position: "absolute",
+//     top: 0,
+//     left: 0,
+//     right: 0,
+//     bottom: 0,
+//     borderRadius: "12px",
+//     padding: "2px",
+//     background: "linear-gradient(45deg, rgba(234, 102, 203, 0.5), rgba(189, 132, 246, 0.5))",
+//     mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+//     maskComposite: "xor",
+//     WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+//     WebkitMaskComposite: "xor",
+//     zIndex: -1,
+//   },
+//   "&:hover": {
+//     transform: "translateY(-2px)",
+//     boxShadow: "0 8px 25px rgba(234, 102, 203, 0.2)",
+//     "&::before": {
+//       background: "linear-gradient(45deg, rgb(234, 102, 203), rgb(189, 132, 246), #f093fb)",
+//     },
+//   },
+// })
 
 const Login: React.FC = () => {
   const [userEmail, setUserEmail] = useState("")
@@ -1336,12 +1336,13 @@ const Login: React.FC = () => {
             }}
           >
             <Box component="form" onSubmit={handleSubmit} noValidate>
-              <Typography 
-                variant="h3" 
-                fontWeight="700" 
-                align="center" 
-                sx={{ 
-                  mb: 5,
+              <Typography
+                variant="h4" // שינוי ל-h4
+                fontWeight="700"
+                align="center"
+                sx={{
+                  mt: -4,
+                  mb: 3, // הפחתת מרווח
                   background: "linear-gradient(135deg, rgb(234, 102, 203), rgb(189, 132, 246), #f093fb)",
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
@@ -1357,14 +1358,14 @@ const Login: React.FC = () => {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                 >
-                  <Alert 
-                    severity="error" 
-                    sx={{ 
-                      mb: 3, 
+                  <Alert
+                    severity="error"
+                    sx={{
+                      mb: 2, // הפחתת מרווח
                       borderRadius: 2,
                       background: "rgba(255, 255, 255, 0.95)",
                       border: "1px solid rgba(244, 67, 54, 0.3)",
-                    }} 
+                    }}
                     onClose={() => setError("")}
                   >
                     {error}
@@ -1372,69 +1373,45 @@ const Login: React.FC = () => {
                 </motion.div>
               )}
 
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.2, duration: 0.5 }}
-              >
-                <StyledTextField
-                  label="כתובת מייל"
-                  type="email"
-                  value={userEmail}
-                  onChange={(e) => setUserEmail(e.target.value)}
-                  fullWidth
-                  required
-                  margin="normal"
-                  variant="outlined"
-                  sx={{ mb: 3 }}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <EmailOutlined sx={{ color: "rgb(234, 102, 203)" }} />
-                      </InputAdornment>
-                    ),
-                  }}
-                />
-              </motion.div>
+              <StyledTextField
+                label="כתובת מייל"
+                type="email"
+                value={userEmail}
+                onChange={(e) => setUserEmail(e.target.value)}
+                fullWidth
+                required
+                margin="normal"
+                variant="outlined"
+                sx={{ mb: 2 }} // הפחתת מרווח
+              />
 
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.3, duration: 0.5 }}
-              >
-                <StyledTextField
-                  label="סיסמה"
-                  type={showPassword ? "text" : "password"}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  fullWidth
-                  required
-                  margin="normal"
-                  variant="outlined"
-                  sx={{ mb: 3 }}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <LockOutlined sx={{ color: "rgb(234, 102, 203)" }} />
-                      </InputAdornment>
-                    ),
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton 
-                          aria-label="toggle password visibility" 
-                          onClick={handleClickShowPassword} 
-                          edge="end"
-                          sx={{ color: "rgb(189, 132, 246)" }}
-                        >
-                          {showPassword ? <VisibilityOff /> : <Visibility />}
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  }}
-                />
-              </motion.div>
+              <StyledTextField
+                label="סיסמה"
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                fullWidth
+                required
+                margin="normal"
+                variant="outlined"
+                sx={{ mb: 2 }} // הפחתת מרווח
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <IconButton
+                        onClick={handleClickShowPassword}
+                        edge="start"
+                        aria-label="toggle password visibility"
+                      >
+                        {showPassword ? <Visibility /> : <VisibilityOff />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
 
-              <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 3 }}>
+
+              <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 2 }}>
                 <Link
                   to="/forgot-password"
                   style={{
@@ -1451,71 +1428,29 @@ const Login: React.FC = () => {
                 </Link>
               </Box>
 
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4, duration: 0.5 }}
+              <GradientButton
+                type="submit"
+                variant="contained"
+                fullWidth
+                size="large"
+                disabled={loading}
+                sx={{ mb: 3 }} // הפחתת מרווח
               >
-                <GradientButton
-                  type="submit"
-                  variant="contained"
-                  fullWidth
-                  size="large"
-                  disabled={loading}
-                  sx={{ mb: 4 }}
-                >
-                  {loading ? (
-                    <CircularProgress size={24} color="inherit" />
-                  ) : (
-                    "התחברות"
-                  )}
-                </GradientButton>
-              </motion.div>
+                {loading ? (
+                  <CircularProgress size={24} color="inherit" />
+                ) : (
+                  "התחברות"
+                )}
+              </GradientButton>
 
-              <Box sx={{ display: "flex", alignItems: "center", my: 3 }}>
-                <Divider sx={{ flex: 1, bgcolor: "rgba(234, 102, 203, 0.3)" }} />
-                <Typography 
-                  variant="body2" 
-                  sx={{ 
-                    px: 2, 
-                    color: "#666",
-                    fontWeight: "500",
-                  }}
-                >
-                  או
-                </Typography>
-                <Divider sx={{ flex: 1, bgcolor: "rgba(234, 102, 203, 0.3)" }} />
-              </Box>
-
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5, duration: 0.5 }}
-              >
-                <Box sx={{ display: "flex", gap: 2, mb: 4 }}>
-                  <SocialButton 
-                    variant="outlined" 
-                    fullWidth 
-                    startIcon={<Google />}
-                  >
-                    Google
-                  </SocialButton>
-                  <SocialButton 
-                    variant="outlined" 
-                    fullWidth 
-                    startIcon={<Facebook />}
-                  >
-                    Facebook
-                  </SocialButton>
-                </Box>
-              </motion.div>
-
-              <Typography 
-                variant="body1" 
-                align="center" 
-                sx={{ 
+              <Typography
+                variant="body1"
+                align="center"
+                sx={{
                   color: "#666",
                   fontWeight: "500",
+                  mb: -3, // הפחתת מרווח תחתון
+
                 }}
               >
                 אין לך חשבון?{" "}
@@ -1534,6 +1469,7 @@ const Login: React.FC = () => {
                 </Link>
               </Typography>
             </Box>
+
           </GlassCard>
         </Grid>
       </Grid>
@@ -1544,8 +1480,8 @@ const Login: React.FC = () => {
         onClose={() => setSuccess(false)}
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       >
-        <Alert 
-          severity="success" 
+        <Alert
+          severity="success"
           variant="filled"
           sx={{
             background: "linear-gradient(135deg, rgb(234, 102, 203), rgb(189, 132, 246), #f093fb)",

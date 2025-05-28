@@ -29,11 +29,11 @@ import TextFieldsIcon from "@mui/icons-material/TextFields"
 import BrushIcon from "@mui/icons-material/Brush"
 import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions"
 import ShapeLineIcon from "@mui/icons-material/Hexagon"
-import PaletteIcon from "@mui/icons-material/Palette"
+// import PaletteIcon from "@mui/icons-material/Palette"
 import type { CollageState } from "./use-collage-state"
 import { ShapesPanel } from "./ShapesPanel"
 import { StickersPanel } from "./StickersPanel"
-import { BrushPanel } from "./BrushPanel"
+// import { BrushPanel } from "./BrushPanel"
 
 interface CollageDialogsProps {
   collageState: CollageState
@@ -590,7 +590,7 @@ export const CollageDialogs: React.FC<CollageDialogsProps> = ({ collageState }) 
       </Dialog>
 
       {/* Brush Dialog */}
-      <Dialog
+      {/* <Dialog
         open={collageState.openBrushDialog}
         onClose={() => collageState.setOpenBrushDialog(false)}
         maxWidth="sm"
@@ -635,7 +635,7 @@ export const CollageDialogs: React.FC<CollageDialogsProps> = ({ collageState }) 
             onSizeChange={(size) => collageState.setBrushSize(size)}
           />
         </DialogContent>
-      </Dialog>
+      </Dialog> */}
 
       {/* Backdrop for dialogs */}
       <Backdrop

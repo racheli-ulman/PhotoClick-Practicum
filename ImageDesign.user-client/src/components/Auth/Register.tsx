@@ -362,7 +362,7 @@
 import type React from "react"
 import { useState } from "react"
 import { observer } from "mobx-react-lite"
-import userStore from "../stores/userStore"
+import userStore from "../../stores/userStore"
 import { Link } from "react-router-dom"
 import {
   TextField,
@@ -376,7 +376,7 @@ import {
   Alert,
   Snackbar,
   CircularProgress,
-  Divider,
+  // Divider,
   // useTheme,
   styled,
   keyframes,
@@ -389,8 +389,8 @@ import {
   LockOutlined, 
   PersonOutlined, 
   BadgeOutlined, 
-  Google, 
-  Facebook 
+  // Google, 
+  // Facebook 
 } from "@mui/icons-material"
 import { motion } from "framer-motion"
 
@@ -594,39 +594,39 @@ const GradientButton = styled(Button)({
   },
 })
 
-const SocialButton = styled(Button)({
-  background: "rgba(255, 255, 255, 0.9)",
-  border: "2px solid transparent",
-  borderRadius: "12px",
-  color: "#333",
-  fontWeight: "600",
-  padding: "12px 20px",
-  position: "relative",
-  transition: "all 0.3s ease",
-  "&::before": {
-    content: '""',
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    borderRadius: "12px",
-    padding: "2px",
-    background: "linear-gradient(45deg, rgba(234, 102, 203, 0.5), rgba(189, 132, 246, 0.5))",
-    mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
-    maskComposite: "xor",
-    WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
-    WebkitMaskComposite: "xor",
-    zIndex: -1,
-  },
-  "&:hover": {
-    transform: "translateY(-2px)",
-    boxShadow: "0 8px 25px rgba(234, 102, 203, 0.2)",
-    "&::before": {
-      background: "linear-gradient(45deg, rgb(234, 102, 203), rgb(189, 132, 246), #f093fb)",
-    },
-  },
-})
+// const SocialButton = styled(Button)({
+//   background: "rgba(255, 255, 255, 0.9)",
+//   border: "2px solid transparent",
+//   borderRadius: "12px",
+//   color: "#333",
+//   fontWeight: "600",
+//   padding: "12px 20px",
+//   position: "relative",
+//   transition: "all 0.3s ease",
+//   "&::before": {
+//     content: '""',
+//     position: "absolute",
+//     top: 0,
+//     left: 0,
+//     right: 0,
+//     bottom: 0,
+//     borderRadius: "12px",
+//     padding: "2px",
+//     background: "linear-gradient(45deg, rgba(234, 102, 203, 0.5), rgba(189, 132, 246, 0.5))",
+//     mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+//     maskComposite: "xor",
+//     WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+//     WebkitMaskComposite: "xor",
+//     zIndex: -1,
+//   },
+//   "&:hover": {
+//     transform: "translateY(-2px)",
+//     boxShadow: "0 8px 25px rgba(234, 102, 203, 0.2)",
+//     "&::before": {
+//       background: "linear-gradient(45deg, rgb(234, 102, 203), rgb(189, 132, 246), #f093fb)",
+//     },
+//   },
+// })
 
 const Register: React.FC = observer(() => {
   const [firstName, setFirstName] = useState<string>('')
@@ -753,7 +753,8 @@ const Register: React.FC = observer(() => {
                 fontWeight="700" 
                 align="center" 
                 sx={{ 
-                  mb: 5,
+                  mb: 1,
+                  mt:-5,
                   background: "linear-gradient(135deg, rgb(234, 102, 203), rgb(189, 132, 246), #f093fb)",
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
@@ -798,7 +799,7 @@ const Register: React.FC = observer(() => {
                   required
                   margin="normal"
                   variant="outlined"
-                  sx={{ mb: 3 }}
+                  sx={{ mb: 1 }}
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
@@ -823,7 +824,7 @@ const Register: React.FC = observer(() => {
                   required
                   margin="normal"
                   variant="outlined"
-                  sx={{ mb: 3 }}
+                  sx={{ mb: 1 }}
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
@@ -848,7 +849,7 @@ const Register: React.FC = observer(() => {
                   required
                   margin="normal"
                   variant="outlined"
-                  sx={{ mb: 3 }}
+                  sx={{ mb: 1 }}
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
@@ -873,7 +874,7 @@ const Register: React.FC = observer(() => {
                   required
                   margin="normal"
                   variant="outlined"
-                  sx={{ mb: 3 }}
+                  sx={{ mb: 4 }}
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
@@ -907,7 +908,7 @@ const Register: React.FC = observer(() => {
                   fullWidth
                   size="large"
                   disabled={loading}
-                  sx={{ mb: 4 }}
+                  sx={{ mb: 2 }}
                 >
                   {loading ? (
                     <CircularProgress size={24} color="inherit" />
@@ -917,7 +918,7 @@ const Register: React.FC = observer(() => {
                 </GradientButton>
               </motion.div>
 
-              <Box sx={{ display: "flex", alignItems: "center", my: 3 }}>
+              {/* <Box sx={{ display: "flex", alignItems: "center", my: 3 }}>
                 <Divider sx={{ flex: 1, bgcolor: "rgba(234, 102, 203, 0.3)" }} />
                 <Typography 
                   variant="body2" 
@@ -953,7 +954,7 @@ const Register: React.FC = observer(() => {
                     Facebook
                   </SocialButton>
                 </Box>
-              </motion.div>
+              </motion.div> */}
 
               <Typography 
                 variant="body1" 
