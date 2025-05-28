@@ -9,6 +9,7 @@ import ShareIcon from "@mui/icons-material/Share"
 import EditIcon from "@mui/icons-material/Edit"
 import CollectionsIcon from "@mui/icons-material/Collections"
 import PhotoAlbumIcon from "@mui/icons-material/PhotoAlbum"
+import { useNavigate } from "react-router-dom";
 
 interface Feature {
   title: string
@@ -58,6 +59,7 @@ const features: Feature[] = [
 
 const Features: React.FC = () => {
   // const theme = useTheme()
+const navigate = useNavigate();
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -367,8 +369,7 @@ const Features: React.FC = () => {
             </Typography>
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <Box
-                component="a"
-                href="/register"
+                 onClick={() => navigate("/register")} // שימוש ב-navigate
                 sx={{
                   display: "inline-block",
                   px: 6,

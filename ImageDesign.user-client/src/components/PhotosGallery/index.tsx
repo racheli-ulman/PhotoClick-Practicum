@@ -84,7 +84,7 @@ const PhotoGallery: React.FC = observer(() => {
     });
     const [selectedTag, setSelectedTag] = useState<string>("");
     const [selectedTagId, setSelectedTagId] = useState<number | null>(null);
-    
+
     // New search states
     const [searchTerm, setSearchTerm] = useState<string>("");
     const [filtersExpanded, setFiltersExpanded] = useState(false);
@@ -256,7 +256,7 @@ const PhotoGallery: React.FC = observer(() => {
         // Filter by search term
         if (searchTerm.trim()) {
             const search = searchTerm.toLowerCase().trim();
-            filtered = filtered.filter(photo => 
+            filtered = filtered.filter(photo =>
                 photo.photoName.toLowerCase().includes(search)
             );
         }
@@ -283,44 +283,44 @@ const PhotoGallery: React.FC = observer(() => {
 
     const hasActiveFilters = searchTerm.trim() || selectedTag;
 
-if (loading) {
-   return (
-       <Container maxWidth="lg" sx={{ py: 8, mt: 8 }}>
-           <Box sx={{ 
-               mb: 4,
-               display: 'flex',
-               flexDirection: 'column',
-               alignItems: 'center',
-               justifyContent: 'center',
-               minHeight: '50vh'
-           }}>
-               <Box sx={{
-                   width: 80,
-                   height: 80,
-                   borderRadius: '50%',
-                //    bolder: '10px solid transparent',
-                   border: '8px solid transparent',
-                   borderTop: '8px solid rgb(234, 102, 203)',
-                   borderRight: '8px solid rgb(189, 132, 246)',
-                   borderBottom: '8px solid #f093fb',
-                   animation: 'spin 1s linear infinite',
-                   mb: 2,
-                   '@keyframes spin': {
-                       '0%': {
-                           transform: 'rotate(0deg)',
-                       },
-                       '100%': {
-                           transform: 'rotate(360deg)',
-                       },
-                   },
-               }} />
-                <Typography variant="h5" sx={{ mb: 2, color: 'text.primary' }}>
-                     טוען את התמונות...
-                </Typography>
-               {/* <Skeleton variant="text" width={300} height={40} />
+    if (loading) {
+        return (
+            <Container maxWidth="lg" sx={{ py: 8, mt: 8 }}>
+                <Box sx={{
+                    mb: 4,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    minHeight: '50vh'
+                }}>
+                    <Box sx={{
+                        width: 80,
+                        height: 80,
+                        borderRadius: '50%',
+                        //    bolder: '10px solid transparent',
+                        border: '8px solid transparent',
+                        borderTop: '8px solid rgb(234, 102, 203)',
+                        borderRight: '8px solid rgb(189, 132, 246)',
+                        borderBottom: '8px solid #f093fb',
+                        animation: 'spin 1s linear infinite',
+                        mb: 2,
+                        '@keyframes spin': {
+                            '0%': {
+                                transform: 'rotate(0deg)',
+                            },
+                            '100%': {
+                                transform: 'rotate(360deg)',
+                            },
+                        },
+                    }} />
+                    <Typography variant="h5" sx={{ mb: 2, color: 'text.primary' }}>
+                        טוען את התמונות...
+                    </Typography>
+                    {/* <Skeleton variant="text" width={300} height={40} />
                <Skeleton variant="text" width={200} height={24} sx={{ mt: 1 }} /> */}
-           </Box>
-           {/* <Grid container spacing={3}>
+                </Box>
+                {/* <Grid container spacing={3}>
                {[1, 2, 3, 4, 5, 6].map((item) => (
                    <Grid item xs={12} sm={6} md={4} lg={3} key={item}>
                        <Skeleton variant="rectangular" width="100%" height={200} sx={{ borderRadius: 2 }} />
@@ -328,9 +328,9 @@ if (loading) {
                    </Grid>
                ))}
            </Grid> */}
-       </Container>
-   );
-}
+            </Container>
+        );
+    }
 
     return (
         <Box
@@ -349,15 +349,20 @@ if (loading) {
                     sx={{ mb: 4 }}
                 >
                     <Breadcrumbs aria-label="breadcrumb" sx={{ mb: 2 }}>
-                        <MuiLink underline="hover" color="inherit" href="/" sx={{ display: "flex", alignItems: "center" }}>
+                        <MuiLink
+                            underline="hover"
+                            color="inherit"
+                            onClick={() => navigate("/")} // שימוש ב-navigate
+                            sx={{ display: "flex", alignItems: "center", cursor: "pointer" }} // הוספת cursor:pointer
+                        >
                             <Home sx={{ mr: 0.5 }} fontSize="small" />
                             ראשי
                         </MuiLink>
                         <MuiLink
                             underline="hover"
                             color="inherit"
-                            href="/personal-area/userAlbums"
-                            sx={{ display: "flex", alignItems: "center" }}
+                            onClick={() => navigate("/personal-area/userAlbums")} // שימוש ב-navigate
+                            sx={{ display: "flex", alignItems: "center", cursor: "pointer" }} // הוספת cursor:pointer
                         >
                             <Folder sx={{ mr: 0.5 }} fontSize="small" />
                             האלבומים שלי
@@ -406,7 +411,7 @@ if (loading) {
                             </Tooltip>
 
                             <Tooltip title="סינון וחיפוש">
-                                <IconButton 
+                                <IconButton
                                     onClick={() => setFiltersExpanded(!filtersExpanded)}
                                     color={hasActiveFilters ? "primary" : "default"}
                                 >
@@ -431,11 +436,11 @@ if (loading) {
                                 exit={{ opacity: 0, height: 0 }}
                                 transition={{ duration: 0.3 }}
                             >
-                                <Paper 
-                                    elevation={1} 
-                                    sx={{ 
-                                        p: 2, 
-                                        mb: 3, 
+                                <Paper
+                                    elevation={1}
+                                    sx={{
+                                        p: 2,
+                                        mb: 3,
                                         borderRadius: 2,
                                         background: 'rgba(255, 255, 255, 0.95)',
                                         backdropFilter: 'blur(10px)',
@@ -450,7 +455,7 @@ if (loading) {
                                             placeholder="חיפוש לפי שם תמונה..."
                                             value={searchTerm}
                                             onChange={handleSearchChange}
-                                            sx={{ 
+                                            sx={{
                                                 minWidth: 220,
                                                 flex: '1 1 auto',
                                                 '& .MuiOutlinedInput-root': {
@@ -520,7 +525,7 @@ if (loading) {
                                                     variant="outlined"
                                                     startIcon={<Clear sx={{ fontSize: 16 }} />}
                                                     onClick={handleClearFilters}
-                                                    sx={{ 
+                                                    sx={{
                                                         height: 40,
                                                         whiteSpace: 'nowrap',
                                                         borderColor: '#ddd',
@@ -551,7 +556,7 @@ if (loading) {
                                 color={hasActiveFilters ? "primary" : "default"}
                                 variant={hasActiveFilters ? "filled" : "outlined"}
                             />
-                            
+
                             {hasActiveFilters && (
                                 <motion.div
                                     initial={{ opacity: 0, scale: 0.8 }}
