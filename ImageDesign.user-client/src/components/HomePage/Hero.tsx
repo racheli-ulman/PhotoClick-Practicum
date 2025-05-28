@@ -5,6 +5,7 @@ import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Box, Typography, Button, Container } from "@mui/material"
 import { PhotoLibrary, ArrowForward, Star } from "@mui/icons-material"
+import { useNavigate } from "react-router-dom";
 
 const images: string[] = [
   "/placeholder.svg?height=600&width=1200&query=beautiful family photos",
@@ -17,6 +18,7 @@ const Hero: React.FC = () => {
   // const theme = useTheme()
   const [currentImage, setCurrentImage] = useState<number>(0)
   const [particles, setParticles] = useState<Array<{ id: number; x: number; y: number; size: number }>>([])
+  const navigate = useNavigate();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -307,6 +309,7 @@ const Hero: React.FC = () => {
                   <Button
                     variant="contained"
                     size="large"
+                    onClick={() => navigate("/register")} // שימוש ב-navigate
                     sx={{
                       background: "linear-gradient(45deg, #667eea, #764ba2, #f093fb)",
                       color: "white",
@@ -335,8 +338,6 @@ const Hero: React.FC = () => {
                         },
                       },
                     }}
-                    component="a"
-                    href="/register"
                     endIcon={<ArrowForward />}
                   >
                     הרשמו והתחילו
