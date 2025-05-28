@@ -24,8 +24,8 @@ namespace ImageDesign.API.Controllers
             _mapper = mapper;
         }
         // GET: api/<TagController>
-        [HttpGet]
         [Authorize] // דרישת טוקן
+        [HttpGet]
         public async Task<ActionResult<IEnumerable<TagDto>>> Get()
         {
             var tags = await _tagService.GetAllTagsAsync();

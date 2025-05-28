@@ -207,7 +207,7 @@ const UserAlbums: React.FC = () => {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
-          sx={{ mb: 4 }}
+          sx={{ mb: 4,mt:3 }}
         >
           <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 4 }}>
             <Typography
