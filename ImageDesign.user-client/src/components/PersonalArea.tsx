@@ -292,8 +292,4 @@ const PersonalArea: React.FC = () => {
     );
 }
 
-
-
-
-
 export default PersonalArea;
