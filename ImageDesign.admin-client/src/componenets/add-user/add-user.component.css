@@ -31,11 +31,11 @@
   right: 0;
   height: 6px;
   background: linear-gradient(90deg, 
-    #667eea 0%, 
-    #764ba2 25%, 
-    #f093fb 50%, 
+    #FF0000 0%, 
+    #6e1717 25%, 
+    #270505 50%, 
     #f5576c 75%, 
-    #4facfe 100%);
+    #e86666 100%);
   animation: shimmer 3s ease-in-out infinite;
 }
 
@@ -84,7 +84,7 @@
   width: 36px !important;
   height: 36px !important;
   color: #667eea;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+  background: linear-gradient(135deg, #FF0000 0%, #6e1717 50%, #270505 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -101,7 +101,7 @@
   margin: 0 !important;
   font-size: 28px;
   font-weight: 700;
-  background: linear-gradient(135deg, #2c3e50 0%, #3498db 50%, #9b59b6 100%);
+  background: linear-gradient(135deg, #FF0000 0%, #6e1717 50%, #270505 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -216,7 +216,7 @@
 /* אפקט פוקוס מתקדם */
 ::ng-deep .mat-mdc-form-field.mat-focused .mat-mdc-text-field-wrapper {
   background: rgba(255, 255, 255, 1) !important;
-  border-color: #667eea !important;
+  border-color: #FF0000 !important;
   box-shadow: 
     0 0 0 3px rgba(102, 126, 234, 0.1),
     0 8px 30px rgba(102, 126, 234, 0.2) !important;
@@ -346,7 +346,7 @@
 
 /* כפתור שליחה - עיצוב מרהיב */
 .submit-button {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%) !important;
+  background: linear-gradient(135deg, #FF0000 0%, #6e1717 50%, #270505 100%) !important;
   color: white !important;
   border: none !important;
   border-radius: 14px !important;
@@ -382,7 +382,7 @@
 }
 
 .submit-button:hover {
-  background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 50%, #de81e9 100%) !important;
+  background: linear-gradient(135deg, #FF0000 0%, #6e1717 50%, #270505 100%) !important;
   box-shadow: 
     0 12px 35px rgba(102, 126, 234, 0.5),
     0 6px 20px rgba(118, 75, 162, 0.4) !important;

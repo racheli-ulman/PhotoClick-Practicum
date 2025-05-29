@@ -2,6 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Photo } from '../models/photo';
+import { environment } from '../environments/environment';
+
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +11,7 @@ import { Photo } from '../models/photo';
 export class PhotosService {
 
  
-   private baseUrl = 'http://localhost:5083/api/Photo';
+   private baseUrl = `${environment.apiUrl}/Photo`; // URL של ה-API שלך
  
    constructor(private http: HttpClient) { }
  

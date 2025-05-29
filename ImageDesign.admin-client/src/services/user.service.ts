@@ -2,13 +2,15 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AddUser, MonthlyRegistrationsDto, User } from '../models/user';
+import { environment } from '../environments/environment';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
   
-  private baseUrl = 'http://localhost:5083/api/User';
+  private baseUrl = `${environment.apiUrl}/User`; // URL של ה-API שלך
 
   constructor(private http: HttpClient) { }
 
