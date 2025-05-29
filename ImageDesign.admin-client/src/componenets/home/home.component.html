@@ -5,27 +5,34 @@
             <span>משתמשים</span>
         </button>
 
-        <button mat-raised-button class="btn black" [routerLink]="['/home/add-user']" routerLinkActive="buttonactive">
+        <!-- <button mat-raised-button class="btn black" [routerLink]="['/home/add-user']" routerLinkActive="buttonactive">
             <mat-icon>person_add</mat-icon>
             <span>הוספת משתמש</span>
-        </button>
+        </button> -->
 
-        <button mat-raised-button class="btn black" [routerLink]="['/home/statistics']" routerLinkActive="buttonactive">
+        <button mat-raised-button class="btn black" [routerLink]="['/home/dashboard']" routerLinkActive="buttonactive">
             <mat-icon>bar_chart</mat-icon>
-            <span>סטטיסטיקת רישום חודשית של משתמשים</span>
+            <span>סטטיסטיקות</span>
         </button>
-
-        <button mat-raised-button class="btn black" [routerLink]="['/home/count-of-albums']"
+        <button mat-raised-button class="btn black" (click)="logout()">
+            <mat-icon>logout</mat-icon>
+            <span>התנתקות</span>
+        </button>
+        <!-- <button mat-raised-button class="btn black" [routerLink]="['/home/count-of-albums']"
             routerLinkActive="buttonactive">
             <mat-icon>photo_library</mat-icon>
             <span>כל האלבומים</span>
-        </button>
+        </button> -->
 
-        <button mat-raised-button class="btn black" [routerLink]="['/home/count-of-photos']"
+        <!-- <button mat-raised-button class="btn black" [routerLink]="['/home/count-of-photos']"
             routerLinkActive="buttonactive">
             <mat-icon>insert_photo</mat-icon>
             <span>סטטיסטיקת תמונות</span>
-        </button>
+        </button> -->
+
+
+
+
     </nav>
 </header>
 <div class="content-container">

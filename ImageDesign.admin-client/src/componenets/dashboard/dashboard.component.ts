@@ -6,7 +6,7 @@ import { MatCardModule } from '@angular/material/card'; // הוספת ייבוא
 
 @Component({
   selector: 'app-dashboard',
-  imports: [AlbumsComponent, PhotosComponent, StatisticsComponent,MatCardModule], 
+  imports: [PhotosComponent, StatisticsComponent,MatCardModule], 
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })

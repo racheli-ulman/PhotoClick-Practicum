@@ -1,181 +1,499 @@
-/* צבעים עיקריים */
-:root {
-    --primary-red: #e53935;
-    --dark-red: #c62828;
-    --light-red: #ffcdd2;
-    --primary-black: #212121;
-    --primary-white: #ffffff;
-    --gray-light: #f5f5f5;
-    --error-red: #f44336;
+/* תיקון RTL והגדרות כלליות */
+.dialog-container {
+  direction: rtl;
+  font-family: 'Segoe UI', 'Heebo', system-ui, -apple-system, sans-serif;
+  min-width: 400px;
+  max-width: 500px;
+  margin: 0 auto;
 }
 
-.form-container {
-    max-width: 500px;
-    margin: 2rem auto;
-    padding: 2rem;
-    background-color: var(--primary-white);
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    direction: rtl;
+/* כרטיס הטופס הראשי - עיצוב נדיר */
+.user-form-card {
+  border-radius: 24px !important;
+  box-shadow: 
+    0 20px 60px rgba(102, 126, 234, 0.15),
+    0 8px 25px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+  background: 
+    linear-gradient(145deg, #ffffff 0%, #f8faff 50%, #f0f4ff 100%);
+  overflow: hidden;
+  position: relative;
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(102, 126, 234, 0.1);
+}
+
+/* אפקט אור מתקדם */
+.user-form-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: linear-gradient(90deg, 
+    #667eea 0%, 
+    #764ba2 25%, 
+    #f093fb 50%, 
+    #f5576c 75%, 
+    #4facfe 100%);
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; }
+}
+
+/* אפקט זוהר ברקע */
+.user-form-card::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(102, 126, 234, 0.03) 0%, transparent 70%);
+  animation: rotate 20s linear infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* כותרת הטופס - עיצוב יוקרתי */
+.form-header {
+  padding: 32px 32px 20px !important;
+  background: transparent;
+  position: relative;
+  z-index: 1;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  width: 100%;
+}
+
+.header-icon {
+  font-size: 36px !important;
+  width: 36px !important;
+  height: 36px !important;
+  color: #667eea;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 2px 4px rgba(102, 126, 234, 0.3));
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
 }
 
 .form-title {
-    color: var(--primary-black);
-    font-size: 24px;
-    text-align: center;
-    margin-bottom: 1.5rem;
-    font-weight: 600;
-    position: relative;
+  margin: 0 !important;
+  font-size: 28px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #2c3e50 0%, #3498db 50%, #9b59b6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  letter-spacing: -0.5px;
 }
 
-.form-title:after {
-    content: "";
-    display: block;
-    width: 60px;
-    height: 3px;
-    background-color: var(--primary-red);
-    margin: 8px auto 0;
+/* תוכן הטופס */
+.form-content {
+      padding: 5px 10px !important; /* הקטנת הפדינג */
+  position: relative;
+  z-index: 1;
 }
 
-.form-group {
-    margin-bottom: 1.5rem;
-    position: relative;
+/* שורה של שדות */
+.form-row {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 4px;
 }
 
-.form-label {
-    display: block;
-    margin-bottom: 0.5rem;
-    color: var(--primary-black);
-    font-weight: 500;
-    font-size: 0.9rem;
+.form-row .form-field {
+  flex: 1;
 }
 
-.form-control {
-    width: 100%;
-    padding: 0.75rem 1rem;
-    border: 2px solid #e0e0e0;
-    border-radius: 4px;
-    font-size: 1rem;
-    transition: all 0.3s ease;
-    background-color: var(--primary-white);
-    color: var(--primary-black);
+/* תיקון RTL לשדות Material */
+::ng-deep .mat-mdc-form-field {
+  direction: rtl !important;
+  --mdc-outlined-text-field-container-shape: 16px;
+  --mdc-filled-text-field-container-shape: 16px;
+  width: 100%;
+  margin-bottom: 8px;
 }
 
-.form-control:focus {
-    outline: none;
-    border-color: var(--primary-red);
-    box-shadow: 0 0 0 3px rgba(229, 57, 53, 0.2);
+::ng-deep .mat-mdc-text-field-wrapper {
+  border-radius: 16px !important;
+  background: rgba(255, 255, 255, 0.8) !important;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(102, 126, 234, 0.1);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.form-control.invalid {
-    border-color: var(--error-red);
-    background-color: rgba(244, 67, 54, 0.05);
+::ng-deep .mat-mdc-form-field:hover .mat-mdc-text-field-wrapper {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border-color: rgba(102, 126, 234, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
 }
 
-.validation-error {
-    color: var(--error-red);
-    font-size: 0.8rem;
-    margin-top: 0.4rem;
-    display: block;
-    font-weight: 500;
+/* גבולות השדות */
+::ng-deep .mdc-notched-outline {
+  border: none !important;
 }
 
+::ng-deep .mdc-notched-outline__leading,
+::ng-deep .mdc-notched-outline__notch,
+::ng-deep .mdc-notched-outline__trailing {
+  border: none !important;
+}
+
+/* תוויות השדות */
+::ng-deep .mat-mdc-form-field-label {
+  color: #5a6c7d !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  right: 16px !important;
+  left: auto !important;
+}
+
+::ng-deep .mat-mdc-form-field.mat-focused .mat-mdc-form-field-label {
+  color: #667eea !important;
+}
+
+/* שדות הקלט */
+::ng-deep .mat-mdc-input-element {
+  direction: rtl !important;
+  text-align: right !important;
+  color: #2c3e50 !important;
+  font-size: 16px !important;
+  font-weight: 500 !important;
+  padding: 16px 16px !important;
+  background: transparent !important;
+}
+
+::ng-deep .mat-mdc-input-element::placeholder {
+  color: #9ca3af !important;
+  opacity: 0.7 !important;
+  text-align: right !important;
+}
+
+/* אייקונים - תיקון עמדה */
+::ng-deep .mat-mdc-form-field .mat-mdc-form-field-icon-suffix {
+  color: #8b9dc3 !important;
+  margin-right: 12px !important;
+  margin-left: 0 !important;
+  transition: all 0.3s ease;
+}
+
+::ng-deep .mat-mdc-form-field.mat-focused .mat-mdc-form-field-icon-suffix {
+  color: #667eea !important;
+  transform: scale(1.1);
+}
+
+/* שדה הסיסמה - כפתור הצגה */
+::ng-deep .mat-mdc-form-field .mat-mdc-icon-button {
+  width: 40px !important;
+  height: 40px !important;
+  margin-right: 8px !important;
+  margin-left: 0 !important;
+}
+
+/* אפקט פוקוס מתקדם */
+::ng-deep .mat-mdc-form-field.mat-focused .mat-mdc-text-field-wrapper {
+  background: rgba(255, 255, 255, 1) !important;
+  border-color: #667eea !important;
+  box-shadow: 
+    0 0 0 3px rgba(102, 126, 234, 0.1),
+    0 8px 30px rgba(102, 126, 234, 0.2) !important;
+  transform: translateY(-3px) scale(1.02);
+}
+
+/* הודעות שגיאה */
+::ng-deep .mat-mdc-form-field-error {
+  color: #e74c3c !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  margin-top: 6px !important;
+  text-align: right !important;
+  direction: rtl !important;
+}
+
+/* התראת שגיאה כללית - עיצוב יוקרתי */
+.error-alert {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+  background: linear-gradient(135deg, #ffe8e8 0%, #fff0f0 100%);
+  border: 2px solid #ffcccb;
+  border-radius: 16px;
+  padding: 16px 20px;
+  color: #c0392b;
+  font-weight: 600;
+  font-size: 14px;
+  box-shadow: 0 4px 15px rgba(231, 76, 60, 0.1);
+  animation: errorSlide 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  position: relative;
+  overflow: hidden;
+}
+
+.error-alert::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
+  animation: errorShine 2s ease-in-out infinite;
+}
+
+@keyframes errorSlide {
+  0% {
+    opacity: 0;
+    transform: translateX(50px) scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes errorShine {
+  0%, 100% { transform: translateX(-100%); }
+  50% { transform: translateX(100%); }
+}
+
+.error-icon {
+  font-size: 20px !important;
+  width: 20px !important;
+  height: 20px !important;
+  animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+/* פעולות הטופס - עיצוב מהודר */
+.form-actions {
+  padding: 24px 32px 32px !important;
+  display: flex;
+  justify-content: flex-start;
+  gap: 16px;
+  background: linear-gradient(135deg, #f8faff 0%, #f0f4ff 100%);
+  position: relative;
+  z-index: 1;
+}
+
+/* כפתור ביטול - עיצוב אלגנטי */
+.cancel-button {
+  color: #6c757d !important;
+  background: rgba(255, 255, 255, 0.8) !important;
+  border: 2px solid #e9ecef !important;
+  border-radius: 14px !important;
+  padding: 0 28px !important;
+  height: 48px !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  backdrop-filter: blur(10px);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.cancel-button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: radial-gradient(circle, rgba(108, 117, 125, 0.1) 0%, transparent 70%);
+  transition: all 0.4s ease;
+  transform: translate(-50%, -50%);
+}
+
+.cancel-button:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+.cancel-button:hover {
+  background: rgba(255, 255, 255, 1) !important;
+  border-color: #adb5bd !important;
+  color: #495057 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* כפתור שליחה - עיצוב מרהיב */
 .submit-button {
-    display: block;
-    width: 100%;
-    padding: 0.9rem;
-    background-color: var(--primary-red);
-    color: var(--primary-white);
-    border: none;
-    border-radius: 4px;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    margin-top: 1rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%) !important;
+  color: white !important;
+  border: none !important;
+  border-radius: 14px !important;
+  padding: 0 36px !important;
+  height: 48px !important;
+  font-weight: 700 !important;
+  font-size: 14px !important;
+  letter-spacing: 0.5px;
+  box-shadow: 
+    0 8px 25px rgba(102, 126, 234, 0.4),
+    0 4px 15px rgba(118, 75, 162, 0.3) !important;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
 }
 
-.submit-button:hover:not(:disabled) {
-    background-color: var(--dark-red);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+.submit-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(255, 255, 255, 0.3), 
+    transparent);
+  transition: left 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.submit-button:hover::before {
+  left: 100%;
+}
+
+.submit-button:hover {
+  background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 50%, #de81e9 100%) !important;
+  box-shadow: 
+    0 12px 35px rgba(102, 126, 234, 0.5),
+    0 6px 20px rgba(118, 75, 162, 0.4) !important;
+  transform: translateY(-3px) scale(1.02);
+}
+
+.submit-button:active {
+  transform: translateY(-1px) scale(0.98);
 }
 
 .submit-button:disabled {
-    background-color: #cccccc;
-    cursor: not-allowed;
-    opacity: 0.7;
+  background: linear-gradient(135deg, #cbd5e0 0%, #e2e8f0 100%) !important;
+  box-shadow: none !important;
+  transform: none !important;
+  cursor: not-allowed;
+  opacity: 0.6;
 }
 
-.error-message {
-    background-color: rgba(244, 67, 54, 0.1);
-    color: var(--error-red);
-    padding: 0.8rem;
-    border-radius: 4px;
-    margin: 1rem 0;
-    text-align: center;
-    font-weight: 500;
+/* אייקונים בכפתורים */
+.cancel-button .mat-icon,
+.submit-button .mat-icon {
+  margin-left: 8px !important;
+  margin-right: 0 !important;
+  font-size: 18px !important;
+  width: 18px !important;
+  height: 18px !important;
 }
 
-.password-field {
-    position: relative;
+/* קו מפריד מתקדם */
+::ng-deep .mat-mdc-card .mat-divider {
+  border: none !important;
+  height: 2px !important;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    rgba(102, 126, 234, 0.1) 20%, 
+    rgba(102, 126, 234, 0.3) 50%, 
+    rgba(102, 126, 234, 0.1) 80%, 
+    transparent 100%) !important;
+  margin: 0 !important;
 }
 
-.password-toggle {
-    position: absolute;
-    left: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    color: var(--primary-black);
-    cursor: pointer;
-    opacity: 0.6;
+/* אנימציית כניסה מרהיבה */
+.user-form-card {
+  animation: magnificentEntrance 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
-.password-toggle:hover {
+@keyframes magnificentEntrance {
+  0% {
+    opacity: 0;
+    transform: translateY(50px) scale(0.8) rotate(3deg);
+    filter: blur(10px);
+  }
+  50% {
+    opacity: 0.8;
+    transform: translateY(-10px) scale(1.05) rotate(-1deg);
+    filter: blur(2px);
+  }
+  100% {
     opacity: 1;
+    transform: translateY(0) scale(1) rotate(0deg);
+    filter: blur(0px);
+  }
 }
 
-/* אנימציות */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+/* אפקטים נוספים לשדות */
+.form-field {
+  position: relative;
+  margin-bottom: 8px;
 }
 
-.form-group {
-    animation: fadeIn 0.3s ease-out forwards;
+/* עיצוב מתקדם למסכים קטנים */
+@media (max-width: 650px) {
+  .dialog-container {
+    min-width: 90vw;
+    max-width: 95vw;
+    margin: 12px;
+  }
+  
+  .form-row {
+    flex-direction: column;
+    gap: 4px;
+  }
+  
+  .form-content {
+    padding: 20px 24px !important;
+  }
+  
+  .form-actions {
+    padding: 20px 24px 24px !important;
+    flex-direction: column-reverse;
+    gap: 12px;
+  }
+  
+  .cancel-button,
+  .submit-button {
+    width: 100%;
+    height: 44px !important;
+  }
+  
+  .form-title {
+    font-size: 24px;
+  }
 }
 
-.form-group:nth-child(1) {
-    animation-delay: 0.1s;
-}
-
-.form-group:nth-child(2) {
-    animation-delay: 0.2s;
-}
-
-.form-group:nth-child(3) {
-    animation-delay: 0.3s;
-}
-
-.form-group:nth-child(4) {
-    animation-delay: 0.4s;
-}
-
-/* התאמה לכיוון RTL/עברית */
-.rtl-form {
-    direction: rtl;
-    text-align: right;
-}
-
-h2 {
-    color: red;
+/* אפקט זוהר מתקדם על הכל */
+@media (hover: hover) {
+  .user-form-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 
+      0 25px 70px rgba(102, 126, 234, 0.2),
+      0 12px 35px rgba(0, 0, 0, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
+  }
 }

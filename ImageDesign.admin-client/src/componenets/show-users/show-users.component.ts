@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { LoginComponent } from '../login/login.component';
 import { MatDialog } from '@angular/material/dialog';
+import { AddUserComponent } from '../add-user/add-user.component';
 
 @Component({
   selector: 'app-show-users',
@@ -23,7 +24,7 @@ export class ShowUsersComponent {
   totalItems: number = 0;
   pages: number[] = [];
 
-  constructor(private userService: UserService, private router: Router,private dialog: MatDialog) {}
+  constructor(private userService: UserService, private router: Router, private dialog: MatDialog) {}
 
   ngOnInit(): void {
     this.loadUsers();
@@ -74,4 +75,18 @@ export class ShowUsersComponent {
   editUser(id: number): void {
     this.router.navigate(['/edit-user', id]);
   }
+
+
+  openAddUserDialog(): void {
+    const dialogRef = this.dialog.open(AddUserComponent, {
+      width: '500px',
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 'added') {
+        this.loadUsers(); // טען מחדש את המשתמשים לאחר הוספה
+      }
+    });
+  }
+
 }

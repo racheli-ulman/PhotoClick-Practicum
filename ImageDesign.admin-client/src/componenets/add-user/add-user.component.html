@@ -1,84 +1,114 @@
-<div class="form-container rtl-form">
-    <h2 class="form-title">הוספת משתמש חדש</h2>
+<div class="dialog-container">
+  <mat-card class="user-form-card">
+    <mat-card-header class="form-header">
+      <div class="header-content">
+        <mat-icon class="header-icon">person_add</mat-icon>
+        <h2 class="form-title">הוספת משתמש חדש</h2>
+      </div>
+    </mat-card-header>
     
-    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-      <div class="form-group">
-        <label for="firstName" class="form-label">שם פרטי:</label>
-        <input 
-          id="firstName" 
-          type="text" 
-          formControlName="firstName" 
-          class="form-control" 
-          [ngClass]="{'invalid': registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched}" 
-        />
-        <span class="validation-error" *ngIf="registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched">
-          שם פרטי הוא שדה חובה
-        </span>
-      </div>
-  
-      <div class="form-group">
-        <label for="lastName" class="form-label">שם משפחה:</label>
-        <input 
-          id="lastName" 
-          type="text" 
-          formControlName="lastName" 
-          class="form-control" 
-          [ngClass]="{'invalid': registerForm.get('lastName')?.invalid && registerForm.get('lastName')?.touched}" 
-        />
-        <span class="validation-error" *ngIf="registerForm.get('lastName')?.invalid && registerForm.get('lastName')?.touched">
-          שם משפחה הוא שדה חובה
-        </span>
-      </div>
-  
-      <div class="form-group">
-        <label for="email" class="form-label">כתובת אימייל:</label>
-        <input 
-          id="email" 
-          type="email" 
-          formControlName="email" 
-          class="form-control" 
-          [ngClass]="{'invalid': registerForm.get('email')?.invalid && registerForm.get('email')?.touched}" 
-        />
-        <span class="validation-error" *ngIf="registerForm.get('email')?.hasError('required') && registerForm.get('email')?.touched">
-          כתובת אימייל היא שדה חובה
-        </span>
-        <span class="validation-error" *ngIf="registerForm.get('email')?.hasError('email') && registerForm.get('email')?.touched">
-          יש להזין כתובת אימייל תקינה
-        </span>
-      </div>
-  
-      <div class="form-group">
-        <label for="password" class="form-label">סיסמה:</label>
-        <div class="password-field">
+    <mat-divider></mat-divider>
+    
+    <mat-card-content class="form-content">
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="user-form">
+        
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>שם פרטי</mat-label>
+            <input 
+              matInput 
+              formControlName="firstName" 
+              placeholder="הזן שם פרטי"
+              autocomplete="given-name">
+            <mat-icon matSuffix>person</mat-icon>
+            <mat-error *ngIf="registerForm.get('firstName')?.hasError('required')">
+              שם פרטי הוא שדה חובה
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>שם משפחה</mat-label>
+            <input 
+              matInput 
+              formControlName="lastName" 
+              placeholder="הזן שם משפחה"
+              autocomplete="family-name">
+            <mat-icon matSuffix>badge</mat-icon>
+            <mat-error *ngIf="registerForm.get('lastName')?.hasError('required')">
+              שם משפחה הוא שדה חובה
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline" class="form-field full-width">
+          <mat-label>כתובת אימייל</mat-label>
           <input 
-            id="password" 
-            [type]="showPassword ? 'text' : 'password'" 
+            matInput 
+            type="email"
+            formControlName="email" 
+            placeholder="example@domain.com"
+            autocomplete="email">
+          <mat-icon matSuffix>email</mat-icon>
+          <mat-error *ngIf="registerForm.get('email')?.hasError('required')">
+            כתובת אימייל היא שדה חובה
+          </mat-error>
+          <mat-error *ngIf="registerForm.get('email')?.hasError('email')">
+            יש להזין כתובת אימייל תקינה
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field full-width">
+          <mat-label>סיסמה</mat-label>
+          <input 
+            matInput 
+            [type]="showPassword ? 'text' : 'password'"
             formControlName="password" 
-            class="form-control" 
-            [ngClass]="{'invalid': registerForm.get('password')?.invalid && registerForm.get('password')?.touched}" 
-          />
+            placeholder="הזן סיסמה"
+            autocomplete="new-password">
           <button 
             type="button" 
-            class="password-toggle" 
-            (click)="togglePasswordVisibility()" 
-            tabindex="-1">
-            {{ showPassword ? 'הסתר' : 'הצג' }}
+            mat-icon-button 
+            matSuffix 
+            (click)="togglePasswordVisibility()"
+            [attr.aria-label]="'הצג סיסמה'"
+            [attr.aria-pressed]="showPassword">
+            <mat-icon>{{showPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
           </button>
+          <mat-error *ngIf="registerForm.get('password')?.hasError('required')">
+            סיסמה היא שדה חובה
+          </mat-error>
+        </mat-form-field>
+
+        <div *ngIf="error" class="error-alert">
+          <mat-icon class="error-icon">error</mat-icon>
+          <span>{{ error }}</span>
         </div>
-        <span class="validation-error" *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
-          סיסמה היא שדה חובה
-        </span>
-      </div>
-  
-      <div *ngIf="error" class="error-message">
-        {{ error }}
-      </div>
-  
+
+      </form>
+    </mat-card-content>
+
+    <mat-divider></mat-divider>
+
+    <mat-card-actions class="form-actions">
       <button 
-        type="submit" 
-        class="submit-button" 
-        [disabled]="!registerForm.valid">
+        mat-button 
+        type="button" 
+        class="cancel-button"
+        (click)="dialogRef.close()">
+        <mat-icon>close</mat-icon>
+        ביטול
+      </button>
+      
+      <button 
+        mat-raised-button 
+        color="primary"
+        type="submit"
+        class="submit-button"
+        [disabled]="!registerForm.valid"
+        (click)="onSubmit()">
+        <mat-icon>add</mat-icon>
         יצירת חשבון
       </button>
-    </form>
-  </div>
+    </mat-card-actions>
+  </mat-card>
+</div>

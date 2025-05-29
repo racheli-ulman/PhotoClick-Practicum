@@ -11,9 +11,10 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatBadgeModule } from '@angular/material/badge';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-home',
-  imports: [MatButtonModule, MatIconModule,RouterOutlet,MatCardModule, MatButtonModule,RouterLinkActive, RouterLink, CommonModule,
+  imports: [MatButtonModule, MatIconModule, RouterOutlet, MatCardModule, MatButtonModule, RouterLinkActive, RouterLink, CommonModule,
     MatButtonModule,
     MatIconModule,
     MatRippleModule,
@@ -26,5 +27,10 @@ import { MatBadgeModule } from '@angular/material/badge';
   styleUrl: './home.component.css'
 })
 export class HomeComponent {
+  constructor(private router: Router) { }
 
+  logout() {
+    localStorage.clear(); // מנקה את ה-local storage
+    this.router.navigate(['']); // מנתב לעמוד הבית
+  }
 }
