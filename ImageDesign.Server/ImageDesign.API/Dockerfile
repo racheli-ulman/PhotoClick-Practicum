@@ -29,4 +29,5 @@ RUN dotnet publish "./ImageDesign.API.csproj" -c $BUILD_CONFIGURATION -o /app/pu
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+COPY ["ImageDesign.API/Templates", "Templates/"]
 ENTRYPOINT ["dotnet", "ImageDesign.API.dll"]

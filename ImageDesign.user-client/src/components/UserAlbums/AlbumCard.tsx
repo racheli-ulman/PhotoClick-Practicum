@@ -16,7 +16,8 @@ import {
   Chip,
   Button,
 } from "@mui/material"
-import { Folder, MoreVert, Edit, Delete, Share, Info, PhotoLibrary } from "@mui/icons-material"
+// import { Folder, MoreVert, Edit, Delete, Share, Info, PhotoLibrary } from "@mui/icons-material"
+import { Folder, MoreVert, Edit, Delete, PhotoLibrary } from "@mui/icons-material"
 import type { Album } from "../../models/Album"
 
 interface AlbumCardProps {
@@ -213,7 +214,7 @@ const AlbumCard: React.FC<AlbumCardProps> = ({
               </ListItemIcon>
               <ListItemText>מחק אלבום</ListItemText>
             </MenuItem>
-            <MenuItem
+            {/* <MenuItem
               onClick={handleMenuClose}
               sx={{
                 color: "#374151",
@@ -229,8 +230,8 @@ const AlbumCard: React.FC<AlbumCardProps> = ({
                 <Share fontSize="small" sx={{ color: "#64748b" }} />
               </ListItemIcon>
               <ListItemText>שתף אלבום</ListItemText>
-            </MenuItem>
-            <MenuItem
+            </MenuItem> */}
+            {/* <MenuItem
               onClick={handleMenuClose}
               sx={{
                 color: "#374151",
@@ -246,7 +247,7 @@ const AlbumCard: React.FC<AlbumCardProps> = ({
                 <Info fontSize="small" sx={{ color: "#64748b" }} />
               </ListItemIcon>
               <ListItemText>פרטי אלבום</ListItemText>
-            </MenuItem>
+            </MenuItem> */}
           </Menu>
         </Box>
       </Box>

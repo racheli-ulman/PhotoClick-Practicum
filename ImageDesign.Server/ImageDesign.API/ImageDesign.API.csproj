@@ -37,4 +37,10 @@
     <ProjectReference Include="..\ImageDesign.Server\ImageDesign.Service.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Include="Templates\*.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

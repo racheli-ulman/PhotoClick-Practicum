@@ -25,7 +25,7 @@ import {
     DriveFileMoveOutlined,
     MoreVert,
     ZoomIn,
-    Edit,
+    // Edit,
     Share,
 } from "@mui/icons-material"
 import photoUploadStore from "../../stores/photoUploaderStore"
@@ -262,7 +262,7 @@ const PhotoGrid: React.FC<PhotoGridProps> = ({ photos, onPhotoClick, onCopyMoveC
                                                 </ListItemIcon>
                                                 <ListItemText>העבר תמונה</ListItemText>
                                             </MenuItem>
-                                            <MenuItem
+                                            {/* <MenuItem
                                                 onClick={() => {
                                                     // Handle edit
                                                     handleMenuClose(photo.id)
@@ -272,7 +272,7 @@ const PhotoGrid: React.FC<PhotoGridProps> = ({ photos, onPhotoClick, onCopyMoveC
                                                     <Edit fontSize="small" />
                                                 </ListItemIcon>
                                                 <ListItemText>שנה שם תמונה</ListItemText>
-                                            </MenuItem>
+                                            </MenuItem> */}
                                             <MenuItem
                                                 onClick={() => {
                                                     handleGrayscaleToggle(photo.id);
