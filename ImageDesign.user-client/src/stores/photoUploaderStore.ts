@@ -53,6 +53,9 @@ class PhotoUploadStore {
             console.error('שגיאה בקבלת התיוגים:', error);
             this.setError('שגיאה בקבלת התיוגים.');
         }
+        console.log("tags ", this.tag);
+        return this.tag; // החזרת התגים שנשמרו
+        
     }
 
     async fetchPhotosByAlbumId(albumId: number) {
