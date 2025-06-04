@@ -98,7 +98,7 @@ const Header: React.FC<HeaderProps> = ({ onOpenChat }) => {
 
   const menuItems = [
     { label: "בית", icon: <Home fontSize="small" />, path: "/", action: undefined },
-    { label: "אודות", icon: <Info fontSize="small" />, path: "#about", action: undefined },
+    { label: "אזור אישי", icon: <Info fontSize="small" />, path: "/personal-area", action: undefined },
     { label: "עזרה", icon: <Help fontSize="small" />, path: "#help", action: handleHelpClick },
     { label: "התחברות", icon: <Login fontSize="small" />, path: "/login", action: undefined },
   ]

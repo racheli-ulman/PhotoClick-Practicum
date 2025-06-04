@@ -8,7 +8,7 @@ import FileUploader from "./components/FileUploader";
 import Register from "./components/Auth/Register";
 import UserPhotosDialog from "./components/Collage/UserPhotos";
 import PhotoGallery from "./components/PhotosGallery";
-import TinPhoto from "./components/TinPhoto";
+import TinPhoto from "./components/PhotosGallery/TinPhoto";
 import PersonalArea from "./components/PersonalArea";
 import UserAlbums from "../src/components/UserAlbums/UserAlbums";
 import CollageCreatorPage from "./components/Collage/collage-creator-page";

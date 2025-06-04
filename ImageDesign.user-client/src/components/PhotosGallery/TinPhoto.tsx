@@ -18,7 +18,7 @@ import {
 } from "@mui/material"
 import { Restore, DeleteForever, ZoomIn, Delete, PhotoLibrary } from "@mui/icons-material"
 import { motion, AnimatePresence } from "framer-motion"
-import photoUploadStore from "../stores/photoUploaderStore"
+import photoUploadStore from "../../stores/photoUploaderStore"
 
 const TinPhoto: React.FC = observer(() => {
   const userData = sessionStorage.getItem("user")
