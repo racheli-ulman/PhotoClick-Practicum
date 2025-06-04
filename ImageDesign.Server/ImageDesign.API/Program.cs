@@ -104,7 +104,7 @@ var connectionString = Environment.GetEnvironmentVariable("ConnectionStrings");
 builder.Services.AddDbContext<DataContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString), options => options.CommandTimeout(60)));
 
-
+builder.Services.AddHttpClient();
 
 builder.Services.AddScoped<IAlbumRepository, AlbumRepository>();
 builder.Services.AddScoped<IPhotoRepository, PhotoRepository>();
