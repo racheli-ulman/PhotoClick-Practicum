@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Net.Http.Headers;
 using System.Text.Json;
+using static System.Net.Mime.MediaTypeNames;
+using Microsoft.AspNetCore.Mvc;
 using System.Text;
-using Microsoft.Extensions.Logging;
-using System.Text.RegularExpressions;
-
+using Newtonsoft.Json;
 namespace ImageDesign.API.Controllers
 {
     [Route("api/[controller]")]
@@ -18,8 +18,10 @@ namespace ImageDesign.API.Controllers
         public AiController(HttpClient httpClient, IConfiguration configuration, ILogger<AiController> logger)
         {
             _httpClient = httpClient;
-            _openAiApiKey = configuration["API_KEY"] ?? throw new ArgumentNullException("OpenAI API Key (API_KEY) not configured in environment variables.");
-            _logger = logger;
+            // שינוי: שליפת המפתח מ-API_KEY במקום OpenAI:ApiKey
+            _openAiApiKey = configuration["API_KEY"] ??
+                           Environment.GetEnvironmentVariable("API_KEY") ??
+                           throw new ArgumentNullException("API_KEY not configured in environment variables."); _logger = logger;
         }
 
         [HttpPost("generate")]
@@ -45,13 +47,14 @@ namespace ImageDesign.API.Controllers
                     size = "1024x1024" // שונה ל-1024x1024 עבור DALL-E 3
                 };
 
-                var json = JsonSerializer.Serialize(dalleRequest);
+                var json = System.Text.Json.JsonSerializer.Serialize(dalleRequest);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
                 _httpClient.DefaultRequestHeaders.Clear();
                 _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {_openAiApiKey}");
 
                 _logger.LogInformation("Sending DALL-E API request...");
+                //var response = await _httpClient.PostAsync("https://api.deepai.org/api/text2img", content);
                 var response = await _httpClient.PostAsync("https://api.openai.com/v1/images/generations", content);
                 _logger.LogInformation($"Received DALL-E API response with status code: {response.StatusCode}");
 
@@ -72,7 +75,7 @@ namespace ImageDesign.API.Controllers
                     PropertyNamingPolicy = JsonNamingPolicy.CamelCase
                 };
 
-                var dalleResponse = JsonSerializer.Deserialize<DalleResponse>(responseContent, options);
+                var dalleResponse = System.Text.Json.JsonSerializer.Deserialize<DalleResponse>(responseContent, options);
 
                 string? imageUrl = dalleResponse?.Data?.FirstOrDefault()?.Url;
 
@@ -85,15 +88,16 @@ namespace ImageDesign.API.Controllers
 
                 _logger.LogInformation($"Generated image URL: {imageUrl}");
 
+                return Ok(imageUrl);
                 // Download the image
-                _logger.LogInformation($"Attempting to download image from: {imageUrl}");
-                var imageResponse = await _httpClient.GetAsync(imageUrl);
-                _logger.LogInformation($"Image download response status: {imageResponse.StatusCode}");
-                imageResponse.EnsureSuccessStatusCode();
+                //_logger.LogInformation($"Attempting to download image from: {imageUrl}");
+                //var imageResponse = await _httpClient.GetAsync(imageUrl);
+                //_logger.LogInformation($"Image download response status: {imageResponse.StatusCode}");
+                //imageResponse.EnsureSuccessStatusCode();
 
-                var imageBytes = await imageResponse.Content.ReadAsByteArrayAsync();
+                //var imageBytes = await imageResponse.Content.ReadAsByteArrayAsync();
 
-                return File(imageBytes, "image/png", "generated_image.png");
+                //return File(imageBytes, "image/png", "generated_image.png");
             }
             catch (HttpRequestException ex)
             {
@@ -106,7 +110,6 @@ namespace ImageDesign.API.Controllers
                 return StatusCode(500, new { error = $"Internal server error: {ex.Message}" });
             }
         }
-
         private async Task<string> TranslateToEnglish(string text)
         {
             try
@@ -125,7 +128,7 @@ namespace ImageDesign.API.Controllers
                     temperature = 0
                 };
 
-                var json = JsonSerializer.Serialize(translateRequest);
+                var json = System.Text.Json.JsonSerializer.Serialize(translateRequest);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
 
                 _httpClient.DefaultRequestHeaders.Clear();
@@ -151,7 +154,7 @@ namespace ImageDesign.API.Controllers
                     PropertyNamingPolicy = JsonNamingPolicy.CamelCase
                 };
 
-                var openAiResponse = JsonSerializer.Deserialize<OpenAIChatCompletionResponse>(responseContent, options);
+                var openAiResponse = System.Text.Json.JsonSerializer.Deserialize<OpenAIChatCompletionResponse>(responseContent, options);
                 string? translatedText = openAiResponse?.Choices?.FirstOrDefault()?.Message?.Content?.Trim();
 
                 if (!string.IsNullOrEmpty(translatedText))
@@ -210,4 +213,16 @@ namespace ImageDesign.API.Controllers
         public string? Role { get; set; }
         public string? Content { get; set; }
     }
+    public class ImageResponse
+    {
+        public int Created { get; set; }
+        public List<ImageData> Data { get; set; }
+    }
+
+    public class ImageData
+    {
+        public string B64Json { get; set; }
+    }
+
+
 }

@@ -62,7 +62,15 @@ const PersonalArea: React.FC = () => {
             icon: <DeleteForeverIcon sx={{ color: theme.palette.error.main }} />,
             onClick: () => navigate(`/personal-area/tin-photo`),
             path: "tin-photo"
-        }
+        },               
+        // {
+        //     title: "יצירת תמונה ב AI",
+        //     description: "צור תמונות מותאמות אישית באמצעות בינה מלאכותית",
+        //     icon: <DeleteForeverIcon sx={{ color: theme.palette.error.main }} />,
+        //     onClick: () => navigate(`/personal-area/tin-photo`),
+        //     path: "tin-photo"
+        // }
+        
     ];
 
     return (
