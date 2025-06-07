@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import { 
-  Button, 
-  IconButton, 
-  Tooltip, 
-  Box,
-  Typography,
-  Divider,
-//   Paper,
-  useTheme
+import {
+    Button,
+    IconButton,
+    Tooltip,
+    Box,
+    Typography,
+    Divider,
+    //   Paper,
+    useTheme
 } from '@mui/material';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import PhotoLibraryIcon from '@mui/icons-material/PhotoLibrary';
@@ -19,15 +19,16 @@ import UserPhotosDialog from "./Collage/UserPhotos";
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import PersonIcon from '@mui/icons-material/Person';
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 
 const PersonalArea: React.FC = () => {
     const theme = useTheme();
     const [openCollageDialog, setOpenCollageDialog] = useState<boolean>(false);
     const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
-    
+
     const navigate = useNavigate();
     const location = useLocation();
-    
+
     // פונקציה לבדיקה אם כפתור פעיל כעת (נמצאים בנתיב שלו)
     const isActive = (path: string) => {
         return location.pathname.includes(path);
@@ -62,22 +63,22 @@ const PersonalArea: React.FC = () => {
             icon: <DeleteForeverIcon sx={{ color: theme.palette.error.main }} />,
             onClick: () => navigate(`/personal-area/tin-photo`),
             path: "tin-photo"
-        },               
-        // {
-        //     title: "יצירת תמונה ב AI",
-        //     description: "צור תמונות מותאמות אישית באמצעות בינה מלאכותית",
-        //     icon: <DeleteForeverIcon sx={{ color: theme.palette.error.main }} />,
-        //     onClick: () => navigate(`/personal-area/tin-photo`),
-        //     path: "tin-photo"
-        // }
-        
+        },
+        {
+            title: "יצירת תמונה ב AI",
+            description: "צור תמונות מותאמות אישית באמצעות בינה מלאכותית",
+            icon: <AutoAwesomeIcon sx={{ color: theme.palette.error.main }} />,
+            onClick: () => navigate(`/personal-area/generate-image`),
+            path: "generate-image"
+        }
+
     ];
 
     return (
-        <div style={{ 
-            display: 'flex', 
-            padding: '16px', 
-            overflow: 'hidden', 
+        <div style={{
+            display: 'flex',
+            padding: '16px',
+            overflow: 'hidden',
             minHeight: 'calc(100vh - 130px)',
         }}>
             {/* סיידבר */}
@@ -97,9 +98,9 @@ const PersonalArea: React.FC = () => {
                 zIndex: 10
             }}>
                 {/* כותרת הסיידבר */}
-                <Box sx={{ 
+                <Box sx={{
                     p: sidebarOpen ? 2.5 : 1.5,
-                  background: "linear-gradient(135deg,rgb(234, 102, 203),rgb(189, 132, 246), #f093fb, #00d4ff)",
+                    background: "linear-gradient(135deg,rgb(234, 102, 203),rgb(189, 132, 246), #f093fb, #00d4ff)",
                     color: 'white',
                     display: 'flex',
                     alignItems: 'center',
@@ -110,7 +111,7 @@ const PersonalArea: React.FC = () => {
                             אזור אישי
                         </Typography>
                     )}
-                    <Box sx={{ 
+                    <Box sx={{
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center'
@@ -137,17 +138,18 @@ const PersonalArea: React.FC = () => {
                 <Divider />
 
                 {/* רשימת פריטי התפריט */}
-                <Box sx={{ 
-                    display: 'flex', 
-                    flexDirection: 'column', 
+                <Box sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
                     p: 2,
                     gap: 1.5,
                     flexGrow: 1,
-                    overflowY: 'auto'
+                    overflowY: 'auto', // מאפשר גלילה
+                    maxHeight: 'calc(95vh - 120px)', // הגדרת גובה מקסימלי
                 }}>
                     {menuItems.map((item, index) => {
                         const active = isActive(item.path);
-                        
+
                         return sidebarOpen ? (
                             // גרסה מורחבת של הכפתור
                             <Button
@@ -159,7 +161,8 @@ const PersonalArea: React.FC = () => {
                                     flexDirection: 'column',
                                     alignItems: 'flex-start',
                                     justifyContent: 'flex-start',
-                                    p: 2,
+                                    // p: 3, // הגדלת ה-padding
+                                    height: '60px', // הגדרת גובה לכפתור
                                     borderRadius: 2,
                                     bgcolor: active ? `${theme.palette.primary.light}20` : 'transparent',
                                     color: active ? theme.palette.primary.main : 'text.primary',
@@ -168,8 +171,8 @@ const PersonalArea: React.FC = () => {
                                     width: '100%',
                                     textTransform: 'none',
                                     '&:hover': {
-                                        bgcolor: active 
-                                            ? `${theme.palette.primary.light}30` 
+                                        bgcolor: active
+                                            ? `${theme.palette.primary.light}30`
                                             : 'rgba(0, 0, 0, 0.04)'
                                     },
                                     position: 'relative',
@@ -186,9 +189,9 @@ const PersonalArea: React.FC = () => {
                                     } : {}
                                 }}
                             >
-                                <Box sx={{ 
-                                    display: 'flex', 
-                                    alignItems: 'center', 
+                                <Box sx={{
+                                    display: 'flex',
+                                    alignItems: 'center',
                                     width: '100%',
                                     mb: 0.5
                                 }}>
@@ -201,28 +204,28 @@ const PersonalArea: React.FC = () => {
                                             width: 40,
                                             height: 40,
                                             borderRadius: '50%',
-                                            bgcolor: active 
-                                                ? `${theme.palette.primary.main}20` 
+                                            bgcolor: active
+                                                ? `${theme.palette.primary.main}20`
                                                 : 'rgba(0, 0, 0, 0.04)',
                                         }}
                                     >
-                                        {React.cloneElement(item.icon, { 
-                                            sx: { fontSize: 22 } 
+                                        {React.cloneElement(item.icon, {
+                                            sx: { fontSize: 22 }
                                         })}
                                     </Box>
-                                    <Typography 
-                                        variant="subtitle1" 
+                                    <Typography
+                                        variant="subtitle1"
                                         fontWeight={active ? 'bold' : 'medium'}
-                                        sx={{ flexGrow: 1, textAlign: 'right' }}
+                                        sx={{ flexGrow: 1, textAlign: 'left' }}
                                     >
                                         {item.title}
                                     </Typography>
                                 </Box>
-                                
-                                <Typography 
-                                    variant="body2" 
+
+                                <Typography
+                                    variant="body2"
                                     color="text.secondary"
-                                    sx={{ 
+                                    sx={{
                                         opacity: 0.8,
                                         width: '100%',
                                         textAlign: 'right',
@@ -249,8 +252,8 @@ const PersonalArea: React.FC = () => {
                                         color: active ? theme.palette.primary.main : 'text.secondary',
                                         bgcolor: active ? `${theme.palette.primary.light}20` : 'transparent',
                                         '&:hover': {
-                                            bgcolor: active 
-                                                ? `${theme.palette.primary.light}30` 
+                                            bgcolor: active
+                                                ? `${theme.palette.primary.light}30`
                                                 : 'rgba(0, 0, 0, 0.04)'
                                         },
                                         position: 'relative',
@@ -272,14 +275,15 @@ const PersonalArea: React.FC = () => {
                         );
                     })}
                 </Box>
-                
+
+
                 {/* רווח נוסף בתחתית */}
                 <Box sx={{ p: 2 }}></Box>
             </div>
 
             {/* תוכן ראשי */}
-            <div style={{ 
-                flex: 1, 
+            <div style={{
+                flex: 1,
                 marginRight: sidebarOpen ? '310px' : '110px',
                 transition: 'margin-right 0.3s ease',
                 padding: '16px',

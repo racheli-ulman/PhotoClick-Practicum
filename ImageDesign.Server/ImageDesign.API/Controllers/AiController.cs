@@ -2,7 +2,6 @@
 using System.Net.Http.Headers;
 using System.Text.Json;
 using static System.Net.Mime.MediaTypeNames;
-using Microsoft.AspNetCore.Mvc;
 using System.Text;
 using Newtonsoft.Json;
 namespace ImageDesign.API.Controllers

@@ -12,6 +12,7 @@ import TinPhoto from "./components/PhotosGallery/TinPhoto";
 import PersonalArea from "./components/PersonalArea";
 import UserAlbums from "../src/components/UserAlbums/UserAlbums";
 import CollageCreatorPage from "./components/Collage/collage-creator-page";
+import ImageGenerator from "./components/GenerateImage";
 
 export const Router = createHashRouter([
     {
@@ -25,7 +26,7 @@ export const Router = createHashRouter([
             {
                 path: "personal-area", element: <PersonalArea />,
                 children: [
-                    { path: 'userAlbums', element: <UserAlbums/> },
+                    { path: 'userAlbums', element: <UserAlbums /> },
                     { index: true, element: <UserAlbums /> },
                     { path: 'upload', element: <PhotoUploader /> },
                     // { path: "delete-album/:albumId", element: <DeleteAlbum /> },
@@ -34,11 +35,11 @@ export const Router = createHashRouter([
                     { path: "all-photoes-of-user", element: <UserPhotosDialog open={true} onClose={() => { }} /> },
                     { path: "tin-photo", element: <TinPhoto /> },
                     { path: "create-collage", element: <CollageCreatorPage /> }, // הדף החדש לקולאז'
-
+                    { path: "generate-image", element: <ImageGenerator /> }
 
                 ]
             },
-         
+
         ]
 
     }
