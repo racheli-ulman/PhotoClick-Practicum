@@ -376,6 +376,7 @@ const CollageCreatorPage: React.FC = () => {
   return (
     <Box
       sx={{
+        marginTop:"40px",
         minHeight: "100vh",
         background: "linear-gradient(135deg, rgb(234, 102, 203), rgb(189, 132, 246), #f093fb, #00d4ff)",
       }}
