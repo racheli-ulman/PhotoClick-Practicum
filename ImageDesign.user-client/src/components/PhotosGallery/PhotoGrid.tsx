@@ -241,61 +241,54 @@ const PhotoGrid: React.FC<PhotoGridProps> = ({ photos, onPhotoClick, onCopyMoveC
                                             TransitionComponent={Fade}
                                         >
                                             <MenuItem
-                                                onClick={() => {
-                                                    onCopyMoveClick(photo.id, true)
-                                                    handleMenuClose(photo.id)
-                                                }}
-                                            >
-                                                <ListItemIcon>
-                                                    <FileCopyOutlined fontSize="small" />
-                                                </ListItemIcon>
-                                                <ListItemText>העתק תמונה</ListItemText>
-                                            </MenuItem>
-                                            <MenuItem
-                                                onClick={() => {
-                                                    onCopyMoveClick(photo.id, false)
-                                                    handleMenuClose(photo.id)
-                                                }}
-                                            >
-                                                <ListItemIcon>
-                                                    <DriveFileMoveOutlined fontSize="small" />
-                                                </ListItemIcon>
-                                                <ListItemText>העבר תמונה</ListItemText>
-                                            </MenuItem>
-                                            {/* <MenuItem
-                                                onClick={() => {
-                                                    // Handle edit
-                                                    handleMenuClose(photo.id)
-                                                }}
-                                            >
-                                                <ListItemIcon>
-                                                    <Edit fontSize="small" />
-                                                </ListItemIcon>
-                                                <ListItemText>שנה שם תמונה</ListItemText>
-                                            </MenuItem> */}
-                                            <MenuItem
-                                                onClick={() => {
-                                                    handleGrayscaleToggle(photo.id);
-                                                    handleMenuClose(photo.id);
-                                                }}
-                                            >
-                                                <ListItemIcon>
-                                                    <FilterBAndWIcon fontSize="small" />
-                                                </ListItemIcon>
-                                                <ListItemText>שנה את התמונה לשחור לבן</ListItemText>
-                                            </MenuItem>
-                                            <MenuItem
-                                                onClick={() => {
-                                                    handleSharePhoto(photo); // עדכן את הקריאה לפונקציה
-                                                    handleMenuClose(photo.id)
-                                                }}
-                                            >
-                                                <ListItemIcon>
-                                                    <Share fontSize="small" />
-                                                </ListItemIcon>
-                                                <ListItemText>שתף תמונה</ListItemText>
-                                            </MenuItem>
-                                        </Menu>
+        onClick={() => {
+            onCopyMoveClick(photo.id, true)
+            handleMenuClose(photo.id)
+        }}
+        style={{ display: 'flex', flexDirection: 'row-reverse' }} // שינוי הכיווניות
+    >
+        <ListItemIcon style={{ marginLeft: '8px' }}> {/* הוספת רווח בין האייקון לכיתוב */}
+            <FileCopyOutlined fontSize="small" />
+        </ListItemIcon>
+        <ListItemText style={{ textAlign: 'right' }}>העתק תמונה</ListItemText>
+    </MenuItem>
+    <MenuItem
+        onClick={() => {
+            onCopyMoveClick(photo.id, false)
+            handleMenuClose(photo.id)
+        }}
+        style={{ display: 'flex', flexDirection: 'row-reverse' }}
+    >
+        <ListItemIcon style={{ marginLeft: '8px' }}>
+            <DriveFileMoveOutlined fontSize="small" />
+        </ListItemIcon>
+        <ListItemText style={{ textAlign: 'right' }}>העבר תמונה</ListItemText>
+    </MenuItem>
+    <MenuItem
+        onClick={() => {
+            handleGrayscaleToggle(photo.id);
+            handleMenuClose(photo.id);
+        }}
+        style={{ display: 'flex', flexDirection: 'row-reverse' }}
+    >
+        <ListItemIcon style={{ marginLeft: '8px' }}>
+            <FilterBAndWIcon fontSize="small" />
+        </ListItemIcon>
+        <ListItemText style={{ textAlign: 'right' }}>שנה את התמונה לשחור לבן</ListItemText>
+    </MenuItem>
+    <MenuItem
+        onClick={() => {
+            handleSharePhoto(photo);
+            handleMenuClose(photo.id)
+        }}
+        style={{ display: 'flex', flexDirection: 'row-reverse' }}
+    >
+        <ListItemIcon style={{ marginLeft: '8px' }}>
+            <Share fontSize="small" />
+        </ListItemIcon>
+        <ListItemText style={{ textAlign: 'right' }}>שתף תמונה</ListItemText>
+    </MenuItem>
+</Menu>
                                     </Box>
                                 </CardActions>
                             </Card>
