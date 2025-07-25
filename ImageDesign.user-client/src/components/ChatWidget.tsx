@@ -14,7 +14,7 @@ import {
   Slide,
   Fade,
   Chip,
-//   useTheme,
+  //   useTheme,
 } from "@mui/material"
 import CloseIcon from "@mui/icons-material/Close"
 import SendIcon from "@mui/icons-material/Send"
@@ -26,7 +26,7 @@ interface ChatComponentProps {
 }
 
 const ChatComponent: React.FC<ChatComponentProps> = ({ onClose }) => {
-//   const theme = useTheme()
+  //   const theme = useTheme()
 
   const [input, setInput] = useState("")
   const [isExpanded, setIsExpanded] = useState(false)
@@ -69,8 +69,16 @@ const ChatComponent: React.FC<ChatComponentProps> = ({ onClose }) => {
         Question: input,
       })
       const botResponse = response.data?.choices?.[0]?.message?.content || "אני מצטער, קרתה שגיאה."
-      setMessages([...messages, { sender: "user", text: input }, { sender: "bot", text: botResponse }])
+      setMessages([
+        ...messages,
+        { sender: "user", text: input },
+        { sender: "bot", text: botResponse }
+      ])
       setStatus("idle")
+
+      speakText(botResponse) // 🗣️ השמעת תשובת הבוט
+
+
     } catch (error) {
       console.error("שגיאה בעת שליחת השאלה:", error)
       setMessages([
@@ -83,6 +91,33 @@ const ChatComponent: React.FC<ChatComponentProps> = ({ onClose }) => {
       setStatus("idle")
     }
   }
+
+
+
+
+
+
+
+const speakText = (text: string) => {
+  if ("speechSynthesis" in window) {
+    const utterance = new SpeechSynthesisUtterance(text)
+    utterance.lang = "he-IL" // עברית
+
+    window.speechSynthesis.cancel() // עצור כל דיבור קודם
+    window.speechSynthesis.speak(utterance) // דבר את הטקסט החדש
+  } else {
+    console.warn("Speech Synthesis לא נתמך בדפדפן זה")
+  }
+}
+
+
+
+
+
+
+
+
+
 
   const handleTopicClick = (topic: string) => {
     setInput(topic)

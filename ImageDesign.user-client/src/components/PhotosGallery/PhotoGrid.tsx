@@ -49,7 +49,7 @@ interface PhotoGridProps {
 const PhotoGrid: React.FC<PhotoGridProps> = ({ photos, onPhotoClick, onCopyMoveClick, viewMode }) => {
     const [anchorEl, setAnchorEl] = React.useState<{ [key: number]: HTMLElement | null }>({})
     const [grayscale, setGrayscale] = React.useState<{ [key: number]: boolean }>({});
-    
+
     // הוסף state לדיאלוג המייל
     const [emailDialogOpen, setEmailDialogOpen] = React.useState(false);
     const [selectedPhotoForEmail, setSelectedPhotoForEmail] = React.useState<Photo | null>(null);
@@ -241,54 +241,54 @@ const PhotoGrid: React.FC<PhotoGridProps> = ({ photos, onPhotoClick, onCopyMoveC
                                             TransitionComponent={Fade}
                                         >
                                             <MenuItem
-        onClick={() => {
-            onCopyMoveClick(photo.id, true)
-            handleMenuClose(photo.id)
-        }}
-        style={{ display: 'flex', flexDirection: 'row-reverse' }} // שינוי הכיווניות
-    >
-        <ListItemIcon style={{ marginLeft: '8px' }}> {/* הוספת רווח בין האייקון לכיתוב */}
-            <FileCopyOutlined fontSize="small" />
-        </ListItemIcon>
-        <ListItemText style={{ textAlign: 'right' }}>העתק תמונה</ListItemText>
-    </MenuItem>
-    <MenuItem
-        onClick={() => {
-            onCopyMoveClick(photo.id, false)
-            handleMenuClose(photo.id)
-        }}
-        style={{ display: 'flex', flexDirection: 'row-reverse' }}
-    >
-        <ListItemIcon style={{ marginLeft: '8px' }}>
-            <DriveFileMoveOutlined fontSize="small" />
-        </ListItemIcon>
-        <ListItemText style={{ textAlign: 'right' }}>העבר תמונה</ListItemText>
-    </MenuItem>
-    <MenuItem
-        onClick={() => {
-            handleGrayscaleToggle(photo.id);
-            handleMenuClose(photo.id);
-        }}
-        style={{ display: 'flex', flexDirection: 'row-reverse' }}
-    >
-        <ListItemIcon style={{ marginLeft: '8px' }}>
-            <FilterBAndWIcon fontSize="small" />
-        </ListItemIcon>
-        <ListItemText style={{ textAlign: 'right' }}>שנה את התמונה לשחור לבן</ListItemText>
-    </MenuItem>
-    <MenuItem
-        onClick={() => {
-            handleSharePhoto(photo);
-            handleMenuClose(photo.id)
-        }}
-        style={{ display: 'flex', flexDirection: 'row-reverse' }}
-    >
-        <ListItemIcon style={{ marginLeft: '8px' }}>
-            <Share fontSize="small" />
-        </ListItemIcon>
-        <ListItemText style={{ textAlign: 'right' }}>שתף תמונה</ListItemText>
-    </MenuItem>
-</Menu>
+                                                onClick={() => {
+                                                    onCopyMoveClick(photo.id, true)
+                                                    handleMenuClose(photo.id)
+                                                }}
+                                                style={{ display: 'flex', flexDirection: 'row-reverse' }} // שינוי הכיווניות
+                                            >
+                                                <ListItemIcon style={{ marginLeft: '8px' }}> {/* הוספת רווח בין האייקון לכיתוב */}
+                                                    <FileCopyOutlined fontSize="small" />
+                                                </ListItemIcon>
+                                                <ListItemText style={{ textAlign: 'right' }}>העתק תמונה</ListItemText>
+                                            </MenuItem>
+                                            <MenuItem
+                                                onClick={() => {
+                                                    onCopyMoveClick(photo.id, false)
+                                                    handleMenuClose(photo.id)
+                                                }}
+                                                style={{ display: 'flex', flexDirection: 'row-reverse' }}
+                                            >
+                                                <ListItemIcon style={{ marginLeft: '8px' }}>
+                                                    <DriveFileMoveOutlined fontSize="small" />
+                                                </ListItemIcon>
+                                                <ListItemText style={{ textAlign: 'right' }}>העבר תמונה</ListItemText>
+                                            </MenuItem>
+                                            <MenuItem
+                                                onClick={() => {
+                                                    handleGrayscaleToggle(photo.id);
+                                                    handleMenuClose(photo.id);
+                                                }}
+                                                style={{ display: 'flex', flexDirection: 'row-reverse' }}
+                                            >
+                                                <ListItemIcon style={{ marginLeft: '8px' }}>
+                                                    <FilterBAndWIcon fontSize="small" />
+                                                </ListItemIcon>
+                                                <ListItemText style={{ textAlign: 'right' }}>שנה את התמונה לשחור לבן</ListItemText>
+                                            </MenuItem>
+                                            <MenuItem
+                                                onClick={() => {
+                                                    handleSharePhoto(photo);
+                                                    handleMenuClose(photo.id)
+                                                }}
+                                                style={{ display: 'flex', flexDirection: 'row-reverse' }}
+                                            >
+                                                <ListItemIcon style={{ marginLeft: '8px' }}>
+                                                    <Share fontSize="small" />
+                                                </ListItemIcon>
+                                                <ListItemText style={{ textAlign: 'right' }}>שתף תמונה</ListItemText>
+                                            </MenuItem>
+                                        </Menu>
                                     </Box>
                                 </CardActions>
                             </Card>
